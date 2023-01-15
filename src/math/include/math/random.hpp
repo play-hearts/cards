@@ -7,12 +7,14 @@ namespace pho::math {
 class RandomGenerator
 {
 public:
+    /// @brief Create a PRNG, seeded from std::random_device.
     RandomGenerator();
-    RandomGenerator(uint128_t seed);
+
+    /// @brief  Create a PRNG, seeded from the given 64-bit seed.
+    /// @param seed
+    RandomGenerator(uint64_t seed);
 
     RandomGenerator(const RandomGenerator&) = default;
-
-    void reseed(uint128_t seed) const;
 
     bool operator==(const RandomGenerator& o) const
     {
@@ -58,6 +60,10 @@ private:
     // The state must be seeded so that it is not everywhere zero.
     static constexpr int kStateWords{4};
     mutable uint64_t s[kStateWords];
+
+    void seedFromRandomDevice();
+
+    void seedFrom64BitValue(uint64_t seed) const;
 
 private:
     static thread_local RandomGenerator gRandomGenerator;

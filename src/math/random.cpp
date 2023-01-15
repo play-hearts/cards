@@ -1,40 +1,64 @@
 #include "math/random.hpp"
+#include "prim/range.hpp"
+#include "prim/dlog.hpp"
 
 #include <assert.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
+#include <random>
 
 namespace pho::math {
 
-RandomGenerator::RandomGenerator()
+namespace {
+DLog dlog("math_rng_seed");
+
+class SplitMix64
 {
-    const int kNumBytes = sizeof(s);
-    int fd = open("/dev/urandom", O_RDONLY);
-    assert(fd != -1);
-    int actual = read(fd, s, kNumBytes);
-    close(fd);
-    if (actual != kNumBytes)
+    // https://xoshiro.di.unimi.it/splitmix64.c
+    // This is only used by seedFrom64BitValue()
+public:
+    SplitMix64() = delete;
+    SplitMix64(uint64_t seed) : x{seed} {}
+
+    uint64_t next()
     {
-        fprintf(stderr, "Failed to read enough bytes to initialize RandomGenerator\n");
-        exit(1);
+        uint64_t z = (x += 0x9e3779b97f4a7c15);
+        z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+        z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+        return z ^ (z >> 31);
+    }
+
+private:
+    uint64_t x;
+};
+}
+
+void RandomGenerator::seedFromRandomDevice()
+{
+    std::random_device rd;
+    std::uniform_int_distribution<uint64_t> dist{};
+    for (auto i : prim::range(kStateWords))
+    {
+        s[i] = dist(rd);
+        dlog("seedFromRandomDevice({}): {:x}", i, s[i]);
     }
 }
 
-RandomGenerator::RandomGenerator(uint128_t seed)
+RandomGenerator::RandomGenerator()
 {
-    reseed(seed);
+    seedFromRandomDevice();
 }
 
-void RandomGenerator::reseed(uint128_t seed) const
+RandomGenerator::RandomGenerator(uint64_t seed)
 {
+    seedFrom64BitValue(seed);
+}
+
+void RandomGenerator::seedFrom64BitValue(uint64_t seed) const
+{
+    SplitMix64 mix{seed};
     s[0] = seed;
-    s[1] = seed >> 21;
-    s[2] = seed >> 42;
-    s[3] = seed >> 64;
+    s[1] = mix.next();
+    s[2] = mix.next();
+    s[3] = mix.next();
 }
 
 namespace {
