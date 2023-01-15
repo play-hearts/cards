@@ -40,7 +40,7 @@ public:
 
     // If return is 0, then generation is done.
     // Otherwise, the returned value will have K of the first N bits set,
-    // i.e. valid results will be >= 2^K-1, and less  than 2^N-1, and CountBits(result) will K.
+    // i.e. valid results will be >= 2^K-1, and less  than 2^N-1, and countBits(result) will K.
     uint64_t next();
 
     // The number of elements that should be generated
@@ -62,8 +62,8 @@ ChooseFromGenerator<K, N>::ChooseFromGenerator()
     static_assert(K <= N);
     static_assert(N <= 13);
 
-    assert(CountBits(first()) == K);
-    assert(CountBits(last()) == K);
+    assert(countBits(first()) == K);
+    assert(countBits(last()) == K);
 }
 
 template <unsigned K, unsigned N>
@@ -73,7 +73,7 @@ uint64_t ChooseFromGenerator<K, N>::next()
     if (mNext == 0)
         return mNext;
 
-    assert(CountBits(mNext) == K);
+    assert(countBits(mNext) == K);
 
     // We always have the next result queued up, so we will return the current value of mNext;
     auto result = mNext;

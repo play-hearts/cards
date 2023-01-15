@@ -61,7 +61,7 @@ public:
     [[nodiscard]] auto operator==(const CardSet& other) const { return mCardBits == other.mCardBits; }
     [[nodiscard]] auto operator!=(const CardSet& other) const { return mCardBits != other.mCardBits; }
 
-    [[nodiscard]] auto size() const { return math::CountBits(mCardBits); }
+    [[nodiscard]] auto size() const { return math::countBits(mCardBits); }
     [[nodiscard]] auto empty() const { return mCardBits == kNoCards;}
 
     [[nodiscard]] CardSet setUnion(CardSet other) const { return CardSet{ mCardBits | other.mCardBits }; }
@@ -84,13 +84,13 @@ public:
     [[nodiscard]] Card front() const
     {
         assert(!empty());
-        return math::LeastSetBitIndex(mCardBits);
+        return math::leastSetBitIndex(mCardBits);
     }
 
     [[nodiscard]] Card back() const
     {
         assert(!empty());
-        return math::GreatestSetBitIndex(mCardBits);
+        return math::greatestSetBitIndex(mCardBits);
     }
 
     [[nodiscard]] Card nthCard(unsigned n) const
@@ -195,13 +195,13 @@ public:
         Card operator*() const
         {
             assert(!done());
-            return math::LeastSetBitIndex(mCardBits);
+            return math::leastSetBitIndex(mCardBits);
         }
 
         iterator& operator++()
         {
             assert(!done());
-            Card card = math::LeastSetBitIndex(mCardBits);
+            Card card = math::leastSetBitIndex(mCardBits);
             mCardBits &= ~maskOf(card);
             return *this;
         }

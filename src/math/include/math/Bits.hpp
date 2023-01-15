@@ -6,33 +6,33 @@
 
 namespace pho::math {
 
-inline int LeastSetBitIndex(uint64_t x) {
+inline int leastSetBitIndex(uint64_t x) {
     return x==0 ? 64 : __builtin_ctzll(x);
 }
 
-inline int GreatestSetBitIndex(uint64_t x)
+inline int greatestSetBitIndex(uint64_t x)
 {
     return x==0 ? -1 : 63 - __builtin_clzll(x);
 }
 
-inline int GreatestSetBitIndex(uint128_t x)
+inline int greatestSetBitIndex(uint128_t x)
 {
-    auto hiWordBit = GreatestSetBitIndex(uint64_t(x >> 64));
-    return hiWordBit != 64 ? 64u+hiWordBit : GreatestSetBitIndex(uint64_t(x));
+    auto hiWordBit = greatestSetBitIndex(uint64_t(x >> 64));
+    return hiWordBit != 64 ? 64u+hiWordBit : greatestSetBitIndex(uint64_t(x));
 }
 
-inline unsigned CountBits(uint64_t x)
+inline unsigned countBits(uint64_t x)
 {
     return __builtin_popcountll(x);
 }
 
-inline uint64_t IsolateLeastBit(uint64_t x) { return uint64_t{1} << LeastSetBitIndex(x); }
+inline uint64_t isolateLeastBit(uint64_t x) { return uint64_t{1} << leastSetBitIndex(x); }
 
-inline uint64_t IsolateGreatestBit(uint64_t x) { return uint64_t{1} << GreatestSetBitIndex(x); }
+inline uint64_t isolateGreatestBit(uint64_t x) { return uint64_t{1} << greatestSetBitIndex(x); }
 
-inline uint64_t RoundUpToPowerOfTwo(uint64_t n)
+inline uint64_t roundUpToPowerOfTwo(uint64_t n)
 {
-    uint64_t b = uint64_t{1} << GreatestSetBitIndex(n);
+    uint64_t b = uint64_t{1} << greatestSetBitIndex(n);
     if (b < n)
         b *= 2;
     return b;

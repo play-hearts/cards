@@ -57,7 +57,7 @@ TEST(combinations128, possibleDistinguishableDealsHex)
 TEST(combinations128, possibleDistinguishableDealsHighBit)
 {
     uint128_t N = possibleDistinguishableDeals();
-    auto topBit = GreatestSetBitIndex(N);
+    auto topBit = greatestSetBitIndex(N);
     EXPECT_EQ(topBit, 95);
 }
 
