@@ -19,7 +19,7 @@ struct CoreCardSetConstants
     {
         return BitSetMask{((kOne << kCardsPerSuit) - 1) << (suit * kCardsPerSuit)};
     }
-    static constexpr BitSetMask maskOf(Card card) { return BitSetMask{kOne << card}; }
+    static constexpr BitSetMask maskOf(Card card) { return card.mask(); }
     static constexpr BitSetMask maskOf(Suit suit, Rank rank)
     {
         return BitSetMask{kOne << (suit * kCardsPerSuit + rank)};
@@ -199,13 +199,13 @@ public:
         Card operator*() const
         {
             assert(!done());
-            return math::leastSetBitIndex(mCardBits);
+            return Card{Ord(math::leastSetBitIndex(mCardBits))};
         }
 
         iterator& operator++()
         {
             assert(!done());
-            Card card = math::leastSetBitIndex(mCardBits);
+            auto card = Card{Ord(math::leastSetBitIndex(mCardBits))};
             mCardBits &= ~maskOf(card);
             return *this;
         }

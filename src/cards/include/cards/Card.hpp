@@ -12,11 +12,6 @@ namespace pho::cards {
 using Nib = std::int8_t; // We only need 2 bits, but we use 8. For representing Rank and Suit.
 using Ord = std::uint8_t; // We only need 6 bits, but we use 8. For values 0..51.
 
-// We represent one card as an unsigned integer in the range 0..51
-using Card = Ord;
-
-constexpr Card kNoCard{63};
-
 enum Suit : Nib
 {
     kClubs = 0u,
@@ -44,15 +39,42 @@ enum Rank : Nib
     kAce,
 };
 
-constexpr Suit suitOf(Card card) { return Suit(card / kCardsPerSuit); }
-constexpr Rank rankOf(Card card) { return Rank(card % kCardsPerSuit); }
+class Card
+{
+public:
+    static constexpr auto kNone = Ord{63};
+
+    constexpr Card() : card{kNone} {}
+    constexpr Card(Ord c) : card{c} {}
+
+    Card(const Card&) = default;
+    Card(Card&&) = default;
+    Card& operator=(const Card&) = default;
+    Card& operator=(Card&&) = default;
+
+    constexpr Ord ord() const { return card; }
+
+    constexpr Suit suit() const { return Suit(card / kCardsPerSuit); }
+    constexpr Rank rank() const { return Rank(card % kCardsPerSuit); }
+
+    constexpr uint64_t mask() const { return 1ul << card; }
+
+    static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
+
+    friend bool operator==(Card a, Card b) { return a.card == b.card; }
+
+private:
+    Ord card;
+};
+
+constexpr Card kNoCard{};
+
+constexpr Suit suitOf(Card card) { return card.suit(); }
+constexpr Rank rankOf(Card card) { return card.rank(); }
 constexpr Card cardFor(Rank rank, Suit suit) { return suit * kCardsPerSuit + rank; }
 
 constexpr Nib iSuitOf(Card card) { return Nib(suitOf(card)); }
 constexpr Nib iRankOf(Card card) { return Nib(rankOf(card)); }
-
-// More convenient for range loop over cards
-constexpr Card kNumCards = Card(kCardsPerDeck);
 
 std::string nameOfSuit(Suit suit);
 std::string nameOfCard(Card card);

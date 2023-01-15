@@ -34,8 +34,8 @@ std::string nameOfCard(Card card)
 {
     if (card == kNoCard)
         return "{}";
-    assert(card < kCardsPerDeck);
-    return kNames[card];
+    assert(card.ord() < kCardsPerDeck);
+    return kNames[card.ord()];
 }
 
 } // namespace pho::cards
