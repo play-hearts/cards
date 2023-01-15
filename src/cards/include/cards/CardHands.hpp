@@ -75,7 +75,7 @@ public:
                 ++numPlayers;
         }
         assert(capacity == expectedCapacity);
-        (void) capacity;    // silence warning in release build
+        (void) capacity; // silence warning in release build
         assert(numPlayers >= 1);
         return numPlayers;
     }
@@ -125,7 +125,6 @@ public:
         assert(capacity >= mCapacities[p]);
         mCapacities[p] = capacity;
     }
-
 
 private:
     using Capacities = std::array<Size_t, 4>;

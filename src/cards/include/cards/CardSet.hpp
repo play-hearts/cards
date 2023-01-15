@@ -15,9 +15,15 @@ struct CoreCardSetConstants
     using BitSetMask = uint64_t;
     static constexpr BitSetMask kOne{1ul};
 
-    static constexpr BitSetMask maskOfSuit(Suit suit) { return BitSetMask{((kOne << kCardsPerSuit) - 1) << (suit * kCardsPerSuit)}; }
+    static constexpr BitSetMask maskOfSuit(Suit suit)
+    {
+        return BitSetMask{((kOne << kCardsPerSuit) - 1) << (suit * kCardsPerSuit)};
+    }
     static constexpr BitSetMask maskOf(Card card) { return BitSetMask{kOne << card}; }
-    static constexpr BitSetMask maskOf(Suit suit, Rank rank) { return BitSetMask{kOne << (suit * kCardsPerSuit + rank)}; }
+    static constexpr BitSetMask maskOf(Suit suit, Rank rank)
+    {
+        return BitSetMask{kOne << (suit * kCardsPerSuit + rank)};
+    }
 
     static constexpr BitSetMask kNoCards = BitSetMask{0};
     static constexpr BitSetMask kAllCards = BitSetMask{(kOne << kCardsPerDeck) - 1};
@@ -39,7 +45,7 @@ public:
     static constexpr CardSet make(const std::initializer_list<Card>& cards)
     {
         CardSet result;
-        for (auto card: cards)
+        for (auto card : cards)
             result += card;
         return result;
     }
@@ -51,7 +57,7 @@ public:
     CardSet& operator=(CardSet&&) = default;
 
     // ---- factory methods
-    [[nodiscard]] static constexpr CardSet fullDeck() {return CardSet(kAllCards); }
+    [[nodiscard]] static constexpr CardSet fullDeck() { return CardSet(kAllCards); }
 
 public:
     // ---- immutable/functional methods
@@ -62,10 +68,10 @@ public:
     [[nodiscard]] auto operator!=(const CardSet& other) const { return mCardBits != other.mCardBits; }
 
     [[nodiscard]] auto size() const { return math::countBits(mCardBits); }
-    [[nodiscard]] auto empty() const { return mCardBits == kNoCards;}
+    [[nodiscard]] auto empty() const { return mCardBits == kNoCards; }
 
-    [[nodiscard]] CardSet setUnion(CardSet other) const { return CardSet{ mCardBits | other.mCardBits }; }
-    [[nodiscard]] CardSet setIntersection(CardSet other) const { return CardSet{ mCardBits & other.mCardBits }; }
+    [[nodiscard]] CardSet setUnion(CardSet other) const { return CardSet{mCardBits | other.mCardBits}; }
+    [[nodiscard]] CardSet setIntersection(CardSet other) const { return CardSet{mCardBits & other.mCardBits}; }
     [[nodiscard]] CardSet setNegation() const { return CardSet(~mCardBits & kAllCards); }
     [[nodiscard]] CardSet setSubtract(CardSet other) const
     {
@@ -113,7 +119,7 @@ public:
     /// @brief Create the subset of cards NOT of the given suit
     /// @param suit the suit to exclude
     /// @return the new CardSet excluding cards of the given suit from this CardSet.
-    [[nodiscard]] CardSet cardsNotWithSuit(Suit suit) const  { return CardSet{mCardBits & ~maskOfSuit(suit)}; }
+    [[nodiscard]] CardSet cardsNotWithSuit(Suit suit) const { return CardSet{mCardBits & ~maskOfSuit(suit)}; }
 
     // ---- friend free functions
 
@@ -181,16 +187,14 @@ public:
     private:
         friend CardSet;
 
-        iterator(CardSet cards) : mCardBits(cards.mCardBits) {}
+        iterator(CardSet cards)
+        : mCardBits(cards.mCardBits)
+        { }
 
         bool done() const { return mCardBits == kNoCards; }
 
     public:
-
-        bool operator!=(iterator const& other) const
-        {
-            return mCardBits != other.mCardBits;
-        }
+        bool operator!=(iterator const& other) const { return mCardBits != other.mCardBits; }
 
         Card operator*() const
         {
@@ -213,7 +217,7 @@ public:
     iterator begin() const { return iterator(*this); }
     iterator end() const { return iterator(CardSet{}); }
 
-// ---- Rendering
+    // ---- Rendering
 
     friend std::string to_string(CardSet cards);
 

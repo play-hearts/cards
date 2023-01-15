@@ -3,22 +3,21 @@
 #pragma once
 
 #include <cstdlib>
+#include <fmt/printf.h>
 #include <string>
 #include <unistd.h>
-#include <fmt/printf.h>
 
 class DLog
 {
 public:
-    DLog(const std::string& channel, FILE* outFile=stderr)
+    DLog(const std::string& channel, FILE* outFile = stderr)
     : mChannel(channel)
     , mOutFile(outFile)
     , mOn(enabled())
     , mColorize(isatty(fileno(outFile)))
-    {}
+    { }
 
-    template <typename ...T>
-    void operator()(fmt::format_string<T...> fmt, T&&... args) const
+    template <typename... T> void operator()(fmt::format_string<T...> fmt, T&&... args) const
     {
         if (mOn)
         {
