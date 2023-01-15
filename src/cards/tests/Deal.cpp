@@ -13,11 +13,11 @@ void dealIsValid(Deal deal)
 
     for (auto i : prim::range(kNumPlayers))
     {
-        EXPECT_EQ(combined.size(), i*13);
+        EXPECT_EQ(combined.size(), i * 13);
         auto hand = deal.dealFor(i);
         EXPECT_TRUE(combined.setIntersection(hand).empty());
         combined += hand;
-        EXPECT_EQ(combined.size(), (i+1)*13);
+        EXPECT_EQ(combined.size(), (i + 1) * 13);
     }
 
     EXPECT_EQ(combined.size(), kCardsPerDeck);
@@ -78,9 +78,9 @@ TEST(Deal, dealFromHexString)
     Deal deal("");
     dealIsValid(deal);
     const auto index = math::asHexString(deal.dealIndex());
-    EXPECT_GT(index.size(), 10);    // just a very cheap & dirty test for randomness
+    EXPECT_GT(index.size(), 10); // just a very cheap & dirty test for randomness
 
-    for (int i=0; i<10; ++i)
+    for (int i = 0; i < 10; ++i)
     {
         Deal d("");
         EXPECT_NE(d.dealIndex(), deal.dealIndex());

@@ -7,12 +7,12 @@ namespace pho::math::tests {
 
 TEST(combinations128, small)
 {
-    EXPECT_EQ(1u, (unsigned)combinations128(0, 0));
-    EXPECT_EQ(1u, (unsigned)combinations128(1, 1));
-    EXPECT_EQ(3u, (unsigned)combinations128(3, 1));
-    EXPECT_EQ(3u, (unsigned)combinations128(3, 2));
-    EXPECT_EQ(4u, (unsigned)combinations128(4, 1));
-    EXPECT_EQ(6u, (unsigned)combinations128(4, 2));
+    EXPECT_EQ(1u, (unsigned) combinations128(0, 0));
+    EXPECT_EQ(1u, (unsigned) combinations128(1, 1));
+    EXPECT_EQ(3u, (unsigned) combinations128(3, 1));
+    EXPECT_EQ(3u, (unsigned) combinations128(3, 2));
+    EXPECT_EQ(4u, (unsigned) combinations128(4, 1));
+    EXPECT_EQ(6u, (unsigned) combinations128(4, 2));
 }
 
 // As an independent confirmation, several of the values below are published here:
@@ -79,7 +79,7 @@ TEST(ChooseFromGenerator, nominal)
     EXPECT_EQ(kSize, 286u);
 
     std::set<uint64_t> seen;
-    for (unsigned i=0; i<kSize; ++i)
+    for (unsigned i = 0; i < kSize; ++i)
     {
         auto mask = gen.next();
 
@@ -94,7 +94,7 @@ TEST(ChooseFromGenerator, nominal)
         EXPECT_EQ(seen.size(), i);
         EXPECT_EQ(seen.find(mask), seen.end());
         seen.insert(mask);
-        EXPECT_EQ(seen.size(), i+1);
+        EXPECT_EQ(seen.size(), i + 1);
     }
 
     auto last = gen.next();

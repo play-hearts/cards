@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "math/Bits.hpp"
+#include "gtest/gtest.h"
 
 namespace pho::math::tests {
 
@@ -78,8 +78,9 @@ TEST(countBits, nominal)
     EXPECT_EQ(64, countBits(~kZero));
 }
 
-TEST(roundUpToPowerOfTwo, Exact) {
-    for (uint64_t i=0; i<64; ++i)
+TEST(roundUpToPowerOfTwo, Exact)
+{
+    for (uint64_t i = 0; i < 64; ++i)
     {
         uint64_t u = kOne << i;
         EXPECT_EQ(u, roundUpToPowerOfTwo(u));

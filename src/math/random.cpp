@@ -1,6 +1,6 @@
 #include "math/random.hpp"
-#include "prim/range.hpp"
 #include "prim/dlog.hpp"
+#include "prim/range.hpp"
 
 #include <assert.h>
 #include <random>
@@ -16,7 +16,9 @@ class SplitMix64
     // This is only used by seedFrom64BitValue()
 public:
     SplitMix64() = delete;
-    SplitMix64(uint64_t seed) : x{seed} {}
+    SplitMix64(uint64_t seed)
+    : x{seed}
+    { }
 
     uint64_t next()
     {
@@ -29,7 +31,7 @@ public:
 private:
     uint64_t x;
 };
-}
+} // namespace
 
 void RandomGenerator::seedFromRandomDevice()
 {
@@ -42,15 +44,9 @@ void RandomGenerator::seedFromRandomDevice()
     }
 }
 
-RandomGenerator::RandomGenerator()
-{
-    seedFromRandomDevice();
-}
+RandomGenerator::RandomGenerator() { seedFromRandomDevice(); }
 
-RandomGenerator::RandomGenerator(uint64_t seed)
-{
-    seedFrom64BitValue(seed);
-}
+RandomGenerator::RandomGenerator(uint64_t seed) { seedFrom64BitValue(seed); }
 
 void RandomGenerator::seedFrom64BitValue(uint64_t seed) const
 {
@@ -62,28 +58,26 @@ void RandomGenerator::seedFrom64BitValue(uint64_t seed) const
 }
 
 namespace {
-inline uint64_t rotl(const uint64_t x, int k) {
-	return (x << k) | (x >> (64 - k));
-}
-}
+inline uint64_t rotl(const uint64_t x, int k) { return (x << k) | (x >> (64 - k)); }
+} // namespace
 
 uint64_t RandomGenerator::random64() const
 {
     // http://prng.di.unimi.it/xoshiro256starstar.c
-	const uint64_t result = rotl(s[1] * 5, 7) * 9;
+    const uint64_t result = rotl(s[1] * 5, 7) * 9;
 
-	const uint64_t t = s[1] << 17;
+    const uint64_t t = s[1] << 17;
 
-	s[2] ^= s[0];
-	s[3] ^= s[1];
-	s[1] ^= s[2];
-	s[0] ^= s[3];
+    s[2] ^= s[0];
+    s[3] ^= s[1];
+    s[1] ^= s[2];
+    s[0] ^= s[3];
 
-	s[2] ^= t;
+    s[2] ^= t;
 
-	s[3] = rotl(s[3], 45);
+    s[3] = rotl(s[3], 45);
 
-	return result;
+    return result;
 }
 
 uint128_t RandomGenerator::random128() const
@@ -118,7 +112,7 @@ double RandomGenerator::randNorm() const
     constexpr uint64_t kExponent{0x3ff0'0000'0000'0000ull};
     auto n = range64(kMaxMantissa) | kExponent;
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-    double d = *reinterpret_cast<double *>(&n);
+    double d = *reinterpret_cast<double*>(&n);
     assert(d >= 1.0);
     assert(d < 2.0);
     return d - 1.0;

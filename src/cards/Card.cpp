@@ -23,10 +23,7 @@ static void InitializeCardNames()
 class Initializer
 {
 public:
-    Initializer()
-    {
-        InitializeCardNames();
-    }
+    Initializer() { InitializeCardNames(); }
 };
 
 static Initializer gInitializer;

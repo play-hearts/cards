@@ -48,18 +48,11 @@ Deal::Deal(uint128_t index)
 
 Deal::Deal(const std::string& dealIndex)
 : Deal(dealIndex.empty() ? randomDealIndex() : math::parseHex128(dealIndex.c_str()))
-{
-}
+{ }
 
-uint128_t Deal::randomDealIndex(const RandomGenerator& rng)
-{
-    return rng.range128(kPossibleDistinguishableDeals);
-}
+uint128_t Deal::randomDealIndex(const RandomGenerator& rng) { return rng.range128(kPossibleDistinguishableDeals); }
 
-uint128_t Deal::randomDealIndex()
-{
-    return randomDealIndex(RandomGenerator::ThreadSpecific());
-}
+uint128_t Deal::randomDealIndex() { return randomDealIndex(RandomGenerator::ThreadSpecific()); }
 
 void Deal::DealHands(uint128_t I) { DealUnknownsToHands(CardSet::fullDeck(), mHands, I); }
 
@@ -149,7 +142,7 @@ Card removeACardAtRandom_(CardSet& hand, const math::RandomGenerator& rng)
     hand -= card;
     return card;
 }
-}
+} // namespace
 
 // This is a special constructor that can be used by a PassThree algorithm.
 Deal::Deal(CardSet carlosHand, const RandomGenerator& rng)
@@ -178,4 +171,4 @@ Deal::Deal(CardSet carlosHand, const RandomGenerator& rng)
     assert(mHands.totalCapacity() == 0);
 }
 
-}  // namespace pho::cards
+} // namespace pho::cards

@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
-#include "math/Bits.hpp"
 #include "cards/Card.hpp"
 #include "cards/CardSet.hpp"
+#include "math/Bits.hpp"
 
 namespace pho::cards {
 namespace {
@@ -71,5 +71,5 @@ TEST(Card, nameOfCard)
     EXPECT_EQ(std::string(" A♥️"), nameOfCard(cardFor(kAce, kHearts)));
 }
 
-} // namespace anon
+} // namespace
 } // namespace pho::cards
