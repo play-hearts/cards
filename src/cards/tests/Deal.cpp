@@ -40,7 +40,7 @@ TEST(Deal, deckForIndex0)
 {
     Deal deal(0);
     dealIsValid(deal);
-    for (int i = 0; i < 52; i++)
+    for (Ord i = 0; i < 52; i++)
         EXPECT_EQ(i, deal.PeekAt(i));
 }
 
