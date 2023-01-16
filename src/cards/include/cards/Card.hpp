@@ -17,7 +17,9 @@ enum Suit : Nib
     kClubs = 0u,
     kDiamonds,
     kSpades,
-    kHearts
+    kHearts,
+
+    kUnknown
 };
 
 constexpr auto allSuits = std::array<Suit, 4>{kClubs, kDiamonds, kSpades, kHearts};
