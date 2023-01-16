@@ -10,7 +10,7 @@ std::string to_string(CardSet cards)
     {
         result += nameOfCard(card);
     }
-    return result.size()>0 ? result : "<empty>";
+    return result.size() > 0 ? result : "<empty>";
 }
 
 } // namespace pho::cards

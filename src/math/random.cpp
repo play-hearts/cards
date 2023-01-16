@@ -1,65 +1,83 @@
 #include "math/random.hpp"
+#include "prim/dlog.hpp"
+#include "prim/range.hpp"
 
 #include <assert.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
+#include <random>
 
 namespace pho::math {
 
-RandomGenerator::RandomGenerator()
+namespace {
+DLog dlog("math_rng_seed");
+
+class SplitMix64
 {
-    const int kNumBytes = sizeof(s);
-    int fd = open("/dev/urandom", O_RDONLY);
-    assert(fd != -1);
-    int actual = read(fd, s, kNumBytes);
-    close(fd);
-    if (actual != kNumBytes)
+    // https://xoshiro.di.unimi.it/splitmix64.c
+    // This is only used by seedFrom64BitValue()
+public:
+    SplitMix64() = delete;
+    SplitMix64(uint64_t seed)
+    : x{seed}
+    { }
+
+    uint64_t next()
     {
-        fprintf(stderr, "Failed to read enough bytes to initialize RandomGenerator\n");
-        exit(1);
+        uint64_t z = (x += 0x9e3779b97f4a7c15);
+        z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+        z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+        return z ^ (z >> 31);
+    }
+
+private:
+    uint64_t x;
+};
+} // namespace
+
+void RandomGenerator::seedFromRandomDevice()
+{
+    std::random_device rd;
+    std::uniform_int_distribution<uint64_t> dist{};
+    for (auto i : prim::range(kStateWords))
+    {
+        s[i] = dist(rd);
+        dlog("seedFromRandomDevice({}): {:x}", i, s[i]);
     }
 }
 
-RandomGenerator::RandomGenerator(uint128_t seed)
-{
-    reseed(seed);
-}
+RandomGenerator::RandomGenerator() { seedFromRandomDevice(); }
 
-void RandomGenerator::reseed(uint128_t seed) const
+RandomGenerator::RandomGenerator(uint64_t seed) { seedFrom64BitValue(seed); }
+
+void RandomGenerator::seedFrom64BitValue(uint64_t seed) const
 {
+    SplitMix64 mix{seed};
     s[0] = seed;
-    s[1] = seed >> 21;
-    s[2] = seed >> 42;
-    s[3] = seed >> 64;
+    s[1] = mix.next();
+    s[2] = mix.next();
+    s[3] = mix.next();
 }
 
 namespace {
-inline uint64_t rotl(const uint64_t x, int k) {
-	return (x << k) | (x >> (64 - k));
-}
-}
+inline uint64_t rotl(const uint64_t x, int k) { return (x << k) | (x >> (64 - k)); }
+} // namespace
 
 uint64_t RandomGenerator::random64() const
 {
     // http://prng.di.unimi.it/xoshiro256starstar.c
-	const uint64_t result = rotl(s[1] * 5, 7) * 9;
+    const uint64_t result = rotl(s[1] * 5, 7) * 9;
 
-	const uint64_t t = s[1] << 17;
+    const uint64_t t = s[1] << 17;
 
-	s[2] ^= s[0];
-	s[3] ^= s[1];
-	s[1] ^= s[2];
-	s[0] ^= s[3];
+    s[2] ^= s[0];
+    s[3] ^= s[1];
+    s[1] ^= s[2];
+    s[0] ^= s[3];
 
-	s[2] ^= t;
+    s[2] ^= t;
 
-	s[3] = rotl(s[3], 45);
+    s[3] = rotl(s[3], 45);
 
-	return result;
+    return result;
 }
 
 uint128_t RandomGenerator::random128() const
@@ -94,7 +112,7 @@ double RandomGenerator::randNorm() const
     constexpr uint64_t kExponent{0x3ff0'0000'0000'0000ull};
     auto n = range64(kMaxMantissa) | kExponent;
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-    double d = *reinterpret_cast<double *>(&n);
+    double d = *reinterpret_cast<double*>(&n);
     assert(d >= 1.0);
     assert(d < 2.0);
     return d - 1.0;

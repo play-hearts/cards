@@ -15,21 +15,18 @@ uint128_t combinations128(unsigned n, unsigned k);
 uint128_t possibleDistinguishableDeals();
 // Returns 52! / 13!^4
 
-template <unsigned N>
-constexpr uint64_t constFactorial()
+template <unsigned N> constexpr uint64_t constFactorial()
 {
     static_assert(N < 15u);
-    if constexpr(N == 0)
+    if constexpr (N == 0)
         return uint64_t{1};
     else
-        return N * constFactorial<N-1>();
+        return N * constFactorial<N - 1>();
 }
 
-template <unsigned _K=3, unsigned _N=13>
-class ChooseFromGenerator
+template <unsigned _K = 3, unsigned _N = 13> class ChooseFromGenerator
 {
 public:
-
     static constexpr auto K = _K;
     static constexpr auto N = _N;
 
@@ -40,14 +37,14 @@ public:
 
     // If return is 0, then generation is done.
     // Otherwise, the returned value will have K of the first N bits set,
-    // i.e. valid results will be >= 2^K-1, and less  than 2^N-1, and CountBits(result) will K.
+    // i.e. valid results will be >= 2^K-1, and less  than 2^N-1, and countBits(result) will K.
     uint64_t next();
 
     // The number of elements that should be generated
-    static constexpr uint64_t size() { return constFactorial<N>() / (constFactorial<K>()*constFactorial<N-K>()); }
+    static constexpr uint64_t size() { return constFactorial<N>() / (constFactorial<K>() * constFactorial<N - K>()); }
 
-    static constexpr uint64_t first() { return ((1u<<K) - 1u); }
-    static constexpr uint64_t last() { return first() << (N-K); }
+    static constexpr uint64_t first() { return ((1u << K) - 1u); }
+    static constexpr uint64_t last() { return first() << (N - K); }
     static constexpr uint64_t limit() { return last() + 1u; }
 
 private:
@@ -62,18 +59,17 @@ ChooseFromGenerator<K, N>::ChooseFromGenerator()
     static_assert(K <= N);
     static_assert(N <= 13);
 
-    assert(CountBits(first()) == K);
-    assert(CountBits(last()) == K);
+    assert(countBits(first()) == K);
+    assert(countBits(last()) == K);
 }
 
-template <unsigned K, unsigned N>
-uint64_t ChooseFromGenerator<K, N>::next()
+template <unsigned K, unsigned N> uint64_t ChooseFromGenerator<K, N>::next()
 {
     // Gosper's hack: https://en.wikipedia.org/wiki/Combinatorial_number_system#Applications
     if (mNext == 0)
         return mNext;
 
-    assert(CountBits(mNext) == K);
+    assert(countBits(mNext) == K);
 
     // We always have the next result queued up, so we will return the current value of mNext;
     auto result = mNext;
@@ -83,14 +79,14 @@ uint64_t ChooseFromGenerator<K, N>::next()
 
     uint64_t u = x & -x; // extract rightmost bit 1; u =  0'00^a10^b
     uint64_t v = u + x; // set last non-trailing bit 0, and clear to the right; v=x'10^a00^b
-    if (v==0) // then overflow in v, or x==0
+    if (v == 0) // then overflow in v, or x==0
         x = 0; // signal that next k-combination cannot be represented
-    x = v +(((v^x)/u)>>2); // v^x = 0'11^a10^b, (v^x)/u = 0'0^b1^{a+2}, and x ← x'100^b1^a
+    x = v + (((v ^ x) / u) >> 2); // v^x = 0'11^a10^b, (v^x)/u = 0'0^b1^{a+2}, and x ← x'100^b1^a
 
     if (x > last())
         x = 0;
 
-    assert(mNext != result);    // Just to prove our alias really did update mNext
+    assert(mNext != result); // Just to prove our alias really did update mNext
     return result;
 }
 

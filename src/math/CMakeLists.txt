@@ -10,4 +10,6 @@ target_include_directories(math_lib
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+target_link_libraries(math_lib prim_lib)
+
 add_subdirectory(tests)

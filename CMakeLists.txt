@@ -17,4 +17,5 @@ include(cmake/create_test.cmake)
 include(cmake/fmt.cmake)
 include(cmake/googletest.cmake)
 
+enable_testing()
 add_subdirectory(src)

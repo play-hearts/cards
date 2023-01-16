@@ -1,106 +1,107 @@
-#include "gtest/gtest.h"
 #include "math/Bits.hpp"
+#include "gtest/gtest.h"
 
 namespace pho::math::tests {
 
 const uint64_t kZero = 0;
 const uint64_t kOne = 1;
 
-TEST(LeastSetBitIndex, OneBit)
+TEST(leastSetBitIndex, OneBit)
 {
     for (unsigned i = 0; i < 64; ++i)
     {
-        EXPECT_EQ(i, LeastSetBitIndex(kOne << i));
+        EXPECT_EQ(i, leastSetBitIndex(kOne << i));
     }
 }
 
-TEST(GreatestSetBitIndex, OneBit)
+TEST(greatestSetBitIndex, OneBit)
 {
     for (unsigned i = 0; i < 64; ++i)
     {
-        EXPECT_EQ(i, GreatestSetBitIndex(kOne << i));
+        EXPECT_EQ(i, greatestSetBitIndex(kOne << i));
     }
 }
 
-TEST(IsolateLeastBit, OneBit)
-{
-    for (unsigned i = 0; i < 64; ++i)
-    {
-        const uint64_t bits = kOne << i;
-        EXPECT_EQ(bits, IsolateLeastBit(bits));
-    }
-}
-
-TEST(IsolateGreatestBit, OneBit)
+TEST(isolateLeastBit, OneBit)
 {
     for (unsigned i = 0; i < 64; ++i)
     {
         const uint64_t bits = kOne << i;
-        EXPECT_EQ(bits, IsolateGreatestBit(bits));
+        EXPECT_EQ(bits, isolateLeastBit(bits));
     }
 }
 
-TEST(LeastSetBitIndex, TwoBits)
+TEST(isolateGreatestBit, OneBit)
+{
+    for (unsigned i = 0; i < 64; ++i)
+    {
+        const uint64_t bits = kOne << i;
+        EXPECT_EQ(bits, isolateGreatestBit(bits));
+    }
+}
+
+TEST(leastSetBitIndex, TwoBits)
 {
     const uint64_t bits = 3;
     for (unsigned i = 0; i < 63; ++i)
     {
-        EXPECT_EQ(i, LeastSetBitIndex(bits << i));
+        EXPECT_EQ(i, leastSetBitIndex(bits << i));
     }
 }
 
-TEST(GreatestSetBitIndex, TwoBits)
+TEST(greatestSetBitIndex, TwoBits)
 {
     const uint64_t bits = 3;
     for (unsigned i = 0; i < 63; ++i)
     {
-        EXPECT_EQ(i + 1, GreatestSetBitIndex(bits << i));
+        EXPECT_EQ(i + 1, greatestSetBitIndex(bits << i));
     }
 }
 
-TEST(LeastSetBitIndex, Zero) { EXPECT_EQ(64, LeastSetBitIndex(kZero)); }
+TEST(leastSetBitIndex, Zero) { EXPECT_EQ(64, leastSetBitIndex(kZero)); }
 
-TEST(GreatestSetBitIndex, Zero) { EXPECT_EQ(-1, GreatestSetBitIndex(kZero)); }
+TEST(greatestSetBitIndex, Zero) { EXPECT_EQ(-1, greatestSetBitIndex(kZero)); }
 
-TEST(GreatestSetBitIndex, uint128)
+TEST(greatestSetBitIndex, uint128)
 {
     const auto kHuge = ~uint128_t{0};
-    EXPECT_EQ(GreatestSetBitIndex(kHuge), 127);
+    EXPECT_EQ(greatestSetBitIndex(kHuge), 127);
 }
 
-TEST(CountBits, nominal)
+TEST(countBits, nominal)
 {
-    EXPECT_EQ(0, CountBits(kZero));
-    EXPECT_EQ(1, CountBits(8));
-    EXPECT_EQ(2, CountBits(12));
-    EXPECT_EQ(3, CountBits(82));
-    EXPECT_EQ(52, CountBits((kOne << 52) - 1));
-    EXPECT_EQ(64, CountBits(~kZero));
+    EXPECT_EQ(0, countBits(kZero));
+    EXPECT_EQ(1, countBits(8));
+    EXPECT_EQ(2, countBits(12));
+    EXPECT_EQ(3, countBits(82));
+    EXPECT_EQ(52, countBits((kOne << 52) - 1));
+    EXPECT_EQ(64, countBits(~kZero));
 }
 
-TEST(RoundUpToPowerOfTwo, Exact) {
-    for (uint64_t i=0; i<64; ++i)
+TEST(roundUpToPowerOfTwo, Exact)
+{
+    for (uint64_t i = 0; i < 64; ++i)
     {
         uint64_t u = kOne << i;
-        EXPECT_EQ(u, RoundUpToPowerOfTwo(u));
+        EXPECT_EQ(u, roundUpToPowerOfTwo(u));
     }
 }
 
-TEST(RoundUpToPowerOfTwo, RoundUp1)
+TEST(roundUpToPowerOfTwo, RoundUp1)
 {
     for (uint64_t i = 0; i < 63; ++i)
     {
         uint64_t u = kOne << i;
-        EXPECT_EQ(u * 2, RoundUpToPowerOfTwo(u + 1));
+        EXPECT_EQ(u * 2, roundUpToPowerOfTwo(u + 1));
     }
 }
 
-TEST(RoundUpToPowerOfTwo, RoundUp2)
+TEST(roundUpToPowerOfTwo, RoundUp2)
 {
     for (uint64_t i = 2; i < 64; ++i)
     {
         uint64_t u = kOne << i;
-        EXPECT_EQ(u, RoundUpToPowerOfTwo(u - 1));
+        EXPECT_EQ(u, roundUpToPowerOfTwo(u - 1));
     }
 }
 

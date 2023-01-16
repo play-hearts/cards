@@ -66,4 +66,4 @@ private:
     CardHands mHands;
 };
 
-}  // namespace pho::cards
+} // namespace pho::cards

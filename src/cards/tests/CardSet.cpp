@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "cards/CardSet.hpp"
+#include "gtest/gtest.h"
 
 #include <initializer_list>
 
@@ -86,11 +86,11 @@ TEST(CardSet, range_for)
     auto hand = CardSet::make(cards);
 
     auto it = cards.begin();
-    for (Card c: hand)
+    for (Card c : hand)
     {
         EXPECT_EQ(c, *it++);
     }
     EXPECT_EQ(it, cards.end());
 }
 
-}   // namespace pho::cards::tests
+} // namespace pho::cards::tests
