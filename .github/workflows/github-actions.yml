@@ -11,11 +11,6 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.tar.xz",
-            os: windows-latest,
-            build_type: "Release", cc: "gcc", cxx: "g++"
-          }
-        - {
             name: "Ubuntu Latest GCC", artifact: "Linux-gcc.tar.xz",
             os: ubuntu-latest,
             build_type: "Release", cc: "gcc", cxx: "g++"
