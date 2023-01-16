@@ -6,4 +6,6 @@ FetchContent_Declare(
     GIT_TAG 81f1cc74a776581cdef8659d176049d3aeb743c6
 )
 
-FetchContent_MakeAvailable(fmt)
+if(NOT fmt_POPULATED)
+    FetchContent_MakeAvailable(fmt)
+endif()
