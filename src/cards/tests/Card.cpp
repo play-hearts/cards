@@ -16,15 +16,15 @@ TEST(Card, constants)
 
 TEST(Card, cardFor)
 {
-    EXPECT_EQ(0u, cardFor(kTwo, kClubs));
-    EXPECT_EQ(13u, cardFor(kTwo, kDiamonds));
-    EXPECT_EQ(26u, cardFor(kTwo, kSpades));
-    EXPECT_EQ(39u, cardFor(kTwo, kHearts));
+    EXPECT_EQ(0u, cardFor(kClubs, kTwo));
+    EXPECT_EQ(13u, cardFor(kDiamonds, kTwo));
+    EXPECT_EQ(26u, cardFor(kSpades, kTwo));
+    EXPECT_EQ(39u, cardFor(kHearts, kTwo));
 
-    EXPECT_EQ(12u, cardFor(kAce, kClubs));
-    EXPECT_EQ(25u, cardFor(kAce, kDiamonds));
-    EXPECT_EQ(38u, cardFor(kAce, kSpades));
-    EXPECT_EQ(51u, cardFor(kAce, kHearts));
+    EXPECT_EQ(12u, cardFor(kClubs, kAce));
+    EXPECT_EQ(25u, cardFor(kDiamonds, kAce));
+    EXPECT_EQ(38u, cardFor(kSpades, kAce));
+    EXPECT_EQ(51u, cardFor(kHearts, kAce));
 }
 
 TEST(Card, suitOf)
@@ -55,20 +55,20 @@ TEST(Card, rankOf)
 
 TEST(Card, nameOfCard)
 {
-    EXPECT_EQ(std::string(" 2♣️"), nameOfCard(cardFor(kTwo, kClubs)));
-    EXPECT_EQ(std::string(" 2♦️"), nameOfCard(cardFor(kTwo, kDiamonds)));
-    EXPECT_EQ(std::string(" 2♠️"), nameOfCard(cardFor(kTwo, kSpades)));
-    EXPECT_EQ(std::string(" 2♥️"), nameOfCard(cardFor(kTwo, kHearts)));
+    EXPECT_EQ(std::string(" 2♣️"), nameOfCard(cardFor(kClubs, kTwo)));
+    EXPECT_EQ(std::string(" 2♦️"), nameOfCard(cardFor(kDiamonds, kTwo)));
+    EXPECT_EQ(std::string(" 2♠️"), nameOfCard(cardFor(kSpades, kTwo)));
+    EXPECT_EQ(std::string(" 2♥️"), nameOfCard(cardFor(kHearts, kTwo)));
 
-    EXPECT_EQ(std::string("10♣️"), nameOfCard(cardFor(kTen, kClubs)));
-    EXPECT_EQ(std::string("10♦️"), nameOfCard(cardFor(kTen, kDiamonds)));
-    EXPECT_EQ(std::string("10♠️"), nameOfCard(cardFor(kTen, kSpades)));
-    EXPECT_EQ(std::string("10♥️"), nameOfCard(cardFor(kTen, kHearts)));
+    EXPECT_EQ(std::string("10♣️"), nameOfCard(cardFor(kClubs, kTen)));
+    EXPECT_EQ(std::string("10♦️"), nameOfCard(cardFor(kDiamonds, kTen)));
+    EXPECT_EQ(std::string("10♠️"), nameOfCard(cardFor(kSpades, kTen)));
+    EXPECT_EQ(std::string("10♥️"), nameOfCard(cardFor(kHearts, kTen)));
 
-    EXPECT_EQ(std::string(" A♣️"), nameOfCard(cardFor(kAce, kClubs)));
-    EXPECT_EQ(std::string(" A♦️"), nameOfCard(cardFor(kAce, kDiamonds)));
-    EXPECT_EQ(std::string(" A♠️"), nameOfCard(cardFor(kAce, kSpades)));
-    EXPECT_EQ(std::string(" A♥️"), nameOfCard(cardFor(kAce, kHearts)));
+    EXPECT_EQ(std::string(" A♣️"), nameOfCard(cardFor(kClubs, kAce)));
+    EXPECT_EQ(std::string(" A♦️"), nameOfCard(cardFor(kDiamonds, kAce)));
+    EXPECT_EQ(std::string(" A♠️"), nameOfCard(cardFor(kSpades, kAce)));
+    EXPECT_EQ(std::string(" A♥️"), nameOfCard(cardFor(kHearts, kAce)));
 }
 
 } // namespace

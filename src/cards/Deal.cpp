@@ -27,7 +27,7 @@ int Deal::startPlayer() const
     // The hands are always sorted, so we only need to look at first card of each hand
     for (auto p : prim::range(kNumPlayers))
     {
-        if (PeekAt(p, 0) == 0)
+        if (PeekAt(p, 0) == Card(0))
             return p;
     }
     assert(false);

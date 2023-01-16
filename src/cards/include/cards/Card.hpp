@@ -17,7 +17,9 @@ enum Suit : Nib
     kClubs = 0u,
     kDiamonds,
     kSpades,
-    kHearts
+    kHearts,
+
+    kUnknown
 };
 
 constexpr auto allSuits = std::array<Suit, 4>{kClubs, kDiamonds, kSpades, kHearts};
@@ -53,7 +55,6 @@ public:
     Card& operator=(Card&&) = default;
 
     constexpr Ord ord() const { return card; }
-
     constexpr Suit suit() const { return Suit(card / kCardsPerSuit); }
     constexpr Rank rank() const { return Rank(card % kCardsPerSuit); }
 
@@ -71,7 +72,7 @@ constexpr Card kNoCard{};
 
 constexpr Suit suitOf(Card card) { return card.suit(); }
 constexpr Rank rankOf(Card card) { return card.rank(); }
-constexpr Card cardFor(Rank rank, Suit suit) { return suit * kCardsPerSuit + rank; }
+constexpr Card cardFor(Suit suit, Rank rank) { return Card::cardFor(suit, rank); }
 
 constexpr Nib iSuitOf(Card card) { return Nib(suitOf(card)); }
 constexpr Nib iRankOf(Card card) { return Nib(rankOf(card)); }

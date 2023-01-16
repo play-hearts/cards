@@ -1,5 +1,3 @@
-add_custom_target(all_tests)
-
 function(create_test name)
     set(options)
     set(oneValueArgs)
@@ -11,8 +9,5 @@ function(create_test name)
 
     add_custom_target(run_${name}_test COMMAND ${name}_test)
 
-    add_dependencies(all_tests run_${name}_test)
-
     add_test(NAME ${name} COMMAND ${name}_test)
-
 endfunction()
