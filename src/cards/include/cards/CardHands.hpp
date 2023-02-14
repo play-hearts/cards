@@ -1,9 +1,8 @@
-// lib/CardHands.h
+// cards/CardHands.hpp
 
 #pragma once
 
 #include "cards/CardSet.hpp"
-#include "prim/range.hpp"
 
 namespace pho::cards {
 
@@ -39,92 +38,40 @@ public:
 
     using FourHands = std::array<CardSet, 4>;
 
-    CardHands()
-    {
-        // hands empty, full capacity
-        mCapacities.fill(13);
-    }
+    CardHands();
 
-    CardHands(const CardHands& other) = default;
-    CardHands& operator=(const CardHands& other) = delete;
+    CardHands(const CardHands&) = default;
+    CardHands(CardHands&&) = default;
+    CardHands& operator=(const CardHands&) = default;
+    CardHands& operator=(CardHands&&) = default;
 
-    const FourHands& get() const { return mHands; }
+    auto get() const -> const FourHands&;
 
-    const CardSet& operator[](int i) const { return mHands[i]; }
+    auto operator[](int i) const -> CardSet;
+    auto at(int i) const -> CardSet;
 
-    Size_t availableCapacity(int i) const { return mCapacities[i] - mHands[i].size(); }
+    auto availableCapacity(int i) const -> Size_t;
 
-    // TODO move most methods into .cpp file
-    Size_t totalCapacity() const
-    {
-        Size_t total = 0;
-        for (auto p : prim::range(kNumPlayers))
-            total += availableCapacity(p);
-        return total;
-    }
+    auto totalCapacity() const -> Size_t;
 
-    unsigned playersWithAvailableCapacity(Size_t expectedCapacity) const
-    {
-        unsigned numPlayers = 0;
-        Size_t capacity = 0;
-        for (auto p : prim::range(kNumPlayers))
-        {
-            Size_t cap = availableCapacity(p);
-            capacity += cap;
-            if (cap > 0)
-                ++numPlayers;
-        }
-        assert(capacity == expectedCapacity);
-        (void) capacity; // silence warning in release build
-        assert(numPlayers >= 1);
-        return numPlayers;
-    }
+    auto playersWithAvailableCapacity(Size_t expectedCapacity) const -> unsigned;
 
-    void addCard(unsigned p, Card card)
-    {
-        assert(!mHands[p].hasCard(card));
-        mHands[p] += card;
-    }
+    auto addCard(unsigned p, Card card) -> void;
 
-    void setUnion(unsigned p, const CardSet& cards)
-    {
-        if (cards.empty())
-            return;
-        assert(availableCapacity(p) >= cards.size());
-        mHands[p] += cards;
-    }
+    auto setUnion(unsigned p, CardSet cards) -> void;
 
-    void prepCurrentPlayerForDeal(unsigned p, const CardSet& hand)
-    {
-        mCapacities[p] = hand.size();
-        mHands[p] = hand;
-    }
+    auto prepCurrentPlayerForDeal(unsigned p, CardSet hand) -> void;
 
-    void prepForDeal(unsigned p, Size_t capacity, const CardSet& extra)
-    {
-        mCapacities[p] = capacity;
-        mHands[p] = extra;
-    }
+    auto prepForDeal(unsigned p, Size_t capacity, CardSet extra) -> void;
 
-    Size_t reduceAvailableCapacityTo(unsigned p, Size_t capacity)
-    {
-        // This method is like prepForDeal, but used in a more specialized situation.
-        // See TwoOpponentsGetSuit. We're distributing cards from one suit into this and another hand,
-        // but will use DealUnknownsToHands to do the work. We need to temporarily reduce the capacity
-        // to just the number of cards from the suit that we want to distribute to the hand.
-        // After we're done, we need to restore the capacity to its previous value using restoreCapacityTo().
-        assert(capacity <= availableCapacity(p));
-        Size_t prevCapacity = mCapacities[p];
-        mCapacities[p] = mHands[p].size() + capacity;
-        return prevCapacity;
-    }
+    // This method is like prepForDeal, but used in a more specialized situation.
+    // See TwoOpponentsGetSuit. We're distributing cards from one suit into this and another hand,
+    // but will use DealUnknownsToHands to do the work. We need to temporarily reduce the capacity
+    // to just the number of cards from the suit that we want to distribute to the hand.
+    // After we're done, we need to restore the capacity to its previous value using restoreCapacityTo().
+    auto reduceAvailableCapacityTo(unsigned p, Size_t capacity) -> Size_t;
 
-    void restoreCapacityTo(unsigned p, Size_t capacity)
-    {
-        assert(mCapacities[p] == mHands[p].size());
-        assert(capacity >= mCapacities[p]);
-        mCapacities[p] = capacity;
-    }
+    auto restoreCapacityTo(unsigned p, Size_t capacity) -> void;
 
 private:
     using Capacities = std::array<Size_t, 4>;

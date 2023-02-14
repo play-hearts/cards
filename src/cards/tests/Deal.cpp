@@ -2,6 +2,7 @@
 
 #include "cards/Deal.hpp"
 #include "math/combinatorics.hpp"
+#include "prim/range.hpp"
 
 namespace pho::cards::tests {
 
