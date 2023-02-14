@@ -2,6 +2,7 @@
 include_directories(${PROJECT_SOURCE_DIR})
 add_library(cards_lib STATIC
     Card.cpp
+    CardHands.cpp
     CardSet.cpp
     Deal.cpp
 )

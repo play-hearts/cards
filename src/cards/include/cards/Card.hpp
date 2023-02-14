@@ -63,6 +63,8 @@ public:
     static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
 
     friend bool operator==(Card a, Card b) { return a.card == b.card; }
+    friend bool operator!=(Card a, Card b) { return a.card != b.card; }
+    friend bool operator<(Card a, Card b) { return a.card < b.card; }
 
 private:
     Ord card;
