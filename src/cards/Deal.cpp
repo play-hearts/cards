@@ -21,19 +21,6 @@ using uint128_t = math::uint128_t;
 
 static uint128_t kPossibleDistinguishableDeals = math::possibleDistinguishableDeals();
 
-int Deal::startPlayer() const
-{
-    // The 2 clubs is card number 0
-    // The hands are always sorted, so we only need to look at first card of each hand
-    for (auto p : prim::range(kNumPlayers))
-    {
-        if (PeekAt(p, 0) == Card(0))
-            return p;
-    }
-    assert(false);
-    return -1;
-}
-
 Deal::Deal()
 : mDealIndex(randomDealIndex())
 {
@@ -132,7 +119,7 @@ void Deal::printDeal() const
     fmt::print("\n");
 }
 
-CardSet Deal::dealFor(int player) const { return mHands[player]; }
+CardSet Deal::dealFor(PlayerNum player) const { return mHands[player]; }
 
 namespace {
 Card removeACardAtRandom_(CardSet& hand, const math::RandomGenerator& rng)
@@ -145,29 +132,33 @@ Card removeACardAtRandom_(CardSet& hand, const math::RandomGenerator& rng)
 } // namespace
 
 // This is a special constructor that can be used by a PassThree algorithm.
-Deal::Deal(CardSet carlosHand, const RandomGenerator& rng)
+Deal::Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player)
 : mDealIndex(~uint128_t{0})
 {
-    assert(carlosHand.size() == kCardsPerHand);
+    assert(playersHand.size() == kCardsPerHand);
+    assert(player < int(kNumPlayers));
 
     CardSet others{CardSet::kAllCards};
-    others -= carlosHand;
+    others -= playersHand;
     assert(others.size() == kCardsPerDeck - kCardsPerHand);
 
     assert(mHands.totalCapacity() == kCardsPerDeck);
-    mHands.setUnion(0, carlosHand);
+    mHands.setUnion(player, playersHand);
     assert(mHands.totalCapacity() == kCardsPerDeck - kCardsPerHand);
 
+    auto o1 = (player+1) % kNumPlayers;
+    auto o2 = (player+2) % kNumPlayers;
+    auto o3 = (player+3) % kNumPlayers;
     for (auto i : prim::range(kCardsPerHand))
     {
         (void) i;
-        mHands.addCard(1, removeACardAtRandom_(others, rng));
-        mHands.addCard(2, removeACardAtRandom_(others, rng));
+        mHands.addCard(o1, removeACardAtRandom_(others, rng));
+        mHands.addCard(o2, removeACardAtRandom_(others, rng));
     }
     assert(others.size() == kCardsPerHand);
 
-    assert(mHands.availableCapacity(3) == kCardsPerHand);
-    mHands.setUnion(3, others);
+    assert(mHands.availableCapacity(o3) == kCardsPerHand);
+    mHands.setUnion(o3, others);
     assert(mHands.totalCapacity() == 0);
 }
 
