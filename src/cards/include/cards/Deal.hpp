@@ -42,6 +42,8 @@ public:
     // Returns a vector of the 13 cards dealt to the player
     CardSet dealFor(PlayerNum player) const;
 
+    auto hands() const -> FourHands { return mHands.get(); }
+
 static DealIndex randomDealIndex(const RandomGenerator& rng);
     static DealIndex randomDealIndex();
     // Generate a random number in the range [0, 52!/(13!^4))
