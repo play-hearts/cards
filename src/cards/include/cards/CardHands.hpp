@@ -3,6 +3,7 @@
 #pragma once
 
 #include "cards/CardSet.hpp"
+#include "cards/FourHands.hpp"
 
 namespace pho::cards {
 
@@ -36,8 +37,6 @@ public:
     // Capacities should be remain constant for the life of a CardHands instance.
     // Only the AvailableCapacities change, as cards are inserted into the hands.
 
-    using FourHands = std::array<CardSet, 4>;
-
     CardHands();
 
     CardHands(const CardHands&) = default;
@@ -45,7 +44,7 @@ public:
     CardHands& operator=(const CardHands&) = default;
     CardHands& operator=(CardHands&&) = default;
 
-    auto get() const -> const FourHands&;
+    auto get() const -> FourHands { return mHands; }
 
     auto operator[](int i) const -> CardSet;
     auto at(int i) const -> CardSet;
