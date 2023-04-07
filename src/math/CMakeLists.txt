@@ -1,6 +1,7 @@
 
 add_library(math_lib STATIC
     combinatorics.cpp
+    elo.cpp
     math.cpp
     random.cpp
 )
