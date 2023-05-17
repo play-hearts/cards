@@ -19,6 +19,8 @@ public:
     FourHands& operator=(const FourHands&) = default;
     FourHands& operator=(FourHands&&) = default;
 
+    auto hand(int i) const -> CardSet { return mRep.at(i); }
+
     auto at(int i) const -> CardSet { return mRep.at(i); }
     auto at(int i) -> CardSet& { return mRep.at(i); }
 
@@ -26,4 +28,4 @@ private:
     Rep mRep;
 };
 
-} // namespace pho::hearts
+} // namespace pho::cards

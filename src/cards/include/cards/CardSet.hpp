@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <stdint.h>
+#include <vector>
 
 #include "cards/Card.hpp"
 #include "math/Bits.hpp"
@@ -61,6 +62,8 @@ public:
 
 public:
     // ---- immutable/functional methods
+
+    [[nodiscard]] std::vector<Card> asCardVector() const;
 
     [[nodiscard]] BitSetMask asBits() const { return mCardBits; }
 
