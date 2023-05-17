@@ -8,6 +8,11 @@ add_compile_options(-Wall -Wextra -Wno-unused-parameter)
 add_compile_options(-pthread)
 add_link_options(-pthread)
 
+if (EMSCRIPTEN)
+    add_link_options(--bind)
+    add_link_options("SHELL:-s LLD_REPORT_UNDEFINED")
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
