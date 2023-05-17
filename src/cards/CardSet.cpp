@@ -38,6 +38,8 @@ EMSCRIPTEN_BINDINGS(CardSet) {
         .function("size", &CardSet::size)
         ;
 
+    function("to_string", &pho::cards::to_string);
+
     register_vector<Card>("CardVector");
 }
 #endif
