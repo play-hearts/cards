@@ -11,10 +11,6 @@ CardHands::CardHands()
     mCapacities.fill(13);
 }
 
-auto CardHands::get() const -> const FourHands&
-{
-    return mHands;
-}
 
 auto CardHands::at(int i) const -> CardSet
 {
@@ -23,12 +19,12 @@ auto CardHands::at(int i) const -> CardSet
 
 auto CardHands::operator[](int i) const -> CardSet
 {
-    return mHands[i];
+    return mHands.at(i);
 }
 
 auto CardHands::availableCapacity(int i) const -> Size_t
 {
-    return mCapacities[i] - mHands[i].size();
+    return mCapacities[i] - mHands.at(i).size();
 }
 
 auto CardHands::totalCapacity() const -> Size_t
@@ -58,8 +54,8 @@ auto CardHands::playersWithAvailableCapacity(Size_t expectedCapacity) const -> u
 
 auto CardHands::addCard(unsigned p, Card card) -> void
 {
-    assert(!mHands[p].hasCard(card));
-    mHands[p] += card;
+    assert(!mHands.at(p).hasCard(card));
+    mHands.at(p) += card;
 }
 
 auto CardHands::setUnion(unsigned p, CardSet cards) -> void
@@ -67,19 +63,19 @@ auto CardHands::setUnion(unsigned p, CardSet cards) -> void
     if (cards.empty())
         return;
     assert(availableCapacity(p) >= cards.size());
-    mHands[p] += cards;
+    mHands.at(p) += cards;
 }
 
 auto CardHands::prepCurrentPlayerForDeal(unsigned p, CardSet hand) -> void
 {
     mCapacities[p] = hand.size();
-    mHands[p] = hand;
+    mHands.at(p) = hand;
 }
 
 auto CardHands::prepForDeal(unsigned p, Size_t capacity, CardSet extra) -> void
 {
     mCapacities[p] = capacity;
-    mHands[p] = extra;
+    mHands.at(p) = extra;
 }
 
 auto CardHands::reduceAvailableCapacityTo(unsigned p, Size_t capacity) -> Size_t
@@ -91,13 +87,13 @@ auto CardHands::reduceAvailableCapacityTo(unsigned p, Size_t capacity) -> Size_t
     // After we're done, we need to restore the capacity to its previous value using restoreCapacityTo().
     assert(capacity <= availableCapacity(p));
     Size_t prevCapacity = mCapacities[p];
-    mCapacities[p] = mHands[p].size() + capacity;
+    mCapacities[p] = mHands.at(p).size() + capacity;
     return prevCapacity;
 }
 
 auto CardHands::restoreCapacityTo(unsigned p, Size_t capacity) -> void
 {
-    assert(mCapacities[p] == mHands[p].size());
+    assert(mCapacities[p] == mHands.at(p).size());
     assert(capacity >= mCapacities[p]);
     mCapacities[p] = capacity;
 }

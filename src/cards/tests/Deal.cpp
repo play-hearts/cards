@@ -107,4 +107,24 @@ TEST(Deal, deckWithLastIndex)
     }
 }
 
+TEST(Deal, hypotheticalForDealtHand)
+{
+    math::RandomGenerator rng;
+    Deal deal{};
+    for (auto p : prim::range(kNumPlayers))
+    {
+        Deal hypothetical{deal.dealFor(p), rng, p};
+        dealIsValid(hypothetical);
+        EXPECT_EQ(deal.dealFor(p), hypothetical.dealFor(p));
+        for (auto q : prim::range(kNumPlayers))
+        {
+            if (p == q)
+                continue;
+
+            // This test might fail for a legitimate hypothetical deal, but it's very unlikely
+            EXPECT_NE(deal.dealFor(q), hypothetical.dealFor(q));
+        }
+    }
+}
+
 } // namespace pho::cards::tests

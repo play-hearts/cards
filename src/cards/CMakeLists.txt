@@ -5,6 +5,7 @@ add_library(cards_lib STATIC
     CardHands.cpp
     CardSet.cpp
     Deal.cpp
+    FourHands.cpp
 )
 
 target_link_libraries(cards_lib
