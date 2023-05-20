@@ -17,6 +17,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(cmake/CPM.cmake)
+include(cmake/magic_enum.cmake)
+
 include(cmake/create_test.cmake)
 include(cmake/wasm_module.cmake)
 
