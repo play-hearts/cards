@@ -21,4 +21,9 @@ target_link_libraries(gstate_lib
     magic_enum
     )
 
+wasm_module(gstate
+    DEPENDS
+    gstate_lib
+)
+
 add_subdirectory(tests)

@@ -2,6 +2,10 @@
 #include "gstate/utils.hpp"
 #include "prim/range.hpp"
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::gstate
 {
 
@@ -534,5 +538,14 @@ auto GState::asProbabilities() const -> ProbArray
     return prob;
 }
 
+#if __EMSCRIPTEN__
+using namespace emscripten;
+
+EMSCRIPTEN_BINDINGS(GState) {
+    class_<GState>("GState")
+        .constructor<>()
+        ;
+}
+#endif
 
 } // pho::gstate

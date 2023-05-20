@@ -79,7 +79,7 @@ public:
     static GameBehavior kJackDiamonds;
     static GameBehavior kSpades;
 
-    GState(Init init, GameBehavior behavior = kStandard);
+    GState(Init init=kNoPass, GameBehavior behavior = kStandard);
     GState(const cards::Deal& deal, PassOffset passOffset=Init::kRandomPassOffset, GameBehavior behavior = kStandard);
     GState(const GState&) = default;
 
