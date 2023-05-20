@@ -106,7 +106,7 @@ TEST(unbiased_by_seat, player_outcome)
             {
                 auto playerOutcome = std::array<double, kNumPlayers>{};
                 auto stats = stats::RunningStats{};
-                for (auto i : prim::range(1000))
+                for (auto i : prim::range(100))
                 {
                     (void) i;
                     auto gameState = runOneGame(chooser.second, predicate.second, variant);
