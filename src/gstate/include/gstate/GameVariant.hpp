@@ -2,12 +2,12 @@
 
 #include <cassert>
 #include <variant>
-#include <wise_enum.h>
+#include <algorithm>
 
 
 namespace pho::gstate {
 
-WISE_ENUM(GameVariant, standard, jack, spades)
+enum GameVariant { standard, jack, spades };
 
 using FloatScores = std::array<float, cards::kNumPlayers>;
 

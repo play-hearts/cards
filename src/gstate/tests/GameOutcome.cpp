@@ -11,6 +11,7 @@
 
 #include <map>
 #include <numeric>
+#include <magic_enum.hpp>
 
 namespace pho::gstate {
 
@@ -92,11 +93,11 @@ TEST(unbiased_by_seat, trick_lead)
 
 TEST(unbiased_by_seat, player_outcome)
 {
-    for (auto variant : wise_enum::range<GameBehavior::Variant>)
+    for (auto variant : magic_enum::enum_values<GameBehavior::Variant>())
     {
         for (const auto& predicate : predicates)
         {
-            if (predicate.first == "moonShot" && variant.value == GameBehavior::Variant::spades)
+            if (predicate.first == "moonShot" && variant == GameBehavior::Variant::spades)
             {
                 fmt::print("Skipping moon shot game with spades because never happens\n");
                 continue;
@@ -108,7 +109,7 @@ TEST(unbiased_by_seat, player_outcome)
                 for (auto i : prim::range(1000))
                 {
                     (void) i;
-                    auto gameState = runOneGame(chooser.second, predicate.second, variant.value);
+                    auto gameState = runOneGame(chooser.second, predicate.second, variant);
                     auto outcome = gameState.getVariantOutcomeRep();
                     auto rowSum = float{};
                     for (auto p : prim::range(kNumPlayers))
@@ -123,7 +124,7 @@ TEST(unbiased_by_seat, player_outcome)
                     }
                     EXPECT_FLOAT_EQ(rowSum, 1.0f);
                 }
-                fmt::print("{}:{}:{}  score:{}\n", variant.name, predicate.first, chooser.first, toString(stats));
+                fmt::print("{}:{}:{}  score:{}\n", magic_enum::enum_name(variant), predicate.first, chooser.first, toString(stats));
                 auto avg = std::abs(stats.mean());
                 EXPECT_LT(avg, 1.0e-6);
             }

@@ -39,6 +39,7 @@ TEST(GameBehavior, trickWinner)
     auto spades = GameBehavior::make(GameVariant::spades);
 
     EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 3);
+    EXPECT_EQ(standard.trickWinner(Trick{{k2S, k3S, k4S, k4C}}), 2);
     EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 2);
 
     EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 1);
