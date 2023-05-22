@@ -9,7 +9,8 @@ add_compile_options(-pthread)
 add_link_options(-pthread)
 
 if (EMSCRIPTEN)
-    add_link_options(--bind)
+add_link_options("SHELL:-s WASM_BIGINT")
+    add_link_options("SHELL:--bind")
     add_link_options("SHELL:-s LLD_REPORT_UNDEFINED")
 endif()
 
