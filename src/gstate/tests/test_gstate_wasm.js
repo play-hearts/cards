@@ -8,6 +8,9 @@ const assert = require('assert');
 async function GState_test(instance) {
     const gstate = new instance.GState();
 
+    const dealIndex = instance.getDealIndex(gstate);
+    console.log(dealIndex);
+
     gstate.delete()
 }
 

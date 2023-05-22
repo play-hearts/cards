@@ -68,8 +68,6 @@ public:
         constexpr Init()
         : dealIndex{kRandomDealIndex}, passOffset{kRandomPassOffset}
         {}
-
-
     };
 
     static Init kRandom;
@@ -179,6 +177,8 @@ public:
 
     using Bid = uint8_t;
     void setBid(PlayerNum p, Bid bid) { assert(bid>0); assert(bid<=13); mBids[p] = bid; }
+
+    auto dealIndex() const -> DealIndex { return mDealIndex; }
 
 private:
     friend hearts::KState;

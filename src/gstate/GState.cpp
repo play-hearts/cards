@@ -1,6 +1,7 @@
 #include "gstate/GState.hpp"
 #include "gstate/utils.hpp"
 #include "prim/range.hpp"
+#include "math/Int128.hpp"
 
 #if __EMSCRIPTEN__
 #include <emscripten/bind.h>
@@ -541,10 +542,18 @@ auto GState::asProbabilities() const -> ProbArray
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
+auto getDealIndex(const GState& state) -> emscripten::val
+{
+    auto index = state.dealIndex();
+    return math::int128_to_val(index);
+}
+
 EMSCRIPTEN_BINDINGS(GState) {
     class_<GState>("GState")
         .constructor<>()
         ;
+
+    function("getDealIndex", &getDealIndex);
 }
 #endif
 
