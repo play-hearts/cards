@@ -1,5 +1,6 @@
 add_library(gstate_lib STATIC
     GameBehavior.cpp
+    GameVariant.cpp
     GState.cpp
     PlayerVoids.cpp
     ScoreResult.cpp

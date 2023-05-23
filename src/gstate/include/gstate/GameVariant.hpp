@@ -1,8 +1,11 @@
 #pragma once
 
+#include "cards/constants.hpp"
+
+#include <algorithm>
+#include <array>
 #include <cassert>
 #include <variant>
-#include <algorithm>
 
 
 namespace pho::gstate {
