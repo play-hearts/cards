@@ -32,8 +32,11 @@ GameBehavior GState::kStandard = GameBehavior::make(GameVariant::standard);
 GameBehavior GState::kJackDiamonds = GameBehavior::make(GameVariant::jack);
 GameBehavior GState::kSpades = GameBehavior::make(GameVariant::spades);
 
-GState::Init GState::kRandom = GState::Init{GState::Init::kRandomDealIndex, GState::Init::kRandomPassOffset};
-GState::Init GState::kNoPass = GState::Init{GState::Init::kRandomDealIndex, uint8_t{0}};
+GState::Init GState::Init::kRandom = GState::Init{GState::Init::kRandomDealIndex, GState::Init::kRandomPassOffset};
+GState::Init GState::Init::kNoPass = GState::Init{GState::Init::kRandomDealIndex, uint8_t{0}};
+
+GState::Init GState::kRandom = GState::Init::kRandom;
+GState::Init GState::kNoPass = GState::Init::kNoPass;
 
 GState::GState(const cards::Deal& deal, uint8_t passOffset, GameBehavior behavior)
 : mDealIndex{deal.dealIndex()}
@@ -55,6 +58,13 @@ GState::GState(const cards::Deal& deal, uint8_t passOffset, GameBehavior behavio
 GState::GState(Init init, GameBehavior behavior)
 : GState{Deal{actualDealIndex(init.dealIndex)}, actualPassOffset(init.passOffset), behavior}
 {}
+
+#if __EMSCRIPTEN__
+GState::GState(const emscripten::val& init, GameVariant variant)
+: GState{Init::fromVal(init), GameBehavior::make(variant)}
+{}
+#endif
+
 
 auto GState::setPassFor(PlayerNum p, CardSet pass) -> void
 {
@@ -545,15 +555,25 @@ using namespace emscripten;
 auto getDealIndex(const GState& state) -> emscripten::val
 {
     auto index = state.dealIndex();
-    return math::int128_to_val(index);
+    return math::uint128_to_val(index);
 }
 
 EMSCRIPTEN_BINDINGS(GState) {
     class_<GState>("GState")
         .constructor<>()
+        .constructor<emscripten::val, GameVariant>()
+        .function("passOffset", &GState::passOffset)
         ;
 
     function("getDealIndex", &getDealIndex);
+
+    class_<GState::Init>("GStateInit")
+        .class_function("fromVal", &GState::Init::fromVal)
+        .class_function("kNoPassVal", &GState::Init::kNoPassVal)
+        .class_function("kRandomVal", &GState::Init::kRandomVal)
+        .class_function("fromIndexAndOffset", &GState::Init::fromIndexAndOffset)
+        .function("toVal", &GState::Init::toVal)
+        ;
 }
 #endif
 

@@ -11,8 +11,15 @@
 
 #include "prim/range.hpp"
 
+#include "math/Int128.hpp"
+
 #include <fmt/format.h>
 #include <stdexcept>
+
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#include <emscripten/val.h>
+#endif
 
 namespace pho::hearts { class KState; }
 
@@ -47,7 +54,7 @@ public:
 
     struct Init
     {
-        static constexpr DealIndex kRandomDealIndex = ~uint128_t{0};
+        static constexpr DealIndex kRandomDealIndex = ~uint128_t{0} >> 2;
         static constexpr PassOffset kRandomPassOffset = ~uint8_t{0};
 
         const DealIndex dealIndex;
@@ -68,6 +75,50 @@ public:
         constexpr Init()
         : dealIndex{kRandomDealIndex}, passOffset{kRandomPassOffset}
         {}
+
+        constexpr auto operator==(const Init& other) const -> bool
+        {
+            return dealIndex == other.dealIndex && passOffset == other.passOffset;
+        }
+
+        constexpr auto operator!=(const Init& other) const -> bool
+        {
+            return !(*this == other);
+        }
+
+#if __EMSCRIPTEN__
+        auto toVal() const -> emscripten::val
+        {
+            auto v = emscripten::val::object();
+            v.set("dealIndex", math::from_uint128(dealIndex));
+            v.set("passOffset", passOffset);
+            return v;
+        }
+
+        static auto fromVal(const emscripten::val& v) -> Init
+        {
+            auto dealIndex = DealIndex(math::val_to_uint128(v["dealIndex"]));
+            return Init{dealIndex, v["passOffset"].as<uint8_t>()};
+        }
+
+        static auto kNoPassVal() -> emscripten::val
+        {
+            return kNoPass.toVal();
+        }
+
+        static auto kRandomVal() -> emscripten::val
+        {
+            return kRandom.toVal();
+        }
+
+        static auto fromIndexAndOffset(math::Int128 index, uint8_t offset) -> emscripten::val
+        {
+            return Init{math::to_uint128(index), offset}.toVal();
+        }
+#endif
+
+        static Init kRandom;
+        static Init kNoPass;
     };
 
     static Init kRandom;
@@ -80,6 +131,10 @@ public:
     GState(Init init=kNoPass, GameBehavior behavior = kStandard);
     GState(const cards::Deal& deal, PassOffset passOffset=Init::kRandomPassOffset, GameBehavior behavior = kStandard);
     GState(const GState&) = default;
+
+#if __EMSCRIPTEN__
+    GState(const emscripten::val& init, GameVariant variant);
+#endif
 
     auto gameStarted() const -> bool { return mPassingComplete; }
 
