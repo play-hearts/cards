@@ -6,7 +6,7 @@ EMCC=builds/emcc/
 GENERATOR="Ninja Multi-Config"
 CMAKE=/home/jim/.local/bin/cmake
 
-.PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emccgit 
+.PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emccgit
 
 all: test
 
@@ -36,4 +36,7 @@ test_emcc: build_emcc
 
 build: build_x86 build_emcc
 
-test: test_x86 test_emcc
+wasm_tests: build_emcc
+	${CMAKE} --build ${EMCC} -t all_wasm_tests
+
+test: test_x86 test_emcc wasm_tests
