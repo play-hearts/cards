@@ -1,4 +1,5 @@
 #include "cards/CardSet.hpp"
+#include "cards/utils.hpp"
 #include "prim/range.hpp"
 
 #if __EMSCRIPTEN__
@@ -39,6 +40,7 @@ EMSCRIPTEN_BINDINGS(CardSet) {
         ;
 
     function("to_string", &pho::cards::to_string);
+    function("chooseThreeAtRandom", &pho::cards::chooseThreeAtRandom);
 
     register_vector<Card>("CardVector");
 }
