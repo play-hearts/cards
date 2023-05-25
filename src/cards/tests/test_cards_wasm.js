@@ -55,12 +55,8 @@ async function CardSet_test(instance) {
     const deal = new instance.Deal("");
     const hand = deal.dealFor(0);
     assert.strictEqual(hand.size(), 13);
-
-    console.log("Hand: ", instance.to_string(hand));
-
     const pass = instance.chooseThreeAtRandom(hand);
     assert.strictEqual(pass.size(), 3);
-    console.log("pass: ", instance.to_string(pass));
 
     pass.delete()
     hand.delete()

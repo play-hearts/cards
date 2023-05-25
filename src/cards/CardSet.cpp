@@ -41,6 +41,7 @@ EMSCRIPTEN_BINDINGS(CardSet) {
 
     function("to_string", &pho::cards::to_string);
     function("chooseThreeAtRandom", &pho::cards::chooseThreeAtRandom);
+    function("aCardAtRandom", &pho::cards::aCardAtRandom);
 
     register_vector<Card>("CardVector");
 }

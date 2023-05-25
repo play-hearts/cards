@@ -36,7 +36,7 @@ test_emcc: build_emcc
 
 build: build_x86 build_emcc
 
-wasm_tests: build_emcc
+wasm_tests: test_emcc
 	${CMAKE} --build ${EMCC} -t all_wasm_tests
 
 test: test_x86 test_emcc wasm_tests

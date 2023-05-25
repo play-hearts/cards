@@ -559,10 +559,23 @@ auto getDealIndex(const GState& state) -> emscripten::val
 }
 
 EMSCRIPTEN_BINDINGS(GState) {
+    value_object<GState::PlayerOutcome>("PlayerOutcome")
+        .field("zms", &GState::PlayerOutcome::zms)
+        .field("winPts", &GState::PlayerOutcome::winPts)
+        ;
+
     class_<GState>("GState")
         .constructor<>()
         .constructor<emscripten::val, GameVariant>()
         .function("passOffset", &GState::passOffset)
+        .function("playersHand", &GState::playersHand)
+        .function("currentPlayersHand", &GState::currentPlayersHand)
+        .function("legalPlays", &GState::legalPlays)
+        .function("setPassFor", &GState::setPassFor)
+        .function("startGame", &GState::startGame)
+        .function("playCard", &GState::playCard)
+        .function("done", &GState::done)
+        .function("getPlayerOutcome", &GState::getPlayerOutcome)
         ;
 
     function("getDealIndex", &getDealIndex);
