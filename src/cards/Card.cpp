@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <string>
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::cards {
 
 static const std::string kSuits[] = {"♣️", "♦️", "♠️", "♥️"};
@@ -37,5 +41,23 @@ std::string nameOfCard(Card card)
     assert(card.ord() < kCardsPerDeck);
     return kNames[card.ord()];
 }
+
+#if __EMSCRIPTEN__
+using namespace emscripten;
+EMSCRIPTEN_BINDINGS(cards) {
+    class_<Card>("Card")
+        .constructor<Ord>()
+        .function("ord", &Card::ord)
+        .function("suit", &Card::suit)
+        .function("rank", &Card::rank)
+        ;
+
+    function("suitOf", suitOf);
+    function("rankOf", rankOf);
+    function("cardFor", cardFor);
+    function("nameOfSuit", nameOfSuit);
+    function("nameOfCard", nameOfCard);
+}
+#endif
 
 } // namespace pho::cards

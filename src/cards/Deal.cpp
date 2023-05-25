@@ -13,6 +13,10 @@
 #include "math/random.hpp"
 #include "prim/range.hpp"
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::cards {
 
 using namespace std;
@@ -161,5 +165,16 @@ Deal::Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player)
     mHands.setUnion(o3, others);
     assert(mHands.totalCapacity() == 0);
 }
+
+#if __EMSCRIPTEN__
+using namespace emscripten;
+
+EMSCRIPTEN_BINDINGS(Deal) {
+  class_<Deal>("Deal")
+    .constructor<const std::string&>()
+    .function("dealFor", &Deal::dealFor)
+    ;
+}
+#endif
 
 } // namespace pho::cards

@@ -82,13 +82,13 @@ TEST(CardSet, setUnion)
 
 TEST(CardSet, range_for)
 {
-    const auto cards = CardsInitializerList{0, 3, 6, 14, 21, 51};
+    const auto cards = CardsInitializerList{1u, 3u, 6u, 14u, 21u, 51u};
     auto hand = CardSet::make(cards);
 
     auto it = cards.begin();
     for (Card c : hand)
     {
-        EXPECT_EQ(c, *it++);
+        EXPECT_EQ(c.ord(), (*it++).ord());
     }
     EXPECT_EQ(it, cards.end());
 }

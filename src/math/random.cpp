@@ -5,6 +5,10 @@
 #include <assert.h>
 #include <random>
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::math {
 
 namespace {
@@ -119,5 +123,15 @@ double RandomGenerator::randNorm() const
 }
 
 thread_local RandomGenerator RandomGenerator::gRandomGenerator;
+
+#if __EMSCRIPTEN__
+using namespace emscripten;
+EMSCRIPTEN_BINDINGS(cards) {
+    class_<RandomGenerator>("RandomGenerator")
+        .constructor<>()
+        .function("randNorm", &RandomGenerator::randNorm)
+        ;
+}
+#endif
 
 } // namespace pho::math

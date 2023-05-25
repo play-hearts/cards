@@ -27,6 +27,27 @@ TEST(Card, cardFor)
     EXPECT_EQ(51u, cardFor(kHearts, kAce));
 }
 
+TEST(Card, construct_all_cards)
+{
+    for (auto i = 0u; i < kCardsPerDeck; ++i)
+    {
+        EXPECT_EQ(i, Card(i).ord());
+    }
+}
+
+TEST(Card, construct_all_cards_by_suit_rank)
+{
+    uint64_t bits = 0;
+    for (auto s : allSuits)
+    {
+        for (auto r = Nib(kTwo); r <= Nib(kAce); ++r)
+        {
+            bits |= cardFor(s, Rank(r)).mask();
+        }
+    }
+    EXPECT_EQ(CardSet::kAllCards, bits);
+}
+
 TEST(Card, suitOf)
 {
     EXPECT_EQ(kClubs, suitOf(0u));

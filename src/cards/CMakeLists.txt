@@ -6,6 +6,7 @@ add_library(cards_lib STATIC
     CardSet.cpp
     Deal.cpp
     FourHands.cpp
+    utils.cpp
 )
 
 target_link_libraries(cards_lib
@@ -19,3 +20,8 @@ target_include_directories(cards_lib
 )
 
 add_subdirectory(tests)
+
+wasm_module(cards
+    DEPENDS
+    cards_lib
+    )

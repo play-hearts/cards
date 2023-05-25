@@ -14,7 +14,7 @@ using Ord = std::uint8_t; // We only need 6 bits, but we use 8. For values 0..51
 
 enum Suit : Nib
 {
-    kClubs = 0u,
+    kClubs = 0,
     kDiamonds,
     kSpades,
     kHearts,
@@ -58,7 +58,7 @@ public:
     constexpr Suit suit() const { return Suit(card / kCardsPerSuit); }
     constexpr Rank rank() const { return Rank(card % kCardsPerSuit); }
 
-    constexpr uint64_t mask() const { return 1ul << card; }
+    constexpr uint64_t mask() const { return 1ull << card; }
 
     static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
 

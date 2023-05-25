@@ -3,6 +3,10 @@
 #include "cards/CardHands.hpp"
 #include "prim/range.hpp"
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::cards {
 
 CardHands::CardHands()
@@ -10,7 +14,6 @@ CardHands::CardHands()
     // hands empty, full capacity
     mCapacities.fill(13);
 }
-
 
 auto CardHands::at(int i) const -> CardSet
 {
@@ -97,5 +100,17 @@ auto CardHands::restoreCapacityTo(unsigned p, Size_t capacity) -> void
     assert(capacity >= mCapacities[p]);
     mCapacities[p] = capacity;
 }
+
+#if __EMSCRIPTEN__
+using namespace emscripten;
+
+EMSCRIPTEN_BINDINGS(CardHands) {
+    class_<CardHands>("CardHands")
+        .constructor<>()
+        .function("get", &CardHands::get)
+        .function("at", &CardHands::at)
+        ;
+}
+#endif
 
 } // namespace pho::cards
