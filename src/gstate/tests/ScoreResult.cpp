@@ -2,7 +2,7 @@
 
 #include "gstate/GState.hpp"
 #include "gstate/ScoreResult.hpp"
-#include "gstate/utils.hpp"
+#include "cards/utils.hpp"
 #include "prim/range.hpp"
 #include "stats/RunningStats.hpp"
 

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "gstate/GState.hpp"
-#include "gstate/utils.hpp"
+#include "cards/utils.hpp"
 #include "prim/range.hpp"
 
 #include <fmt/ranges.h>

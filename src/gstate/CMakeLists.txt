@@ -5,7 +5,6 @@ add_library(gstate_lib STATIC
     PlayerVoids.cpp
     ScoreResult.cpp
     Trick.cpp
-    utils.cpp
 )
 
 target_include_directories(gstate_lib
