@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ES2022",
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "composite": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@wasm/*": ["builds/emcc/bin/Debug/*"],
+    },
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "types": ["node", "emscripten", "math_wasm", "cards_wasm", "gstate_wasm"],
+  },
+  "files": [
+    "./src/api.mts"
+  ],
+}
