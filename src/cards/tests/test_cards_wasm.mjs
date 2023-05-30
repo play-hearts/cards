@@ -1,8 +1,7 @@
-// test_cards_jswasm.js
+// test_cards_wasm.mjs
 
-const [exe, script, wasmjs, ...args] = process.argv
-const factory = require(wasmjs);
-const assert = require('assert');
+import assert from 'node:assert';
+import factory from './cards_wasm.js';
 
 function logCardSet(instance, cardSet) {
     const cardVec = cardSet.asCardVector();
@@ -65,7 +64,6 @@ async function CardSet_test(instance) {
 
 async function run() {
     const instance = await factory()
-    console.log(`Succesfully loaded ${wasmjs}'`)
 
     await Card_test(instance);
     await Deal_test(instance);
