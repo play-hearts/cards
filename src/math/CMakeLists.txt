@@ -4,7 +4,7 @@ add_library(math_lib STATIC
     elo.cpp
     math.cpp
     random.cpp
-    Int128.cpp
+    Int126.cpp
 )
 
 target_include_directories(math_lib
