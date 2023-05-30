@@ -1,8 +1,7 @@
-// test_cards_jswasm.js
+// test_gstate_wasm.mjs
 
-const [exe, script, wasmjs, ...args] = process.argv
-const factory = require(wasmjs);
-const assert = require('assert');
+import assert from 'node:assert';
+import factory from './gstate_wasm.js';
 
 async function playOutGame(instance, gstate) {
 
@@ -61,7 +60,6 @@ async function GState_test(instance) {
 
 async function run() {
     const instance = await factory()
-    console.log(`Succesfully loaded ${wasmjs}'`)
 
     await GState_test(instance);
 }

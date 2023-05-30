@@ -1,7 +1,7 @@
 #include "gstate/GState.hpp"
 #include "cards/utils.hpp"
 #include "prim/range.hpp"
-#include "math/Int128.hpp"
+#include "math/Int126.hpp"
 
 #if __EMSCRIPTEN__
 #include <emscripten/bind.h>
