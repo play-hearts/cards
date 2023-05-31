@@ -45,7 +45,7 @@ declare module 'cards_wasm' {
         size: () => number;
     }
 
-    export interface CardModule extends EmscriptenModule {
+    export interface CardsModule extends EmscriptenModule {
         CardSet: (this: CardSet) => CardSet;
         Card: (this: Card) => Card;
         CardVector: (this: CardVector) => CardVector;
@@ -59,5 +59,5 @@ declare module 'cards_wasm' {
         chooseThreeAtRandom: (cardSet: CardSet) => CardSet;
     }
 
-    export interface CardModuleFactory extends EmscriptenModuleFactory<CardModule> {}
+    export interface CardsModuleFactory extends EmscriptenModuleFactory<CardsModule> {}
 }

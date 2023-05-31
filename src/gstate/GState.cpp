@@ -565,7 +565,6 @@ EMSCRIPTEN_BINDINGS(GState) {
         ;
 
     class_<GState>("GState")
-        .constructor<>()
         .constructor<emscripten::val, GameVariant>()
         .function("passOffset", &GState::passOffset)
         .function("playersHand", &GState::playersHand)
@@ -581,12 +580,14 @@ EMSCRIPTEN_BINDINGS(GState) {
     function("getDealIndex", &getDealIndex);
 
     class_<GState::Init>("GStateInit")
-        .class_function("fromVal", &GState::Init::fromVal)
-        .class_function("kNoPassVal", &GState::Init::kNoPassVal)
-        .class_function("kRandomVal", &GState::Init::kRandomVal)
-        .class_function("fromIndexAndOffset", &GState::Init::fromIndexAndOffset)
         .function("toVal", &GState::Init::toVal)
         ;
+
+    function("kNoPassVal", &GState::Init::kNoPassVal);
+    function("kRandomVal", &GState::Init::kRandomVal);
+    function("fromVal", &GState::Init::fromVal);
+    function("fromIndexAndOffset", &GState::Init::fromIndexAndOffset);
+
 }
 #endif
 

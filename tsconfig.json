@@ -12,8 +12,7 @@
     "paths": {
       "@wasm/*": ["builds/emcc/bin/Debug/*"],
     },
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "types": ["node", "emscripten", "math_wasm", "cards_wasm", "gstate_wasm"],
+    "typeRoots": ["./node_modules/@types", "./@types"],
   },
   "files": [
     "./src/api.mts"

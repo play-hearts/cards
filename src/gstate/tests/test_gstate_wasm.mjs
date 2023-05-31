@@ -33,12 +33,7 @@ async function playOutGame(instance, gstate) {
 async function GState_test(instance) {
     return Promise.resolve()
     .then(() => {
-        const gstate = new instance.GState();
-        const dealIndex = instance.getDealIndex(gstate);
-        gstate.delete()
-    })
-    .then(() => {
-        const init = instance.GStateInit.kRandomVal();
+        const init = instance.kRandomVal();
         const gstate = new instance.GState(init, instance.GameVariant.STANDARD);
         const dealIndex = instance.getDealIndex(gstate);
         const passOffset = gstate.passOffset();
@@ -46,7 +41,7 @@ async function GState_test(instance) {
         return {dealIndex, passOffset};
     })
     .then(async ({dealIndex, passOffset}) => {
-        const init = instance.GStateInit.fromIndexAndOffset(dealIndex, passOffset);
+        const init = instance.fromIndexAndOffset(dealIndex, passOffset);
         const gstate = new instance.GState(init, instance.GameVariant.STANDARD);
         const dealIndex2 = instance.getDealIndex(gstate);
         const passOffset2 = gstate.passOffset();
