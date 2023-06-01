@@ -173,6 +173,7 @@ EMSCRIPTEN_BINDINGS(Deal) {
   class_<Deal>("Deal")
     .constructor<const std::string&>()
     .function("dealFor", &Deal::dealFor)
+    .function("indexAsHexString", &Deal::indexAsHexString)
     ;
 }
 #endif

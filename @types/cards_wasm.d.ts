@@ -43,12 +43,22 @@ declare module 'cards_wasm' {
         delete: () => null;
         asCardVector: () => CardVector;
         size: () => number;
+        setUnion: (other: CardSet) => CardSet;
+        setIntersection: (other: CardSet) => CardSet;
+        setSubtract: (other: CardSet) => CardSet;
+        equal: (other: CardSet) => boolean;
+    }
+
+    export interface Deal extends Deletable {
+        dealFor: (p: number) => CardSet;
+        indexAsHexString: () => string;
     }
 
     export interface CardsModule extends EmscriptenModule {
-        CardSet: (this: CardSet) => CardSet;
-        Card: (this: Card) => Card;
-        CardVector: (this: CardVector) => CardVector;
+        Deal: (this: Deal, dealIndex: string) => void;
+        CardSet: (this: CardSet) => void;
+        Card: (this: Card) => void;
+        CardVector: (this: CardVector) => void;
         suitOf: (card: Card) => Suit;
         rankOf: (card: Card) => Rank;
         cardFor: (suit: Suit, rank: Rank) => Card;

@@ -8,7 +8,7 @@ CMAKE ?= $(shell which cmake) # /home/jim/.local/bin/cmake
 NODE ?= $(shell which node) # /usr/local/bin/node
 CONFIG ?= Debug
 
-.PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emccgit
+.PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emcc build wasm_tests tsbuild dist dist_test clean api_test test
 
 all: test
 
@@ -53,4 +53,7 @@ dist_test: dist
 clean:
 	rm -rf builds dist
 
-test: test_x86 test_emcc wasm_tests dist_test
+api_test:
+	pnpm run lint && pnpm run test
+
+test: test_x86 test_emcc wasm_tests dist_test api_test

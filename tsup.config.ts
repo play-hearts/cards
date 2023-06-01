@@ -6,7 +6,6 @@ export default defineConfig({
     "./builds/emcc/bin/Debug/cards_wasm.js",
     "./builds/emcc/bin/Debug/gstate_wasm.js",
     "./builds/emcc/bin/Debug/math_wasm.js",
-    "./@types/math_wasm.d.ts",
   ],
   format: [
     "esm"

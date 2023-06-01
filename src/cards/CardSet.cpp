@@ -37,6 +37,10 @@ EMSCRIPTEN_BINDINGS(CardSet) {
         .constructor<>()
         .function("asCardVector", &CardSet::asCardVector)
         .function("size", &CardSet::size)
+        .function("setUnion", &CardSet::setUnion)
+        .function("setSubtract", &CardSet::setSubtract)
+        .function("setIntersection", &CardSet::setIntersection)
+        .function("equal", &CardSet::operator==)
         ;
 
     function("to_string", &pho::cards::to_string);

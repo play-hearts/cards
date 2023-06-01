@@ -8,7 +8,8 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require ts-node/register",
+    "lint": "tsc"
   },
   "keywords": [
     "cards",
@@ -21,14 +22,21 @@
   "author": "jim@play-hearts.online",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/chai-as-promised": "^7.1.5",
     "@types/emscripten": "^1.39.6",
+    "@types/mocha": "^10.0.1",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^20.2.5",
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
     "esbuild": "^0.17.19",
     "esbuild-copy-static-files": "^0.1.0",
     "esbuild-plugin-wasm": "^1.1.0",
-    "jest": "^29.5.0",
+    "mocha": "^10.2.0",
     "module-alias": "^2.2.2",
+    "ts-node": "^10.9.1",
+    "ts-node-register": "^1.0.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
