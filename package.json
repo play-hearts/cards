@@ -1,6 +1,6 @@
 {
-  "name": "@play-hearts/gstate_wasm",
-  "version": "0.1.0",
+  "name": "@playhearts/gstate_wasm",
+  "version": "0.1.1",
   "description": "A library for trick-based card games like Hearts & Spades.",
   "exports": "./dist/src/api.js",
   "type": "module",
@@ -8,13 +8,14 @@
     "node": ">=18.0.0"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/play-hearts/cards.git"
-    },
+    "type": "git",
+    "url": "https://github.com/play-hearts/cards.git"
+  },
   "files": [
     "package.json",
     "dist"
   ],
+  "private": false,
   "scripts": {
     "build": "node esbuild.config.mjs",
     "test": "mocha --require ts-node/register",
@@ -51,5 +52,8 @@
   },
   "_moduleAliases": {
     "@wasm": "dist/builds/emcc/bin/Debug"
+  },
+  "dependencies": {
+    "emscripten": "0.0.2-beta"
   }
 }

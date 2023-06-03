@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  emscripten:
+    specifier: 0.0.2-beta
+    version: 0.0.2-beta
+
 devDependencies:
   '@types/chai':
     specifier: ^4.3.5
@@ -613,6 +618,12 @@ packages:
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
     dev: true
+
+  /emscripten@0.0.2-beta:
+    resolution: {integrity: sha512-bckLzZ9n/GhNB4NwE23frASTc0hB7EyrY9ykys+Ou5wKupOROtEzkeWqxoGmWYQVNbidSW5UYsHwo8hhCuqbKg==}
+    hasBin: true
+    requiresBuild: true
+    dev: false
 
   /esbuild-copy-static-files@0.1.0:
     resolution: {integrity: sha512-KlpmYqANA1t2nZavEdItfcOjJC6wbHA21v35HJWN32DddGTWKNNGDKljUzbCPojmpD+wAw8/DXr5abJ4jFCE0w==}
