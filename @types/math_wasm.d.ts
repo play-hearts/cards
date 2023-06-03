@@ -1,5 +1,3 @@
-/// <reference types="@types/emscripten" />
-
 declare module 'math_wasm' {
     export interface Deletable {
         delete: () => void;
@@ -16,7 +14,7 @@ declare module 'math_wasm' {
     }
 
     export interface MathModule extends EmscriptenModule {
-        RandomGenerator: (this: RandomGenerator) => RandomGenerator;
+        RandomGenerator: (this: RandomGenerator) => void;
     }
 
     export interface MathModuleFactory extends EmscriptenModuleFactory<MathModule> {}

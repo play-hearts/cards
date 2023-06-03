@@ -1,8 +1,16 @@
-/// <reference types="@types/emscripten" />
-
 declare module 'cards_wasm' {
     export interface Deletable {
         delete: () => void;
+    }
+
+    export interface Int126 {
+        hi: BigInt;
+        lo: BigInt;
+    }
+
+    export interface RandomGenerator extends Deletable {
+        delete: () => null;
+        randNorm: () => number;
     }
 
     export enum Suit {
@@ -55,6 +63,7 @@ declare module 'cards_wasm' {
     }
 
     export interface CardsModule extends EmscriptenModule {
+        RandomGenerator: (this: RandomGenerator) => void;
         Deal: (this: Deal, dealIndex: string) => void;
         CardSet: (this: CardSet) => void;
         Card: (this: Card) => void;

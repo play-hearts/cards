@@ -1,12 +1,8 @@
-/// <reference path="../@types/math_wasm.d.ts" />
-/// <reference path="../@types/cards_wasm.d.ts" />
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { Int126 } from 'math_wasm';
-import { Card, CardSet, Deal } from 'cards_wasm';
-import { GStateInit, GStateModule, GState } from 'gstate_wasm';
+import { Int126, RandomGenerator, CardSet, Deal, GStateInit, GStateModule, GState } from 'gstate_wasm';
 
 import { instanceP, playOutGame } from './api.mjs';
 
@@ -17,6 +13,14 @@ describe('api', (): void => {
     let instance: GStateModule;
     beforeEach(async () => {
         instance = await instanceP;
+    });
+
+    describe('math api', (): void => {
+        it('can create a RandomGenerator', async() => {
+            const rng: RandomGenerator = new instance.RandomGenerator();
+            expect(rng).not.to.be.undefined;
+            rng.delete();
+        });
     });
 
     describe('cards api', (): void => {

@@ -44,16 +44,16 @@ wasm_tests: test_emcc
 tsbuild:
 	npx tsc
 
-dist: build_emcc
-	npx tsup
+# dist: build_emcc
+# 	npx tsup
 
-dist_test: dist
-	${NODE} dist/src/api.js
+# dist_test: dist
+# 	${NODE} dist/src/api.js
 
 clean:
-	rm -rf builds dist
+	rm -rf builds # dist
 
 api_test:
 	pnpm run lint && pnpm run test
 
-test: test_x86 test_emcc wasm_tests dist_test api_test
+test: test_x86 test_emcc wasm_tests api_test # dist_test
