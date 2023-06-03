@@ -6,8 +6,7 @@ import factory from "../builds/emcc/bin/Debug/gstate_wasm.js";
 import { GStateModule, GStateModuleFactory } from "../builds/emcc/bin/Debug/gstate_wasm.js";
 import { Card, CardSet, GState } from "gstate_wasm";
 
-
-export const instanceP = (factory as GStateModuleFactory)();
+export const instanceP: Promise<GStateModule> = (factory as GStateModuleFactory)();
 
 export async function playOutGame(instance: GStateModule, gstate: GState): Promise<void> {
 

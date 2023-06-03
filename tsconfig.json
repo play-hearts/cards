@@ -7,7 +7,6 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "composite": true,
-    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "@wasm/*": ["builds/emcc/bin/Debug/*"],

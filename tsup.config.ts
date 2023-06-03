@@ -11,7 +11,7 @@ export default defineConfig({
   banner: {
     js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
   },
-  dts: "./src/api.mts",
+  dts: "./src/api.ts",
   splitting: false,
   sourcemap: true,
   clean: true,
