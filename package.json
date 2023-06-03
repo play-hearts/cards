@@ -7,6 +7,10 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "files": [
+    "package.json",
+    "dist"
+  ],
   "scripts": {
     "build": "node esbuild.config.mjs",
     "test": "mocha --require ts-node/register",
