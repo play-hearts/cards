@@ -1,13 +1,11 @@
 /// <reference types="@types/emscripten" />
-/// <reference path="../@types/math_wasm.d.ts" />
-/// <reference path="../@types/cards_wasm.d.ts" />
 /// <reference path="../@types/gstate_wasm.d.ts" />
 
 // app.mts
 import factory from "../builds/emcc/bin/Debug/gstate_wasm.js";
+import { GStateModule, GStateModuleFactory } from "../builds/emcc/bin/Debug/gstate_wasm.js";
+import { Card, CardSet, GState } from "gstate_wasm";
 
-import type { Card, CardSet } from 'cards_wasm';
-import type { GStateModule, GStateModuleFactory, GState } from 'gstate_wasm';
 
 export const instanceP = (factory as GStateModuleFactory)();
 
