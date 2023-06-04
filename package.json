@@ -1,6 +1,6 @@
 {
   "name": "@playhearts/gstate_wasm",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A library for trick-based card games like Hearts & Spades.",
   "exports": "./dist/src/api.js",
   "type": "module",
