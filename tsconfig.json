@@ -5,10 +5,10 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
+    "rootDir": ".",
     "outDir": "./dist",
-    "composite": true,
-    "declaration": true,
     "baseUrl": ".",
+    "declaration": false,
     "paths": {
       "@wasm/*": ["builds/emcc/bin/Debug/*"],
       "*": ["@types"]
@@ -17,4 +17,5 @@
     "types": ["node", "emscripten", "mocha", "chai", "chai-as-promised", "module-alias"],
   },
   "include": ["src/**/*"],
+  "exclude": [ "src/api.spec.ts"]
 }
