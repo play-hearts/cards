@@ -1,4 +1,4 @@
-#include "math/Int128.hpp"
+#include "math/Int126.hpp"
 
 #if __EMSCRIPTEN__
 #include <emscripten/bind.h>
@@ -11,17 +11,18 @@ namespace pho::math {
 constexpr auto kMaxUint63 = ~uint64_t(0) >> 1;
 constexpr auto kMaxUint126 = ~uint128_t(0) >> 2;
 
-auto to_uint128(const Int128& t) -> uint128_t
+auto to_uint128(const Int126& t) -> uint128_t
 {
     assert(t.hi <= kMaxUint63);
     assert(t.lo <= kMaxUint63);
     return (uint128_t(t.hi) << 63) + t.lo;
 }
 
-auto from_uint128(uint128_t val) -> Int128
+auto from_uint128(uint128_t val) -> Int126
 {
+    (void) (val <= kMaxUint126);
     assert(val <= kMaxUint126);
-    auto result = Int128{
+    auto result = Int126{
         .hi = uint64_t(val >> 63) & kMaxUint63,
         .lo = uint64_t(val) & kMaxUint63,
     };
@@ -50,10 +51,10 @@ auto val_to_uint128(const val& t) -> uint128_t
     return (uint128_t(hi) << 63) + uint64_t(lo);
 }
 
-EMSCRIPTEN_BINDINGS(Int128) {
-    value_object<Int128>("Int128")
-        .field("hi", &Int128::hi)
-        .field("lo", &Int128::lo)
+EMSCRIPTEN_BINDINGS(Int126) {
+    value_object<Int126>("Int126")
+        .field("hi", &Int126::hi)
+        .field("lo", &Int126::lo)
         ;
 
     function("to_uint128", &to_uint128);

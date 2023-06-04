@@ -22,7 +22,7 @@ create_test(random
     gtest
 )
 
-create_test(Int128
+create_test(Int126
     DEPENDS
     math_lib
     gtest
@@ -34,5 +34,5 @@ add_dependencies(run_all_math_tests
     run_combinatorics_test
     run_elo_test
     run_random_test
-    run_Int128_test
+    run_Int126_test
 )
