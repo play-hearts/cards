@@ -8,14 +8,6 @@
     "rootDir": ".",
     "outDir": "./dist",
     "baseUrl": ".",
-    "declaration": false,
-    "paths": {
-      "@wasm/*": ["builds/emcc/bin/Debug/*"],
-      "*": ["@types"]
-    },
-    "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "emscripten", "mocha", "chai", "chai-as-promised", "module-alias"],
   },
   "include": ["src/**/*"],
-  "exclude": [ "src/api.spec.ts"]
 }
