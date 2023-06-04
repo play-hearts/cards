@@ -47,7 +47,6 @@
     "module-alias": "^2.2.2",
     "ts-node": "^10.9.1",
     "ts-node-register": "^1.0.0",
-    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "_moduleAliases": {
