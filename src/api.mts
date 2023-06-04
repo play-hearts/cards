@@ -3,7 +3,7 @@
 
 // app.mts
 import factory from "../builds/emcc/bin/Debug/gstate_wasm.js";
-import { GStateModule, GStateModuleFactory } from "../builds/emcc/bin/Debug/gstate_wasm.js";
+import { GStateModule, GStateModuleFactory } from "gstate_wasm";
 import { Card, CardSet, GState } from "gstate_wasm";
 
 export const instanceP: Promise<GStateModule> = (factory as GStateModuleFactory)();

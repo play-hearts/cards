@@ -17,7 +17,7 @@
   ],
   "private": false,
   "scripts": {
-    "build": "node esbuild.config.mjs && tsc --declaration src/api.mts --outDir dist",
+    "build": "node esbuild.config.mjs && tsc",
     "test": "mocha --require ts-node/register",
     "lint": "tsc --noEmit --pretty"
   },
