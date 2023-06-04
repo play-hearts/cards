@@ -14,6 +14,8 @@
   },
   "private": false,
   "scripts": {
+    "build": "echo \"No build step necessary\"",
+    "test": "echo \"Use gstate_wasm_test\""
   },
   "keywords": [
     "cards",
