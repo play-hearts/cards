@@ -1,4 +1,4 @@
-#include "math/Int128.hpp"
+#include "math/Int126.hpp"
 #include "gtest/gtest.h"
 #include "math/random.hpp"
 #include "prim/range.hpp"
@@ -12,7 +12,7 @@ namespace pho::math::tests {
 
 constexpr auto kMaxUint126 = ~uint128_t(0) >> 2;
 
-TEST(Int128, round_trip)
+TEST(Int126, round_trip)
 {
     for (auto i : prim::range(1000))
     {

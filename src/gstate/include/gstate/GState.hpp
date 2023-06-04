@@ -11,7 +11,7 @@
 
 #include "prim/range.hpp"
 
-#include "math/Int128.hpp"
+#include "math/Int126.hpp"
 
 #include <fmt/format.h>
 #include <stdexcept>
@@ -111,7 +111,7 @@ public:
             return kRandom.toVal();
         }
 
-        static auto fromIndexAndOffset(math::Int128 index, uint8_t offset) -> emscripten::val
+        static auto fromIndexAndOffset(math::Int126 index, uint8_t offset) -> emscripten::val
         {
             return Init{math::to_uint128(index), offset}.toVal();
         }

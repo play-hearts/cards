@@ -1,8 +1,7 @@
-// test_math_jswasm.js
+// test_math_wasm.mjs
 
-const [exe, script, wasmjs, ...args] = process.argv
-const factory = require(wasmjs);
-const assert = require('assert');
+import assert from 'node:assert';
+import factory from './math_wasm.js';
 
 // async function math_val_test(instance) {
 
@@ -16,7 +15,7 @@ const assert = require('assert');
 // }
 
 
-async function Int128_test(instance) {
+async function Int126_test(instance) {
 
 
 }
@@ -24,7 +23,6 @@ async function Int128_test(instance) {
 
 async function run() {
     const instance = await factory()
-    console.log(`Succesfully loaded ${wasmjs}'`)
 
     // await math_val_test(instance);
     // await math_test(instance);

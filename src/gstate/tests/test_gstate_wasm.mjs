@@ -1,8 +1,7 @@
-// test_cards_jswasm.js
+// test_gstate_wasm.mjs
 
-const [exe, script, wasmjs, ...args] = process.argv
-const factory = require(wasmjs);
-const assert = require('assert');
+import assert from 'node:assert';
+import factory from './gstate_wasm.js';
 
 async function playOutGame(instance, gstate) {
 
@@ -34,12 +33,7 @@ async function playOutGame(instance, gstate) {
 async function GState_test(instance) {
     return Promise.resolve()
     .then(() => {
-        const gstate = new instance.GState();
-        const dealIndex = instance.getDealIndex(gstate);
-        gstate.delete()
-    })
-    .then(() => {
-        const init = instance.GStateInit.kRandomVal();
+        const init = instance.kRandomVal();
         const gstate = new instance.GState(init, instance.GameVariant.STANDARD);
         const dealIndex = instance.getDealIndex(gstate);
         const passOffset = gstate.passOffset();
@@ -47,7 +41,7 @@ async function GState_test(instance) {
         return {dealIndex, passOffset};
     })
     .then(async ({dealIndex, passOffset}) => {
-        const init = instance.GStateInit.fromIndexAndOffset(dealIndex, passOffset);
+        const init = instance.fromIndexAndOffset(dealIndex, passOffset);
         const gstate = new instance.GState(init, instance.GameVariant.STANDARD);
         const dealIndex2 = instance.getDealIndex(gstate);
         const passOffset2 = gstate.passOffset();
@@ -61,7 +55,6 @@ async function GState_test(instance) {
 
 async function run() {
     const instance = await factory()
-    console.log(`Succesfully loaded ${wasmjs}'`)
 
     await GState_test(instance);
 }

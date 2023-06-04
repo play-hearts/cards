@@ -36,6 +36,8 @@ public:
 
     DealIndex dealIndex() const { return mDealIndex; }
 
+    std::string indexAsHexString() const { return math::asHexString(mDealIndex, 25u); }
+
     void printDeal() const;
 
     // player is a number 0..3

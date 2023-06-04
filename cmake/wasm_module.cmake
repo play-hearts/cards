@@ -6,7 +6,7 @@ add_custom_target(all_wasm_tests)
 
 # 1. hearts_wasm.wasm        -- the webassembly executable module/library
 # 2. hearts_wasm             -- the js wrapper that loads the wasm and exports an interface
-# 3. hearts_wasm.worker.js   -- the support for multithreading
+# 3. hearts_wasm.worker.mjs   -- the support for multithreading
 
 # The `wasm_module()` cmake function generates a loadable module much link a dynamic link library,
 # that could be used by several different javascript applications, server side (node) or
@@ -16,7 +16,7 @@ add_custom_target(all_wasm_tests)
 # By convention, we require that every wasm module declared with `wasm_module()` have a test driver
 # script in the tests directory of that component:
 
-# 4. ./tests/test_{name}_wasm.js (e.g. test_hearts_wasm.js)
+# 4. ./tests/test_{name}_wasm.mjs (e.g. test_hearts_wasm.mjs)
 
 # Note that wasm modules may depend on code from other components. For example, the `hearts_wasm`
 # artifacts depend on the `math_lib`, `cards_lib`, `tenzor_lib` components. The result is that `hearts_wasm`
@@ -32,12 +32,12 @@ if (EMSCRIPTEN)
     cmake_parse_arguments(PARSE_ARGV 1 JS_WASM_TEST "${options}" "${oneValueArgs}" "${multiValueArgs}")
 
     set(wasm_module "${name}_wasm")
-    set(wasm_module_js "${wasm_module}.js")
+    set(wasm_module_js "${wasm_module}")
     set(wasm_module_lib "${wasm_module}_lib")
 
-    # There must be a js source in the **`tests/`** directory named test_${wasm_module}.js which is a test driver
+    # There must be a js source in the **`tests/`** directory named test_${wasm_module}.mjs which is a test driver
     # for unit tests of the module.
-    set(wasm_test_driver "test_${wasm_module}.js")
+    set(wasm_test_driver "test_${wasm_module}.mjs")
 
     add_executable(${wasm_module_js} ${PROJECT_SOURCE_DIR}/empty.cpp)
 
@@ -65,11 +65,11 @@ if (EMSCRIPTEN)
     )
 
     add_custom_target(install_${wasm_module}_test
-        COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/tests/${wasm_test_driver} ${CMAKE_CURRENT_BINARY_DIR}/tests
+        COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/tests/${wasm_test_driver} ${PROJECT_BINARY_DIR}/bin/$<CONFIG>/${wasm_test_driver}
         )
 
     add_custom_target(run_${wasm_module}_test
-        COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} ${CMAKE_CURRENT_BINARY_DIR}/tests/${wasm_test_driver} ${PROJECT_BINARY_DIR}/bin/$<CONFIG>/${wasm_module}.js
+        COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} ${PROJECT_BINARY_DIR}/bin/$<CONFIG>/${wasm_test_driver}
     )
 
     add_dependencies(run_${wasm_module}_test
