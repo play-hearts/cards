@@ -2,17 +2,44 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { Int126, RandomGenerator, CardSet, Deal, GStateInit, GStateModule, GState } from 'gstate_wasm';
+import factory from "@playhearts/gstate_wasm";
 
-import { instanceP, playOutGame } from './api.mjs';
+import type { Int126, RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
 
+export async function playOutGame(instance: GStateModule, gstate: GState): Promise<void> {
+
+    const passOffset = gstate.passOffset();
+    if (passOffset > 0) {
+        for (let i = 0; i < 4; i++) {
+            let hand = gstate.playersHand(i);
+            let pass = instance.chooseThreeAtRandom(hand);
+            gstate.setPassFor(i, pass);
+        }
+    }
+    gstate.startGame();
+
+    while (!gstate.done()) {
+        const legal: CardSet = gstate.legalPlays();
+        const card: Card = instance.aCardAtRandom(legal);
+        gstate.playCard(card);
+        card.delete();
+        legal.delete();
+    }
+
+    for (let p=0; p<4; ++p)
+    {
+        const outcome = gstate.getPlayerOutcome(p);
+        console.log(`Player ${p} zms: ${outcome.zms}, winPts: ${outcome.winPts}`);
+    }
+}
+
 describe('api', (): void => {
     let instance: GStateModule;
     beforeEach(async () => {
-        instance = await instanceP;
+        instance = await factory();
     });
 
     describe('math api', (): void => {
