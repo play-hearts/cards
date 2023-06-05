@@ -1,4 +1,4 @@
 packages:
   - 'packages/gstate_wasm'
   - 'packages/gstate_wasm_test'
-  - 'packages/gstate'
+  - 'packages/cards_ts'
