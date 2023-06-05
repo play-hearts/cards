@@ -30,30 +30,21 @@ build_x86: configure_x86
 build_emcc: configure_emcc
 	${CMAKE} --build ${EMCC}  --config ${CONFIG}
 
+build_js:
+	pnpm -r build
+
 test_x86: build_x86
 	${CMAKE} --build ${X86} -t test  --config ${CONFIG}
 
 test_emcc: build_emcc
 	${CMAKE} --build ${EMCC} -t test  --config ${CONFIG}
 
-build: build_x86 build_emcc
+test_js:
+	pnpm -r test
 
-wasm_tests: test_emcc
-	${CMAKE} --build ${EMCC} -t all_wasm_tests
-
-tsbuild:
-	npx tsc
-
-dist: build_emcc
-	pnpm run build
-
-dist_test: dist
-	pnpm run test
+build: build_x86 build_emcc build_js
 
 clean:
-	rm -rf builds dist
+	rm -rf builds packages/gstate_wasm_test/dist
 
-api_test:
-	pnpm run lint && pnpm run test
-
-test: test_x86 test_emcc wasm_tests api_test dist_test
+test: test_x86 test_emcc test_js
