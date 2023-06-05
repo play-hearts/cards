@@ -1,0 +1,12 @@
+{
+  "name": "cards",
+  "version": "1.0.0",
+  "description": "This library is the core for Monte Carlo simulations of the card game Hearts. No Heart-specific algorithms are included here though we intend to release a separate library for Hearts in the future.",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "jim@playhearts.online",
+  "license": "ISC"
+}
