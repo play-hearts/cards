@@ -1,59 +1,16 @@
 {
-  "name": "@playhearts/gstate_wasm",
-  "version": "0.1.6",
-  "description": "A library for trick-based card games like Hearts & Spades.",
-  "exports": "./dist/src/api.mjs",
-  "types": "./dist/@types/api.d.mts",
+  "name": "cards",
+  "version": "1.0.0",
+  "description": "This library is the core for Monte Carlo simulations of the card game Hearts. No Heart-specific algorithms are included here though we intend to release a separate library for Hearts in the future.",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/play-hearts/cards.git"
   },
-  "files": [
-    "package.json",
-    "dist"
-  ],
-  "private": false,
+  "devDependencies": {},
   "scripts": {
-    "build": "node esbuild.config.mjs && tsc",
-    "test": "mocha --require ts-node/register",
-    "lint": "tsc --noEmit --pretty"
   },
-  "keywords": [
-    "cards",
-    "hearts",
-    "game",
-    "wasm",
-    "api",
-    "typescript"
-  ],
-  "author": "jim@play-hearts.online",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/chai": "^4.3.5",
-    "@types/chai-as-promised": "^7.1.5",
-    "@types/emscripten": "^1.39.6",
-    "@types/mocha": "^10.0.1",
-    "@types/module-alias": "^2.0.1",
-    "@types/node": "^20.2.5",
-    "chai": "^4.3.7",
-    "chai-as-promised": "^7.1.1",
-    "esbuild": "^0.17.19",
-    "esbuild-copy-static-files": "^0.1.0",
-    "esbuild-plugin-wasm": "^1.1.0",
-    "mocha": "^10.2.0",
-    "module-alias": "^2.2.2",
-    "ts-node": "^10.9.1",
-    "ts-node-register": "^1.0.0",
-    "typescript": "^5.0.4"
-  },
-  "_moduleAliases": {
-    "@wasm": "dist/builds/emcc/bin/Debug"
-  },
-  "dependencies": {
-    "emscripten": "0.0.2-beta"
-  }
+  "keywords": [],
+  "author": "jim@playhearts.online",
+  "license": "ISC"
 }
