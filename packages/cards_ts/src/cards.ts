@@ -8,9 +8,11 @@
 
 export const all_suits = ['clubs', 'diamonds', 'spades', 'hearts'] as const;
 export type Suit = typeof all_suits[number];
+export type SuitOrd = typeof all_suits.indexOf;
 
 export const all_ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'] as const;
 export type Rank = typeof all_ranks[number];
+export type RankOrd = typeof all_ranks.indexOf;
 
 export type CardType = {
     suit: Suit;
@@ -47,28 +49,44 @@ export const kWestNumber = seatPosition('west');
 export const kNorthNumber = seatPosition('north');
 export const kEastNumber = seatPosition('east');
 
-export function suitOrd(suit: Suit): number {
-    return all_suits.indexOf(suit);
-}
-
-export function rankOrd(rank: Rank): number {
-    return all_ranks.indexOf(rank);
-}
-
-export function rankName(rankOrd: number): string {
-    return all_ranks[rankOrd];
-}
-
-export function suitName(suitOrd: number): string {
-    return all_suits[suitOrd];
-}
-
 export function isSuit(suit: unknown): suit is Suit {
     return all_suits.includes(suit as Suit);
 }
 
 export function isRank(rank: unknown): rank is Rank {
     return all_ranks.includes(rank as Rank);
+}
+
+export function suitOrd(suit: Suit): SuitOrd {
+    if (!isSuit(suit))
+        throw new Error(`Invalid SuitOrd: ${suit}`);
+    return all_suits.indexOf(suit) as unknown as SuitOrd;
+}
+
+export function rankOrd(rank: Rank): RankOrd {
+    if (!isRank(rank))
+        throw new Error(`Invalid Rank: ${rank}`);
+    return all_ranks.indexOf(rank) as unknown as RankOrd;
+}
+
+export function rankName(rankOrd: number): Rank {
+    if (!isRankOrd(rankOrd))
+        throw new Error(`Invalid rankOrd: ${rankOrd}`);
+    return all_ranks[rankOrd];
+}
+
+export function suitName(suitOrd: number): Suit {
+    if (!isSuitOrd(suitOrd))
+        throw new Error(`Invalid suit: ${suitOrd}`);
+    return all_suits[suitOrd];
+}
+
+export function isSuitOrd(suitOrd: unknown): suitOrd is SuitOrd {
+    return typeof suitOrd === 'number' && suitOrd >= 0 && suitOrd < 4;
+}
+
+export function isRankOrd(rankOrd: unknown): rankOrd is RankOrd {
+    return typeof rankOrd === 'number' && rankOrd >= 0 && rankOrd < 13;
 }
 
 export function isCard(card: unknown): card is CardType {
