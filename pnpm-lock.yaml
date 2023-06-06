@@ -6,7 +6,13 @@ settings:
 
 importers:
 
+  .: {}
+
   packages/cards_ts:
+    dependencies:
+      '@playhearts/gstate_wasm':
+        specifier: workspace:^
+        version: link:../gstate_wasm
     devDependencies:
       '@types/chai':
         specifier: ^4.3.5
