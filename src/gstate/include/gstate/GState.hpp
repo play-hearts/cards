@@ -235,6 +235,9 @@ public:
 
     auto dealIndex() const -> DealIndex { return mDealIndex; }
 
+    Trick currentTrick() const { return mTrick; }
+    Trick priorTrick() const { return mPriorTrick; }
+
 private:
     friend hearts::KState;
     auto alternate(const FourHands& hands) const -> GState;

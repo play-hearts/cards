@@ -151,7 +151,7 @@ auto GState::playCard(Card card) -> void
 
     mHands.at(player) -= card;
     mCardsPlayed.at(player) += card;
-    mTrick.at(player) = card;
+    mTrick[player] = card;
     ++mPlayIndex;
     ++mCurrent;
     mCurrent = mCurrent % kNumPlayers;
