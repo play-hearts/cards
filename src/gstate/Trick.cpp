@@ -1,6 +1,10 @@
 #include "gstate/Trick.hpp"
 #include "prim/range.hpp"
 
+#if __EMSCRIPTEN__
+#include <emscripten/bind.h>
+#endif
+
 namespace pho::gstate
 {
 
@@ -55,5 +59,26 @@ auto Trick::highCard() const -> Card
     }
     return cardFor(suit, rank);
 }
+
+#if __EMSCRIPTEN__
+using namespace emscripten;
+
+EMSCRIPTEN_BINDINGS(Trick) {
+
+    class_<Trick>("Trick")
+        .constructor<>()
+        .function("at", &Trick::at)
+        .function("trickSuit", &Trick::trickSuit)
+        .function("lead", &Trick::lead)
+        .function("leadCard", &Trick::leadCard)
+        .function("winner", &Trick::winner)
+        .function("highCard", &Trick::highCard)
+        .function("getTrickPlay", &Trick::getTrickPlay)
+        .function("rep", &Trick::rep)
+        ;
+
+}
+
+#endif
 
 } // namespace pho::gstate
