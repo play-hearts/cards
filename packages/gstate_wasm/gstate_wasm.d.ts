@@ -90,7 +90,7 @@ export interface GStateModule extends EmscriptenModule {
     RandomGenerator: (this: RandomGenerator) => void;
     Deal: (this: Deal, dealIndex: string) => void;
     CardSet: (this: CardSet) => void;
-    Card: (this: Card) => void;
+    Card: (this: Card, ord: number) => void;
     CardVector: (this: CardVector) => void;
     suitOf: (card: Card) => Suit;
     rankOf: (card: Card) => Rank;
