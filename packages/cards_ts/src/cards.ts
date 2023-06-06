@@ -57,16 +57,16 @@ export function isRank(rank: unknown): rank is Rank {
     return all_ranks.includes(rank as Rank);
 }
 
-export function suitOrd(suit: Suit): SuitOrd {
+export function suitOrd(suit: Suit): number {
     if (!isSuit(suit))
         throw new Error(`Invalid SuitOrd: ${suit}`);
-    return all_suits.indexOf(suit) as unknown as SuitOrd;
+    return all_suits.indexOf(suit);
 }
 
-export function rankOrd(rank: Rank): RankOrd {
+export function rankOrd(rank: Rank): number {
     if (!isRank(rank))
         throw new Error(`Invalid Rank: ${rank}`);
-    return all_ranks.indexOf(rank) as unknown as RankOrd;
+    return all_ranks.indexOf(rank);
 }
 
 export function rankName(rankOrd: number): Rank {
