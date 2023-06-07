@@ -20,18 +20,18 @@ TEST(GameBehavior_Standard, legal)
     gameState.startGameNoPass();
     auto legal = standard.legal(gameState);
     EXPECT_EQ(legal.size(), 1u);
-    EXPECT_EQ(legal.front(), Card::cardFor(kClubs, kTwo));
+    EXPECT_EQ(legal.front(), Card::cardFor(Suit::kClubs, Rank::kTwo));
 }
 
-constexpr auto k2C = Card::cardFor(kClubs, kTwo);
-constexpr auto k3C = Card::cardFor(kClubs, kThree);
-constexpr auto k4C = Card::cardFor(kClubs, kFour);
+constexpr auto k2C = Card::cardFor(Suit::kClubs, Rank::kTwo);
+constexpr auto k3C = Card::cardFor(Suit::kClubs, Rank::kThree);
+constexpr auto k4C = Card::cardFor(Suit::kClubs, Rank::kFour);
 
-constexpr auto k2D = Card::cardFor(kDiamonds, kTwo);
+constexpr auto k2D = Card::cardFor(Suit::kDiamonds, Rank::kTwo);
 
-constexpr auto k2S = Card::cardFor(kSpades, kTwo);
-constexpr auto k3S = Card::cardFor(kSpades, kThree);
-constexpr auto k4S = Card::cardFor(kSpades, kFour);
+constexpr auto k2S = Card::cardFor(Suit::kSpades, Rank::kTwo);
+constexpr auto k3S = Card::cardFor(Suit::kSpades, Rank::kThree);
+constexpr auto k4S = Card::cardFor(Suit::kSpades, Rank::kFour);
 
 TEST(GameBehavior, trickWinner)
 {

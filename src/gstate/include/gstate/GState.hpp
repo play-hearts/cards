@@ -33,9 +33,9 @@ struct CardSetConstants : public CoreCardSetConstants
 {
     // We split CoreCardSetConstants and CardSetConstants to enable use of maskOf() and maskOfSuit() to define more constants.
     // Placing them in the same struct would lead to `maskOf(...)’ called in a constant expression before its definition is complete`
-    static constexpr BitSetMask kAllHeartsMask = maskOfSuit(kHearts);
+    static constexpr BitSetMask kAllHeartsMask = maskOfSuit(Suit::kHearts);
     static constexpr BitSetMask kNonHeartsMask = ~kAllHeartsMask;
-    static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | maskOf(kSpades, kQueen)};
+    static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | maskOf(Suit::kSpades, Rank::kQueen)};
     static constexpr BitSetMask kNonPointCardsMask = BitSetMask{~kPointCardsMask & kAllCards};
 };
 

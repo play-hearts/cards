@@ -24,6 +24,5 @@ export function convertCardSet(cardSet: CardSet): CardType[] {
 export function makeCard(instance: GStateModule, suit: Suit, rank: Rank): Card {
     const s: number = suitOrd(suit);
     const r: number = rankOrd(rank);
-    const c: number = s*13 + r;
-    return new instance.Card(c);
+    return new instance.Card(s*13 + r);
 }

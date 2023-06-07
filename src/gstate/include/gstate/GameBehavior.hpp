@@ -83,8 +83,8 @@ private:
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
 
         using BitSetMask = uint64_t;
-        static constexpr BitSetMask kAllHeartsMask = cards::CoreCardSetConstants::maskOfSuit(cards::kHearts);
-        static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | cards::CoreCardSetConstants::maskOf(cards::kSpades, cards::kQueen)};
+        static constexpr BitSetMask kAllHeartsMask = cards::CoreCardSetConstants::maskOfSuit(cards::Suit::kHearts);
+        static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | cards::CoreCardSetConstants::maskOf(cards::Suit::kSpades, cards::Rank::kQueen)};
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
 
@@ -96,7 +96,7 @@ private:
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
 
         using BitSetMask = uint64_t;
-        static constexpr BitSetMask kPointCardsMask = StandardHearts::kPointCardsMask | BitSetMask{cards::CoreCardSetConstants::maskOf(cards::kDiamonds, cards::kJack)};
+        static constexpr BitSetMask kPointCardsMask = StandardHearts::kPointCardsMask | BitSetMask{cards::CoreCardSetConstants::maskOf(cards::Suit::kDiamonds, cards::Rank::kJack)};
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
 
@@ -110,7 +110,7 @@ private:
         [[nodiscard]] auto firstLead(const GState& state) const -> uint32_t override;
 
         using BitSetMask = uint64_t;
-        static constexpr BitSetMask kPointCardsMask = cards::CoreCardSetConstants::maskOfSuit(cards::kSpades);
+        static constexpr BitSetMask kPointCardsMask = cards::CoreCardSetConstants::maskOfSuit(cards::Suit::kSpades);
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
 

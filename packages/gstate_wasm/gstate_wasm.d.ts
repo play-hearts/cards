@@ -86,6 +86,29 @@ export enum GameVariant {
     SPADES = 2,
 }
 
+export enum SuitEnum {
+    kClubs = 0,
+    kDiamonds = 1,
+    kHearts = 2,
+    kSpades = 3,
+}
+
+export enum RankEnum {
+    kTwo = 0,
+    kThree = 1,
+    kFour = 2,
+    kFive = 3,
+    kSix = 4,
+    kSeven = 5,
+    kEight = 6,
+    kNine = 7,
+    kTen = 8,
+    kJack = 9,
+    kQueen = 10,
+    kKing = 11,
+    kAce = 12,
+}
+
 export interface GStateModule extends EmscriptenModule {
     RandomGenerator: (this: RandomGenerator) => void;
     Deal: (this: Deal, dealIndex: string) => void;

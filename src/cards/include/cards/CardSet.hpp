@@ -18,12 +18,12 @@ struct CoreCardSetConstants
 
     static constexpr BitSetMask maskOfSuit(Suit suit)
     {
-        return BitSetMask{((kOne << kCardsPerSuit) - 1) << (suit * kCardsPerSuit)};
+        return BitSetMask{((kOne << kCardsPerSuit) - 1) << (Nib(suit) * kCardsPerSuit)};
     }
     static constexpr BitSetMask maskOf(Card card) { return card.mask(); }
     static constexpr BitSetMask maskOf(Suit suit, Rank rank)
     {
-        return BitSetMask{kOne << (suit * kCardsPerSuit + rank)};
+        return BitSetMask{kOne << (Nib(suit) * kCardsPerSuit + Nib(rank))};
     }
 
     static constexpr BitSetMask kNoCards = BitSetMask{0};

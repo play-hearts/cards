@@ -214,8 +214,8 @@ void GState::getStandardOutcome(VariantOutcome::Standard& outcome) const
     for (auto p : prim::range(kNumPlayers))
     {
         auto taken = takenBy(p);
-        outcome.mHeartsTaken[p] = taken.cardsWithSuit(kHearts).size();
-        if (taken.hasCard(cards::cardFor(cards::kSpades, cards::kQueen)))
+        outcome.mHeartsTaken[p] = taken.cardsWithSuit(Suit::kHearts).size();
+        if (taken.hasCard(cards::cardFor(cards::Suit::kSpades, cards::Rank::kQueen)))
         {
             outcome.mTookQueen = p;
             if (outcome.mHeartsTaken[p] == kExpectedTotalHearts)
@@ -256,7 +256,7 @@ auto GState::getJackOutcome() const -> VariantOutcome::Jack
         assert(outcome.mScores[p] <= 1.0);
         outcome.mScores[p] *= 19.5;
         outcome.mScores[p] += 6.5 - 4.0;
-        if (takenBy(p).hasCard(cards::cardFor(cards::kDiamonds, cards::kJack)))
+        if (takenBy(p).hasCard(cards::cardFor(cards::Suit::kDiamonds, cards::Rank::kJack)))
         {
             tookJack = p;
             outcome.mScores[p] -= 10;
@@ -409,7 +409,7 @@ PlayerVoids GState::voidsForOthers() const
     auto voidBits = PlayerVoids{mPlayerVoids.OthersKnownVoid(kCarl)};
 
     // These unknown cards do NOT include cards that Carl passed to Alan.
-    // So if there are no unkonwn cards for a given suit we cannot
+    // So if there are no unknown cards for a given suit we cannot
     // conclude that Alan is void in that suit.
     // We must check whether mPassed has any cards of that suit.
     const CardSet unknown = mUnplayedCards - mHands.at(kCarl) - mPassed.at(kCarl);
@@ -499,13 +499,13 @@ auto GState::asProbabilities() const -> ProbArray
         unsigned remaining = unknown.cardsWithSuit(suit).size();
         if (remaining == 0)
         {
-            suitProb[suit] = 0.0;
+            suitProb[Nib(suit)] = 0.0;
         }
         else
         {
             unsigned numVoid = voids.CountVoidInSuit(suit);
             assert(numVoid < 3);
-            suitProb[suit] = 1.0 / (3 - numVoid);
+            suitProb[Nib(suit)] = 1.0 / (3 - numVoid);
         }
     }
 
@@ -531,7 +531,7 @@ auto GState::asProbabilities() const -> ProbArray
                     }
                     else
                     {
-                        prob[card.ord()][p] = suitProb[suit];
+                        prob[card.ord()][p] = suitProb[Nib(suit)];
                     }
                 }
             }

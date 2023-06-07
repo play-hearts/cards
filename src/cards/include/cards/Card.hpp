@@ -12,7 +12,7 @@ namespace pho::cards {
 using Nib = std::int8_t; // We only need 2 bits, but we use 8. For representing Rank and Suit.
 using Ord = std::uint8_t; // We only need 6 bits, but we use 8. For values 0..51.
 
-enum Suit : Nib
+enum class Suit : Nib
 {
     kClubs = 0,
     kDiamonds,
@@ -22,9 +22,9 @@ enum Suit : Nib
     kUnknown
 };
 
-constexpr auto allSuits = std::array<Suit, 4>{kClubs, kDiamonds, kSpades, kHearts};
+constexpr auto allSuits = std::array<Suit, 4>{Suit::kClubs, Suit::kDiamonds, Suit::kSpades, Suit::kHearts};
 
-enum Rank : Nib
+enum class Rank : Nib
 {
     kTwo = 0u,
     kThree,
@@ -60,7 +60,7 @@ public:
 
     constexpr uint64_t mask() const { return 1ull << card; }
 
-    static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
+    static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(Nib(s) * kCardsPerSuit + Nib(r))}; }
 
     friend bool operator==(Card a, Card b) { return a.card == b.card; }
     friend bool operator!=(Card a, Card b) { return a.card != b.card; }

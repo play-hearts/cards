@@ -3,7 +3,6 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import factory from "@playhearts/gstate_wasm";
-
 import type { Int126, RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
 
 chai.use(chaiAsPromised);

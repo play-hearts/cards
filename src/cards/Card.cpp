@@ -32,7 +32,7 @@ public:
 
 static Initializer gInitializer;
 
-std::string nameOfSuit(Suit suit) { return kSuits[suit]; }
+std::string nameOfSuit(Suit suit) { return kSuits[Nib(suit)]; }
 
 std::string nameOfCard(Card card)
 {
@@ -45,6 +45,30 @@ std::string nameOfCard(Card card)
 #if __EMSCRIPTEN__
 using namespace emscripten;
 EMSCRIPTEN_BINDINGS(cards) {
+
+    enum_<Suit>("Suit")
+        .value("kClubs", Suit::kClubs)
+        .value("kDiamonds", Suit::kDiamonds)
+        .value("kSpades", Suit::kSpades)
+        .value("kHearts", Suit::kHearts)
+        ;
+
+    enum_<Rank>("Rank")
+        .value("kTwo", Rank::kTwo)
+        .value("kThree", Rank::kThree)
+        .value("kFour", Rank::kFour)
+        .value("kFive", Rank::kFive)
+        .value("kSix", Rank::kSix)
+        .value("kSeven", Rank::kSeven)
+        .value("kEight", Rank::kEight)
+        .value("kNine", Rank::kNine)
+        .value("kTen", Rank::kTen)
+        .value("kJack", Rank::kJack)
+        .value("kQueen", Rank::kQueen)
+        .value("kKing", Rank::kKing)
+        .value("kAce", Rank::kAce)
+        ;
+
     class_<Card>("Card")
         .constructor<Ord>()
         .function("ord", &Card::ord)

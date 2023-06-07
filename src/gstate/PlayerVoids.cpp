@@ -81,7 +81,8 @@ std::string PlayerVoids::toString() const
     };
 
     for (auto p : prim::range(kNumPlayers))
-        result += fmt::format("{}{}{}{} ", V(p, kClubs), V(p, kDiamonds), V(p, kSpades), V(p, kHearts));
+        result += fmt::format("{}{}{}{} "
+            , V(p, Suit::kClubs), V(p, Suit::kDiamonds), V(p, Suit::kSpades), V(p, Suit::kHearts));
 
     return result;
 }

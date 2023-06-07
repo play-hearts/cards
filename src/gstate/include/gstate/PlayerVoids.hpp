@@ -21,7 +21,7 @@ struct SuitVoids
         assert(n <= 3);
     }
     SuitVoids()
-        : suit(kUnknown)
+        : suit(Suit::kUnknown)
         , numVoids(0)
     {}
     Suit suit;
@@ -82,7 +82,7 @@ private:
     static inline int VoidBit(int player, Suit suit)
     {
         // This scheme creates one nibble per suit, with each nibble containing one bit per player.
-        return 1u << (4 * suit + player);
+        return 1u << (4 * Nib(suit) + player);
     }
 
     static Rep playerMask(int p)
@@ -92,7 +92,7 @@ private:
 
     static Rep suitMask(Suit suit)
     {
-        return 0x000F << (suit*4);
+        return 0x000F << (Nib(suit)*4);
     }
 
 private:

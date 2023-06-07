@@ -44,7 +44,7 @@ auto GameBehavior::Concept::legal(const GState& state) const -> CardSet
 {
     assert(state.gameStarted());
 
-    if (state.playIndex() == 0 && mVariant!=spades ) return CardSet::make({Card::cardFor(kClubs, kTwo)});
+    if (state.playIndex() == 0 && mVariant!=spades ) return CardSet::make({Card::cardFor(Suit::kClubs, Rank::kTwo)});
 
     auto choices = state.playInTrick()==0 ? legalLeadPlays(state) : legalFollowPlays(state);
     if (choices.empty())
@@ -60,7 +60,7 @@ auto GameBehavior::Concept::trickWinner(const pho::gstate::Trick& trick) const -
 
 auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
 {
-    static constexpr auto kTwoClubs = Card::cardFor(kClubs, kTwo);
+    static constexpr auto kTwoClubs = Card::cardFor(Suit::kClubs, Rank::kTwo);
     const auto& hands = state.hands();
     for (auto p : prim::range(kNumPlayers))
     {
@@ -84,9 +84,9 @@ auto GameBehavior::Spades::trickWinner(const pho::gstate::Trick& trick) const ->
     {
         auto card = trick.at(p);
         assert(card != Card::kNone);
-        if (suit != kSpades && suitOf(card) == kSpades)
+        if (suit != Suit::kSpades && suitOf(card) == Suit::kSpades)
         {
-            suit = kSpades;
+            suit = Suit::kSpades;
             rank = rankOf(card);
             winner = p;
         }

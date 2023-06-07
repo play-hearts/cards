@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --require ts-node/register src/cards.spec.ts"
+    "test": "mocha --require ts-node/register src/**/*.spec.ts"
   },
   "keywords": [],
   "author": "",
