@@ -16,11 +16,12 @@ static std::string kNames[kCardsPerDeck];
 
 static void InitializeCardNames()
 {
-    for (auto card : prim::range(kCardsPerDeck))
+    for (auto c : prim::range(kCardsPerDeck))
     {
-        std::string s(kRanks[iRankOf(card)]);
-        s += kSuits[iSuitOf(card)];
-        kNames[card] = s;
+        Card card(c);
+        std::string s(kRanks[card.rankOrd()]);
+        s += kSuits[card.suitOrd()];
+        kNames[c] = s;
     }
 }
 
@@ -48,14 +49,11 @@ EMSCRIPTEN_BINDINGS(cards) {
     class_<Card>("Card")
         .constructor<Ord>()
         .function("ord", &Card::ord)
-        .function("suit", &Card::suit)
-        .function("rank", &Card::rank)
+        .function("suitOrd", &Card::suitOrd)
+        .function("rankOrd", &Card::rankOrd)
         ;
 
-    function("suitOf", suitOf);
-    function("rankOf", rankOf);
-    function("cardFor", cardFor);
-    function("nameOfSuit", nameOfSuit);
+    function("cardFrom", cardFrom);
     function("nameOfCard", nameOfCard);
 }
 #endif

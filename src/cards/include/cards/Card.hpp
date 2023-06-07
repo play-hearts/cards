@@ -58,6 +58,10 @@ public:
     constexpr Suit suit() const { return Suit(card / kCardsPerSuit); }
     constexpr Rank rank() const { return Rank(card % kCardsPerSuit); }
 
+    // The emscripten interface uses these instead of the Suit/Rank enums.
+    constexpr Ord suitOrd() const { return Ord(card / kCardsPerSuit); }
+    constexpr Ord rankOrd() const { return Ord(card % kCardsPerSuit); }
+
     constexpr uint64_t mask() const { return 1ull << card; }
 
     static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
@@ -75,9 +79,10 @@ constexpr Card kNoCard{};
 constexpr Suit suitOf(Card card) { return card.suit(); }
 constexpr Rank rankOf(Card card) { return card.rank(); }
 constexpr Card cardFor(Suit suit, Rank rank) { return Card::cardFor(suit, rank); }
+constexpr Card cardFrom(Ord suit, Ord rank) { return Card::cardFor(Suit(suit), Rank(rank)); }
 
-constexpr Nib iSuitOf(Card card) { return Nib(suitOf(card)); }
-constexpr Nib iRankOf(Card card) { return Nib(rankOf(card)); }
+constexpr Nib iSuitOf(Card card) { return card.suitOrd(); }
+constexpr Nib iRankOf(Card card) { return card.rankOrd(); }
 
 std::string nameOfSuit(Suit suit);
 std::string nameOfCard(Card card);
