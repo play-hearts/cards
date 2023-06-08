@@ -22,8 +22,10 @@ target_link_libraries(gstate_lib
     )
 
 wasm_module(gstate
-    DEPENDS
+    PUBLIC
     gstate_lib
+    cards_lib
+    math_lib
 )
 
 add_subdirectory(tests)

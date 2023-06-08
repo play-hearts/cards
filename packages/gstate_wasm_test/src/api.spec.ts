@@ -3,7 +3,9 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import factory from "@playhearts/gstate_wasm";
-import type { Int126, RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
+import type { Int126, RandomGenerator } from '@playhearts/gstate_wasm';
+import type { Card, CardSet, Deal, Suit, Rank } from '@playhearts/gstate_wasm';
+import type { GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
@@ -24,6 +26,8 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
         const legal: CardSet = gstate.legalPlays();
         const card: Card = instance.aCardAtRandom(legal);
         gstate.playCard(card);
+        let s = gstate.trickSuit();
+        console.log('trick suit: ' + s);
         card.delete();
         legal.delete();
     }
@@ -50,6 +54,20 @@ describe('api', (): void => {
     });
 
     describe('cards api', (): void => {
+        it('can create a Card', async() => {
+            const card: Card = new instance.Card(0);
+            expect(card).not.to.be.undefined;
+
+            const suit: Suit = card.suit();
+            console.log(`suit: ${suit}`);
+            // expect(suit).to.equal(instance.Suit.kClubs);
+            // const rank: Rank = instance.rankOf(card);
+            // console.log(`rank: ${rank}`);
+            // expect(rank).to.equal(instance.Rank.kTwo);
+
+            card.delete();
+        });
+
         it('can create a CardSet', async() => {
             const cards: CardSet = new instance.CardSet();
             expect(cards.size()).to.equal(0);

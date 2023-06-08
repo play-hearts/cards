@@ -19,6 +19,8 @@ async function playOutGame(instance, gstate) {
         const legal = gstate.legalPlays();
         const card = instance.aCardAtRandom(legal);
         gstate.playCard(card);
+        let s = gstate.trickSuit();
+        console.log('trick suit: ' + s);
         card.delete();
         legal.delete();
     }

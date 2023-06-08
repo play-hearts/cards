@@ -15,7 +15,7 @@ target_include_directories(math_lib
 target_link_libraries(math_lib prim_lib)
 
 wasm_module(math
-    DEPENDS
+    PUBLIC
     math_lib
 )
 

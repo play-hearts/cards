@@ -22,6 +22,6 @@ target_include_directories(cards_lib
 add_subdirectory(tests)
 
 wasm_module(cards
-    DEPENDS
+    PUBLIC
     cards_lib
     )

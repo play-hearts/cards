@@ -78,35 +78,13 @@ export interface GState extends Deletable {
     playCard: (card: Card) => void;
     done: () => boolean;
     getPlayerOutcome: (p: number) => {zms: number, winPts: number};
+    trickSuit: () => Suit;
 }
 
 export enum GameVariant {
     STANDARD = 0,
     JACK = 1,
     SPADES = 2,
-}
-
-export enum SuitEnum {
-    kClubs = 0,
-    kDiamonds = 1,
-    kHearts = 2,
-    kSpades = 3,
-}
-
-export enum RankEnum {
-    kTwo = 0,
-    kThree = 1,
-    kFour = 2,
-    kFive = 3,
-    kSix = 4,
-    kSeven = 5,
-    kEight = 6,
-    kNine = 7,
-    kTen = 8,
-    kJack = 9,
-    kQueen = 10,
-    kKing = 11,
-    kAce = 12,
 }
 
 export interface GStateModule extends EmscriptenModule {
@@ -132,6 +110,8 @@ export interface GStateModule extends EmscriptenModule {
     fromVal: ({index: Int126, offset: number}) => GStateInit;
 
     GameVariant: typeof GameVariant;
+    Suit: typeof Suit;
+    Rank: typeof Rank;
 }
 
 export interface GStateModuleFactory extends EmscriptenModuleFactory<GStateModule> {}

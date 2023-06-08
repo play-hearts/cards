@@ -575,6 +575,7 @@ EMSCRIPTEN_BINDINGS(GState) {
         .function("playCard", &GState::playCard)
         .function("done", &GState::done)
         .function("getPlayerOutcome", &GState::getPlayerOutcome)
+        .function("trickSuit", &GState::trickSuit)
         ;
 
     function("getDealIndex", &getDealIndex);

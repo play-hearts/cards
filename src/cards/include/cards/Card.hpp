@@ -12,7 +12,7 @@ namespace pho::cards {
 using Nib = std::int8_t; // We only need 2 bits, but we use 8. For representing Rank and Suit.
 using Ord = std::uint8_t; // We only need 6 bits, but we use 8. For values 0..51.
 
-enum class Suit : Nib
+enum class Suit
 {
     kClubs = 0,
     kDiamonds,
@@ -24,7 +24,7 @@ enum class Suit : Nib
 
 constexpr auto allSuits = std::array<Suit, 4>{Suit::kClubs, Suit::kDiamonds, Suit::kSpades, Suit::kHearts};
 
-enum class Rank : Nib
+enum class Rank
 {
     kTwo = 0u,
     kThree,

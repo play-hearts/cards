@@ -76,8 +76,8 @@ EMSCRIPTEN_BINDINGS(cards) {
         .function("rank", &Card::rank)
         ;
 
-    function("suitOf", suitOf);
-    function("rankOf", rankOf);
+    function("suitOf", &pho::cards::suitOf);
+    function("rankOf", &pho::cards::rankOf);
     function("cardFor", cardFor);
     function("nameOfSuit", nameOfSuit);
     function("nameOfCard", nameOfCard);

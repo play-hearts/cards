@@ -28,8 +28,8 @@ function(wasm_module name)
 if (EMSCRIPTEN)
     set(options)
     set(oneValueArgs)
-    set(multiValueArgs DEPENDS)
-    cmake_parse_arguments(PARSE_ARGV 1 JS_WASM_TEST "${options}" "${oneValueArgs}" "${multiValueArgs}")
+    set(multiValueArgs INTERFACE PUBLIC PRIVATE)
+    cmake_parse_arguments(PARSE_ARGV 1 WASM_MODULE "${options}" "${oneValueArgs}" "${multiValueArgs}")
 
     set(wasm_module "${name}_wasm")
     set(wasm_module_js "${wasm_module}")
@@ -41,16 +41,20 @@ if (EMSCRIPTEN)
 
     add_executable(${wasm_module_js} ${PROJECT_SOURCE_DIR}/empty.cpp)
 
-    add_library(${wasm_module_lib} INTERFACE)
+    add_library(${wasm_module_lib}
+        ${PROJECT_SOURCE_DIR}/empty.cpp
+    )
 
     target_link_libraries(${wasm_module_lib}
-        INTERFACE
-        ${JS_WASM_TEST_DEPENDS}
+        INTERFACE ${WASM_MODULE_INTERFACE}
+        PUBLIC ${WASM_MODULE_PUBLIC}
+        PRIVATE ${WASM_MODULE_PRIVATE}
     )
 
     target_link_libraries(${wasm_module_js} PUBLIC
         -Wl,--whole-archive
-        ${wasm_module_lib} $<TARGET_PROPERTY:${wasm_module_lib},INTERFACE_LINK_LIBRARIES>
+        ${wasm_module_lib}
+        $<TARGET_PROPERTY:${wasm_module_lib},LINK_LIBRARIES>
         -Wl,--no-whole-archive
     )
 
