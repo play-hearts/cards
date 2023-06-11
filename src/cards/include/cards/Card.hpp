@@ -12,9 +12,14 @@ namespace pho::cards {
 using Nib = std::int8_t; // We only need 2 bits, but we use 8. For representing Rank and Suit.
 using Ord = std::uint8_t; // We only need 6 bits, but we use 8. For values 0..51.
 
-#if __EMSCRIPTEN__
-// using Suit = int;
-#define Suit uint8_t
+#ifdef __EMSCRIPTEN__
+#define USE_INT_SUIT_RANK 1
+#else
+#define USE_INT_SUIT_RANK 0
+#endif
+
+#if USE_INT_SUIT_RANK
+using Suit = uint8_t;
 constexpr Suit kClubs = 0;
 constexpr Suit kDiamonds = 1;
 constexpr Suit kSpades = 2;
@@ -34,8 +39,8 @@ enum Suit : Nib
 
 constexpr auto allSuits = std::array<Suit, 4>{kClubs, kDiamonds, kSpades, kHearts};
 
-#if __EMSCRIPTEN__
-#define Rank uint8_t
+#if USE_INT_SUIT_RANK
+using Rank = uint8_t;
 constexpr Rank kTwo = 0;
 constexpr Rank kThree = 1;
 constexpr Rank kFour = 2;
@@ -84,10 +89,6 @@ public:
     constexpr Suit suit() const { return Suit(card / kCardsPerSuit); }
     constexpr Rank rank() const { return Rank(card % kCardsPerSuit); }
 
-    // The emscripten interface uses these instead of the Suit/Rank enums.
-    // int suitVal() const;
-    // int rankVal() const;
-
     constexpr uint64_t mask() const { return 1ull << card; }
 
     static constexpr auto cardFor(Suit s, Rank r) -> Card { return Card{Ord(s * kCardsPerSuit + r)}; }
@@ -115,7 +116,7 @@ std::string nameOfCard(Card card);
 
 using Trick = std::array<Card, kNumPlayers>;
 
-#if __EMSCRIPTEN__
+#if USE_INT_SUIT_RANK
 static_assert(std::is_same_v<Suit, uint8_t>);
 static_assert(std::is_same_v<Rank, uint8_t>);
 #endif
