@@ -14,11 +14,18 @@ export interface RandomGenerator extends Deletable {
     randNorm: () => number;
 }
 
+// #if USE_INT_SUIT_RANK
+
+// type Suit = number;
+// type Rank = number;
+
+// #else
+
 export enum Suit {
     kClubs = 0,
     kDiamonds = 1,
-    kHearts = 2,
-    kSpades = 3,
+    kSpades = 2,
+    kHearts = 3,
 }
 
 export enum Rank {
@@ -37,6 +44,7 @@ export enum Rank {
     kAce = 12,
 }
 
+// #endif
 export interface Card extends Deletable {
     ord: () => number;
     suit: () => Suit;
@@ -90,7 +98,7 @@ export interface GStateModule extends EmscriptenModule {
     RandomGenerator: (this: RandomGenerator) => void;
     Deal: (this: Deal, dealIndex: string) => void;
     CardSet: (this: CardSet) => void;
-    Card: (this: Card) => void;
+    Card: (this: Card, ord: number) => void;
     CardVector: (this: CardVector) => void;
     suitOf: (card: Card) => Suit;
     rankOf: (card: Card) => Rank;
@@ -109,6 +117,9 @@ export interface GStateModule extends EmscriptenModule {
     fromVal: ({index: Int126, offset: number}) => GStateInit;
 
     GameVariant: typeof GameVariant;
+
+    Suit: typeof Suit;
+    Rank: typeof Rank;
 }
 
 export interface GStateModuleFactory extends EmscriptenModuleFactory<GStateModule> {}
