@@ -25,13 +25,13 @@ public:
     Trick& operator=(Trick&&) = default;
 
     auto at(int i) const -> Card { return mRep.at(i); }
-    auto at(int i) -> Card& { return mRep.at(i); }
+    auto operator[](int i) -> Card& { return mRep[i]; }
 
     auto begin() const { return mRep.begin(); }
     auto end() const { return mRep.end(); }
 
     // Return the suit chosen by the player leading this trick
-    auto trickSuit() const -> cards::Suit;
+    auto trickSuit() const -> Suit;
 
     // Return the player leading the trick
     auto lead() const -> PlayerNum { return mLead; }
@@ -51,6 +51,8 @@ public:
 
     using Rep = std::array<Card, kNumPlayers>;
     Trick(const Rep& rep, PlayerNum lead=0) : mLead{lead}, mRep{rep} {}
+
+    auto rep() const -> const Rep { return mRep; }
 
 private:
     auto clear() -> void { mRep.fill(Card::kNone); }
