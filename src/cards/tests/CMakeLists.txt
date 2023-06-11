@@ -1,20 +1,24 @@
 create_test(Card
     DEPENDS
+    math_lib
     cards_lib
 )
 
 create_test(CardSet
     DEPENDS
+    math_lib
     cards_lib
 )
 
 create_test(Deal
     DEPENDS
+    math_lib
     cards_lib
 )
 
 create_test(FourHands
     DEPENDS
+    math_lib
     cards_lib
 )
 
