@@ -1,5 +1,5 @@
 
-add_library(math_lib STATIC
+add_library(math_lib OBJECT
     combinatorics.cpp
     elo.cpp
     math.cpp

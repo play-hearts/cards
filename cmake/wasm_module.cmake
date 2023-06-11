@@ -41,16 +41,17 @@ if (EMSCRIPTEN)
 
     add_executable(${wasm_module_js} ${PROJECT_SOURCE_DIR}/empty.cpp)
 
-    add_library(${wasm_module_lib} INTERFACE)
+    add_library(${wasm_module_lib} OBJECT
+        ${CMAKE_SOURCE_DIR}/empty.cpp)
 
     target_link_libraries(${wasm_module_lib}
-        INTERFACE
+        PUBLIC
         ${JS_WASM_TEST_DEPENDS}
     )
 
     target_link_libraries(${wasm_module_js} PUBLIC
         -Wl,--whole-archive
-        ${wasm_module_lib} $<TARGET_PROPERTY:${wasm_module_lib},INTERFACE_LINK_LIBRARIES>
+        ${wasm_module_lib} $<TARGET_PROPERTY:${wasm_module_lib},LINK_LIBRARIES>
         -Wl,--no-whole-archive
     )
 
