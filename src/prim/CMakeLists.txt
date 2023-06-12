@@ -1,6 +1,6 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
-add_library(prim_lib STATIC
+add_library(prim_lib OBJECT
     split.cpp
 )
 

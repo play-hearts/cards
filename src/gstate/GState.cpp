@@ -151,7 +151,7 @@ auto GState::playCard(Card card) -> void
 
     mHands.at(player) -= card;
     mCardsPlayed.at(player) += card;
-    mTrick.at(player) = card;
+    mTrick[player] = card;
     ++mPlayIndex;
     ++mCurrent;
     mCurrent = mCurrent % kNumPlayers;
@@ -162,7 +162,7 @@ auto GState::playCard(Card card) -> void
     if (playInTrick() == 0) finishTrick();
 }
 
-auto GState::trickSuit() const -> cards::Suit
+auto GState::trickSuit() const -> Suit
 {
     assert(playInTrick() != 0);
     return mTrick.trickSuit();

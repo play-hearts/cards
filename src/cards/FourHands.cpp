@@ -7,6 +7,9 @@
 namespace pho::cards
 {
 
+auto FourHands::hand(int i) const -> CardSet { return mRep.at(i); }
+
+
 #if __EMSCRIPTEN__
 using namespace emscripten;
 

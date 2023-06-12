@@ -201,7 +201,7 @@ public:
 
     auto voidsForOthers() const -> PlayerVoids;
 
-    auto trickSuit() const -> cards::Suit;
+    auto trickSuit() const -> Suit;
 
     auto allTaken() const -> CardSet { return mAllTaken; }
 
@@ -234,6 +234,9 @@ public:
     void setBid(PlayerNum p, Bid bid) { assert(bid>0); assert(bid<=13); mBids[p] = bid; }
 
     auto dealIndex() const -> DealIndex { return mDealIndex; }
+
+    Trick currentTrick() const { return mTrick; }
+    Trick priorTrick() const { return mPriorTrick; }
 
 private:
     friend hearts::KState;

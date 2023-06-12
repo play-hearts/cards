@@ -97,7 +97,6 @@ describe('api', (): void => {
             const gstate: GState = new instance.GState(init, instance.GameVariant.STANDARD);
             const dealIndex: Int126 = instance.getDealIndex(gstate);
             const passOffset: number = gstate.passOffset();
-            console.log("dealIndex, passOffset:", dealIndex, passOffset);
             gstate.delete();
             expect(dealIndex).not.to.be.undefined;
             expect(passOffset).not.to.be.undefined;
@@ -106,7 +105,6 @@ describe('api', (): void => {
             const gstate2: GState = new instance.GState(init2, instance.GameVariant.STANDARD);
             const dealIndex2: Int126 = instance.getDealIndex(gstate2);
             const passOffset2: number = gstate2.passOffset();
-            console.log("dealIndex2, passOffset2:", dealIndex2, passOffset2);
             expect(dealIndex2).to.deep.equal(dealIndex);
             expect(passOffset2).to.equal(passOffset);
             gstate2.delete();

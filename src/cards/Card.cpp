@@ -16,11 +16,12 @@ static std::string kNames[kCardsPerDeck];
 
 static void InitializeCardNames()
 {
-    for (auto card : prim::range(kCardsPerDeck))
+    for (auto c : prim::range(kCardsPerDeck))
     {
-        std::string s(kRanks[iRankOf(card)]);
-        s += kSuits[iSuitOf(card)];
-        kNames[card] = s;
+        Card card(c);
+        std::string s(kRanks[card.rank()]);
+        s += kSuits[card.suit()];
+        kNames[c] = s;
     }
 }
 
@@ -42,21 +43,70 @@ std::string nameOfCard(Card card)
     return kNames[card.ord()];
 }
 
+#if USE_INT_SUIT_RANK
+static_assert(std::is_same_v<Suit, uint8_t>);
+static_assert(std::is_same_v<Rank, uint8_t>);
+#endif
+
 #if __EMSCRIPTEN__
 using namespace emscripten;
-EMSCRIPTEN_BINDINGS(cards) {
+
+EMSCRIPTEN_BINDINGS(Card) {
     class_<Card>("Card")
         .constructor<Ord>()
         .function("ord", &Card::ord)
-        .function("suit", &Card::suit)
-        .function("rank", &Card::rank)
+        .function("suit", &Card::suit )
+        .function("rank", &Card::rank )
         ;
 
-    function("suitOf", suitOf);
-    function("rankOf", rankOf);
-    function("cardFor", cardFor);
-    function("nameOfSuit", nameOfSuit);
+    function("cardFrom", cardFrom);
     function("nameOfCard", nameOfCard);
+
+#if USE_INT_SUIT_RANK
+    constant("kClubs", kClubs);
+    constant("kDiamonds", kDiamonds);
+    constant("kSpades", kSpades);
+    constant("kHearts", kHearts);
+
+    constant("kTwo", kTwo);
+    constant("kThree", kThree);
+    constant("kFour", kFour);
+    constant("kFive", kFive);
+    constant("kSix", kSix);
+    constant("kSeven", kSeven);
+    constant("kEight", kEight);
+    constant("kNine", kNine);
+    constant("kTen", kTen);
+    constant("kJack", kJack);
+    constant("kQueen", kQueen);
+    constant("kKing", kKing);
+    constant("kAce", kAce);
+#else
+
+    enum_<Suit>("Suit")
+        .value("kClubs", kClubs)
+        .value("kDiamonds", kDiamonds)
+        .value("kSpades", kSpades)
+        .value("kHearts", kHearts)
+        ;
+
+    enum_<Rank>("Rank")
+        .value("kTwo", kTwo)
+        .value("kThree", kThree)
+        .value("kFour", kFour)
+        .value("kFive", kFive)
+        .value("kSix", kSix)
+        .value("kSeven", kSeven)
+        .value("kEight", kEight)
+        .value("kNine", kNine)
+        .value("kTen", kTen)
+        .value("kJack", kJack)
+        .value("kQueen", kQueen)
+        .value("kKing", kKing)
+        .value("kAce", kAce)
+        ;
+
+#endif
 }
 #endif
 

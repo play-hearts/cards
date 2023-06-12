@@ -6,6 +6,19 @@
 
 namespace pho::gstate {
 
+auto VariantOutcome::Base::playerOutcomeResult(unsigned p) const -> float
+{
+    auto best = *std::min_element(mScores.begin(), mScores.end());
+    if (mScores[p] > best)
+        return 0.0;
+    else
+    {
+        auto ties = std::count(mScores.begin(), mScores.end(), best);
+        return 1.0f / ties;
+    }
+}
+
+
 #if __EMSCRIPTEN__
 using namespace emscripten;
 

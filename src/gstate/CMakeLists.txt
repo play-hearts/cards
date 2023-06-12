@@ -1,4 +1,4 @@
-add_library(gstate_lib STATIC
+add_library(gstate_lib OBJECT
     GameBehavior.cpp
     GameVariant.cpp
     GState.cpp
@@ -24,6 +24,9 @@ target_link_libraries(gstate_lib
 wasm_module(gstate
     DEPENDS
     gstate_lib
+    cards_lib
+    math_lib
+    prim_lib
 )
 
 add_subdirectory(tests)

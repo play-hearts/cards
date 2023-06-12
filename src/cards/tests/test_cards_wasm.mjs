@@ -20,6 +20,14 @@ async function Card_test(instance) {
     const cardName = instance.nameOfCard(card);
     console.log("Card name:", cardName);
 
+    const o = card.ord();
+    const s = card.suit();
+    const r = card.rank();
+
+    assert.strictEqual(o, 37);
+    assert.strictEqual(s, 2);
+    assert.strictEqual(r, 1);
+
     card.delete()
 }
 

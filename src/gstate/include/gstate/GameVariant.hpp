@@ -27,17 +27,7 @@ struct VariantOutcome
         {
             return mScores[p];
         }
-        auto playerOutcomeResult(unsigned p) const -> float
-        {
-            auto best = *std::min_element(mScores.begin(), mScores.end());
-            if (mScores[p] > best)
-                return 0.0;
-            else
-            {
-                auto ties = std::count(mScores.begin(), mScores.end(), best);
-                return 1.0f / ties;
-            }
-        }
+        auto playerOutcomeResult(unsigned p) const -> float;
     };
 
     using PlayerNumber = uint32_t;

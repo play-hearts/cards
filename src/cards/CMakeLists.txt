@@ -1,6 +1,6 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
-add_library(cards_lib STATIC
+add_library(cards_lib OBJECT
     Card.cpp
     CardHands.cpp
     CardSet.cpp
@@ -24,4 +24,6 @@ add_subdirectory(tests)
 wasm_module(cards
     DEPENDS
     cards_lib
+    math_lib
+    prim_lib
     )
