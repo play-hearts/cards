@@ -4,22 +4,10 @@ export interface Deletable {
     delete: () => void;
 }
 
-export interface Int126 {
-    hi: BigInt;
-    lo: BigInt;
-}
-
 export interface RandomGenerator extends Deletable {
     delete: () => null;
     randNorm: () => number;
 }
-
-// #if USE_INT_SUIT_RANK
-
-// type Suit = number;
-// type Rank = number;
-
-// #else
 
 export enum Suit {
     kClubs = 0,
@@ -43,8 +31,6 @@ export enum Rank {
     kKing = 11,
     kAce = 12,
 }
-
-// #endif
 export interface Card extends Deletable {
     ord: () => number;
     suit: () => Suit;
@@ -85,7 +71,7 @@ export interface GState extends Deletable {
     startGame: () => void;
     playCard: (card: Card) => void;
     done: () => boolean;
-    getPlayerOutcome: (p: number) => {zms: number, winPts: number};
+    getPlayerOutcome: (p: number) => { zms: number, winPts: number };
 }
 
 export enum GameVariant {
@@ -111,10 +97,10 @@ export interface GStateModule extends EmscriptenModule {
     GState: (this: GState, init: GStateInit, variant: GameVariant) => void;
     GStateInit: (this: GStateInit) => void;
 
-    getDealIndex: (gstate: GState) => Int126;
+    getDealIndex: (gstate: GState) => string;
     kRandomVal: () => GStateInit;
-    fromIndexAndOffset: (index: Int126, offset: number) => GStateInit;
-    fromVal: ({index: Int126, offset: number}) => GStateInit;
+    fromIndexAndOffset: (hexIndex: string, offset: number) => GStateInit;
+    fromVal: ({ hexIndex: string, offset: number }) => GStateInit;
 
     GameVariant: typeof GameVariant;
 
@@ -122,7 +108,7 @@ export interface GStateModule extends EmscriptenModule {
     Rank: typeof Rank;
 }
 
-export interface GStateModuleFactory extends EmscriptenModuleFactory<GStateModule> {}
+export interface GStateModuleFactory extends EmscriptenModuleFactory<GStateModule> { }
 
 declare const Module: GStateModuleFactory;
 export default Module;

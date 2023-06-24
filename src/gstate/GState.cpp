@@ -1,14 +1,12 @@
 #include "gstate/GState.hpp"
 #include "cards/utils.hpp"
 #include "prim/range.hpp"
-#include "math/Int126.hpp"
 
 #if __EMSCRIPTEN__
 #include <emscripten/bind.h>
 #endif
 
-namespace pho::gstate
-{
+namespace pho::gstate {
 
 using math::RandomGenerator;
 
@@ -26,7 +24,7 @@ auto actualPassOffset(uint8_t passOffset) -> uint8_t
         passOffset = RandomGenerator::Range64(4u);
     return passOffset;
 }
-}
+} // namespace
 
 GameBehavior GState::kStandard = GameBehavior::make(GameVariant::standard);
 GameBehavior GState::kJackDiamonds = GameBehavior::make(GameVariant::jack);
@@ -53,18 +51,17 @@ GState::GState(const cards::Deal& deal, uint8_t passOffset, GameBehavior behavio
 , mTrick{}
 , mPriorTrick{}
 , mPassingComplete{}
-{}
+{ }
 
 GState::GState(Init init, GameBehavior behavior)
 : GState{Deal{actualDealIndex(init.dealIndex)}, actualPassOffset(init.passOffset), behavior}
-{}
+{ }
 
 #if __EMSCRIPTEN__
 GState::GState(const emscripten::val& init, GameVariant variant)
 : GState{Init::fromVal(init), GameBehavior::make(variant)}
-{}
+{ }
 #endif
-
 
 auto GState::setPassFor(PlayerNum p, CardSet pass) -> void
 {
@@ -106,7 +103,7 @@ auto GState::startGame() -> void
         }
         for (auto p : prim::range(kNumPlayers))
         {
-            auto passTo = (p+mPassOffset)%4;
+            auto passTo = (p + mPassOffset) % 4;
             mHands.at(passTo) += mPassed.at(p);
             assert(mHands.at(passTo).size() == 13);
         }
@@ -143,7 +140,8 @@ auto GState::playCard(Card card) -> void
     assert(mHands.at(player).hasCard(card));
 
     if (!legalPlays().hasCard(card))
-        throw std::invalid_argument(fmt::format("Card {} is not a legal play ({})", nameOfCard(card), to_string(legalPlays())));
+        throw std::invalid_argument(
+            fmt::format("Card {} is not a legal play ({})", nameOfCard(card), to_string(legalPlays())));
     assert(mUnplayedCards.hasCard(card));
 
     if (playInTrick() != 0 && suitOf(card) != trickSuit())
@@ -159,7 +157,8 @@ auto GState::playCard(Card card) -> void
     mUnplayedCards -= card;
     assert(mUnplayedCards.size() + mPlayIndex == kCardsPerDeck);
 
-    if (playInTrick() == 0) finishTrick();
+    if (playInTrick() == 0)
+        finishTrick();
 }
 
 auto GState::trickSuit() const -> Suit
@@ -171,28 +170,24 @@ auto GState::trickSuit() const -> Suit
 auto GState::getVariantOutcomeRep() const -> VariantOutcomeRep
 {
     auto outcome = VariantOutcomeRep{};
-    switch(mBehavior.variant())
+    switch (mBehavior.variant())
     {
-        case GameVariant::standard:
-        {
-            outcome = getStandardOutcome();
-            break;
-        }
-        case GameVariant::jack:
-        {
-            outcome = getJackOutcome();
-            break;
-        }
-        case GameVariant::spades:
-        {
-            outcome = getSpadesOutcome();
-            break;
-        }
-        default:
-        {
-            assert(false);
-            throw std::runtime_error("Bad behavior variant");
-        }
+    case GameVariant::standard: {
+        outcome = getStandardOutcome();
+        break;
+    }
+    case GameVariant::jack: {
+        outcome = getJackOutcome();
+        break;
+    }
+    case GameVariant::spades: {
+        outcome = getSpadesOutcome();
+        break;
+    }
+    default: {
+        assert(false);
+        throw std::runtime_error("Bad behavior variant");
+    }
     }
     return outcome;
 }
@@ -300,11 +295,11 @@ auto GState::getSpadesOutcome() const -> VariantOutcome::Spades
 
     // Now we can adjust the scores based on the bids.
     // We use the convention that if no bids were set, then we just use the above scoring.
-    // If the bids were set, then the scores we return are derived from the actual scores that would be used in the game,
-    // with two modifications: 1) we negate the scores so that the low scores are better, and 2) we subtract the average
-    // score from each player so that the scores are zero-sum.
-    // We could also scale the scores to the range [-1, 1] but it seems undesirable to squeeze the possible absolute range
-    // of scores from 0 to 130 down to the range [-1, 1], especially we we don't use a global mean to obtain zero-sum.
+    // If the bids were set, then the scores we return are derived from the actual scores that would be used in the
+    // game, with two modifications: 1) we negate the scores so that the low scores are better, and 2) we subtract the
+    // average score from each player so that the scores are zero-sum. We could also scale the scores to the range [-1,
+    // 1] but it seems undesirable to squeeze the possible absolute range of scores from 0 to 130 down to the range [-1,
+    // 1], especially we we don't use a global mean to obtain zero-sum.
     constexpr auto kNoBids = std::array<Bid, kNumPlayers>{};
     if (mBids != kNoBids)
     {
@@ -315,7 +310,7 @@ auto GState::getSpadesOutcome() const -> VariantOutcome::Spades
             auto tricksTaken = takenBy(p).size() / 4;
             if (tricksTaken >= bid)
             {
-                outcome.mScores[p] = -1.0 * (10.0*bid + tricksTaken - bid);
+                outcome.mScores[p] = -1.0 * (10.0 * bid + tricksTaken - bid);
             }
             else
             {
@@ -332,7 +327,6 @@ auto GState::getSpadesOutcome() const -> VariantOutcome::Spades
     return outcome;
 }
 
-
 auto GState::adjustPassedState() -> void
 {
     const auto kCarl = currentPlayer();
@@ -345,7 +339,7 @@ auto GState::adjustPassedState() -> void
         const auto receivedFrom = (p + 4 - mPassOffset) % 4;
         (void) passedTo;
 
-        auto handAtStart = mHands.at(p) +  mCardsPlayed.at(p);
+        auto handAtStart = mHands.at(p) + mCardsPlayed.at(p);
         // fmt::print(stderr, "mHands.at(p) = {}\n", to_string(mHands.at(p)));
         // fmt::print(stderr, "mCardsPlayed.at(p) = {}\n", to_string(mCardsPlayed.at(p)));
         // fmt::print(stderr, "handAtStart.size() = {}\n", handAtStart.size());
@@ -373,7 +367,7 @@ auto GState::adjustPassedState() -> void
         }
         else
         {
-            assert(p!=kCarl && p!=kAlan);
+            assert(p != kCarl && p != kAlan);
             received = chooseThreeAtRandom(handAtStart); // not ideal, but should be good enough
             assert((handAtStart & received) == received);
         }
@@ -414,7 +408,7 @@ PlayerVoids GState::voidsForOthers() const
     // We must check whether mPassed has any cards of that suit.
     const CardSet unknown = mUnplayedCards - mHands.at(kCarl) - mPassed.at(kCarl);
 
-    for (const auto suit: allSuits)
+    for (const auto suit : allSuits)
     {
         if (unknown.cardsWithSuit(suit).empty())
         {
@@ -552,17 +546,17 @@ auto GState::asProbabilities() const -> ProbArray
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-auto getDealIndex(const GState& state) -> emscripten::val
+auto getDealIndex(const GState& state) -> std::string
 {
     auto index = state.dealIndex();
-    return math::uint128_to_val(index);
+    return math::asHexString(index);
 }
 
-EMSCRIPTEN_BINDINGS(GState) {
+EMSCRIPTEN_BINDINGS(GState)
+{
     value_object<GState::PlayerOutcome>("PlayerOutcome")
         .field("zms", &GState::PlayerOutcome::zms)
-        .field("winPts", &GState::PlayerOutcome::winPts)
-        ;
+        .field("winPts", &GState::PlayerOutcome::winPts);
 
     class_<GState>("GState")
         .constructor<emscripten::val, GameVariant>()
@@ -574,21 +568,17 @@ EMSCRIPTEN_BINDINGS(GState) {
         .function("startGame", &GState::startGame)
         .function("playCard", &GState::playCard)
         .function("done", &GState::done)
-        .function("getPlayerOutcome", &GState::getPlayerOutcome)
-        ;
+        .function("getPlayerOutcome", &GState::getPlayerOutcome);
 
     function("getDealIndex", &getDealIndex);
 
-    class_<GState::Init>("GStateInit")
-        .function("toVal", &GState::Init::toVal)
-        ;
+    class_<GState::Init>("GStateInit").function("toVal", &GState::Init::toVal);
 
     function("kNoPassVal", &GState::Init::kNoPassVal);
     function("kRandomVal", &GState::Init::kRandomVal);
     function("fromVal", &GState::Init::fromVal);
     function("fromIndexAndOffset", &GState::Init::fromIndexAndOffset);
-
 }
 #endif
 
-} // pho::gstate
+} // namespace pho::gstate

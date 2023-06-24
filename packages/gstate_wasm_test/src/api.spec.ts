@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import factory from "@playhearts/gstate_wasm";
 
-import type { Int126, RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
+import type { RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
@@ -29,8 +29,7 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
         legal.delete();
     }
 
-    for (let p=0; p<4; ++p)
-    {
+    for (let p = 0; p < 4; ++p) {
         const outcome = gstate.getPlayerOutcome(p);
         console.log(`Player ${p} zms: ${outcome.zms}, winPts: ${outcome.winPts}`);
     }
@@ -43,7 +42,7 @@ describe('api', (): void => {
     });
 
     describe('math api', (): void => {
-        it('can create a RandomGenerator', async() => {
+        it('can create a RandomGenerator', async () => {
             const rng: RandomGenerator = new instance.RandomGenerator();
             expect(rng).not.to.be.undefined;
             rng.delete();
@@ -51,17 +50,17 @@ describe('api', (): void => {
     });
 
     describe('cards api', (): void => {
-        it('can create a CardSet', async() => {
+        it('can create a CardSet', async () => {
             const cards: CardSet = new instance.CardSet();
             expect(cards.size()).to.equal(0);
         });
 
-        it('can create a random Deal and recreate it', async() => {
+        it('can create a random Deal and recreate it', async () => {
             const deal1: Deal = new instance.Deal("");
             const index: string = deal1.indexAsHexString();
             expect(index).to.have.lengthOf(25);
             const deal2: Deal = new instance.Deal(index);
-            for (let p=0; p<4; ++p) {
+            for (let p = 0; p < 4; ++p) {
                 const hand1 = deal1.dealFor(p);
                 const hand2 = deal2.dealFor(p);
                 expect(hand1.equal(hand2)).to.be.true;
@@ -72,11 +71,11 @@ describe('api', (): void => {
             deal2.delete();
         });
 
-        it('a deal is consistent: four non-overlapping subsets', async() => {
+        it('a deal is consistent: four non-overlapping subsets', async () => {
             const deal: Deal = new instance.Deal("");
             let check: CardSet = new instance.CardSet();
             expect(check.size()).to.equal(0);
-            for (let p=0; p<4; ++p) {
+            for (let p = 0; p < 4; ++p) {
                 const hand: CardSet = deal.dealFor(p);
                 expect(hand.size()).to.equal(13);
                 const inCommon: CardSet = check.setIntersection(hand);
@@ -95,7 +94,7 @@ describe('api', (): void => {
         it('withInitTest', async (): Promise<void> => {
             const init: GStateInit = instance.kRandomVal();
             const gstate: GState = new instance.GState(init, instance.GameVariant.STANDARD);
-            const dealIndex: Int126 = instance.getDealIndex(gstate);
+            const dealIndex: string = instance.getDealIndex(gstate);
             const passOffset: number = gstate.passOffset();
             gstate.delete();
             expect(dealIndex).not.to.be.undefined;
@@ -103,7 +102,7 @@ describe('api', (): void => {
 
             const init2: GStateInit = instance.fromIndexAndOffset(dealIndex, passOffset);
             const gstate2: GState = new instance.GState(init2, instance.GameVariant.STANDARD);
-            const dealIndex2: Int126 = instance.getDealIndex(gstate2);
+            const dealIndex2: string = instance.getDealIndex(gstate2);
             const passOffset2: number = gstate2.passOffset();
             expect(dealIndex2).to.deep.equal(dealIndex);
             expect(passOffset2).to.equal(passOffset);

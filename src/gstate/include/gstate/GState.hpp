@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cards/constants.hpp"
 #include "cards/CardSet.hpp"
 #include "cards/Deal.hpp"
+#include "cards/constants.hpp"
 
 #include "cards/FourHands.hpp"
 #include "gstate/GameBehavior.hpp"
@@ -10,8 +10,6 @@
 #include "gstate/Trick.hpp"
 
 #include "prim/range.hpp"
-
-#include "math/Int126.hpp"
 
 #include <fmt/format.h>
 #include <stdexcept>
@@ -21,18 +19,20 @@
 #include <emscripten/val.h>
 #endif
 
-namespace pho::hearts { class KState; }
+namespace pho::hearts {
+class KState;
+}
 
-namespace pho::gstate
-{
+namespace pho::gstate {
 
 using namespace pho::cards;
 using uint128_t = __uint128_t;
 
 struct CardSetConstants : public CoreCardSetConstants
 {
-    // We split CoreCardSetConstants and CardSetConstants to enable use of maskOf() and maskOfSuit() to define more constants.
-    // Placing them in the same struct would lead to `maskOf(...)’ called in a constant expression before its definition is complete`
+    // We split CoreCardSetConstants and CardSetConstants to enable use of maskOf() and maskOfSuit() to define more
+    // constants. Placing them in the same struct would lead to `maskOf(...)’ called in a constant expression before its
+    // definition is complete`
     static constexpr BitSetMask kAllHeartsMask = maskOfSuit(kHearts);
     static constexpr BitSetMask kNonHeartsMask = ~kAllHeartsMask;
     static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | maskOf(kSpades, kQueen)};
@@ -48,7 +48,6 @@ using PlayIndex = uint32_t; // 0..52 (52 -> game over)
 class GState
 {
 public:
-
     using DealIndex = uint128_t;
     using PassOffset = uint8_t;
 
@@ -61,59 +60,54 @@ public:
         const PassOffset passOffset;
 
         constexpr Init(DealIndex dealIndex, PassOffset passOffset)
-        : dealIndex{dealIndex}, passOffset{passOffset}
-        {}
+        : dealIndex{dealIndex}
+        , passOffset{passOffset}
+        { }
 
         constexpr Init(DealIndex dealIndex)
-        : dealIndex{dealIndex}, passOffset{kRandomPassOffset}
-        {}
+        : dealIndex{dealIndex}
+        , passOffset{kRandomPassOffset}
+        { }
 
         constexpr Init(PassOffset passOffset)
-        : dealIndex{kRandomDealIndex}, passOffset{passOffset}
-        {}
+        : dealIndex{kRandomDealIndex}
+        , passOffset{passOffset}
+        { }
 
         constexpr Init()
-        : dealIndex{kRandomDealIndex}, passOffset{kRandomPassOffset}
-        {}
+        : dealIndex{kRandomDealIndex}
+        , passOffset{kRandomPassOffset}
+        { }
 
         constexpr auto operator==(const Init& other) const -> bool
         {
             return dealIndex == other.dealIndex && passOffset == other.passOffset;
         }
 
-        constexpr auto operator!=(const Init& other) const -> bool
-        {
-            return !(*this == other);
-        }
+        constexpr auto operator!=(const Init& other) const -> bool { return !(*this == other); }
 
 #if __EMSCRIPTEN__
         auto toVal() const -> emscripten::val
         {
             auto v = emscripten::val::object();
-            v.set("dealIndex", math::from_uint128(dealIndex));
+            v.set("dealHexStr", math::asHexString(dealIndex));
             v.set("passOffset", passOffset);
             return v;
         }
 
         static auto fromVal(const emscripten::val& v) -> Init
         {
-            auto dealIndex = DealIndex(math::val_to_uint128(v["dealIndex"]));
+            auto dealIndex = DealIndex(math::parseHex128(v["dealHexStr"].as<std::string>().c_str()));
             return Init{dealIndex, v["passOffset"].as<uint8_t>()};
         }
 
-        static auto kNoPassVal() -> emscripten::val
-        {
-            return kNoPass.toVal();
-        }
+        static auto kNoPassVal() -> emscripten::val { return kNoPass.toVal(); }
 
-        static auto kRandomVal() -> emscripten::val
-        {
-            return kRandom.toVal();
-        }
+        static auto kRandomVal() -> emscripten::val { return kRandom.toVal(); }
 
-        static auto fromIndexAndOffset(math::Int126 index, uint8_t offset) -> emscripten::val
+        static auto fromIndexAndOffset(std::string hexIndex, uint8_t offset) -> emscripten::val
         {
-            return Init{math::to_uint128(index), offset}.toVal();
+            return Init{math::parseHex128(hexIndex.c_str()), offset}.toVal();
         }
 #endif
 
@@ -128,8 +122,8 @@ public:
     static GameBehavior kJackDiamonds;
     static GameBehavior kSpades;
 
-    GState(Init init=kNoPass, GameBehavior behavior = kStandard);
-    GState(const cards::Deal& deal, PassOffset passOffset=Init::kRandomPassOffset, GameBehavior behavior = kStandard);
+    GState(Init init = kNoPass, GameBehavior behavior = kStandard);
+    GState(const cards::Deal& deal, PassOffset passOffset = Init::kRandomPassOffset, GameBehavior behavior = kStandard);
     GState(const GState&) = default;
 
 #if __EMSCRIPTEN__
@@ -173,12 +167,15 @@ public:
     // Return the player number of the player that the current player passed to (or will pass to)
     // at the beginning of the game. Will return the current player's own player number when cards were held
     // as dealt.
-    auto currentPassedTo() const -> PlayerNum { return (currentPlayer()+mPassOffset) % kNumPlayers; }
+    auto currentPassedTo() const -> PlayerNum { return (currentPlayer() + mPassOffset) % kNumPlayers; }
 
     // Return the player number of the player that the current player receieved from (or will receive from)
     // at the beginning of the game. Will return the current player's own player number when cards were held
     // as dealt.
-    auto currentReceivedFrom() const -> PlayerNum { return (currentPlayer()-mPassOffset + kNumPlayers) % kNumPlayers; }
+    auto currentReceivedFrom() const -> PlayerNum
+    {
+        return (currentPlayer() - mPassOffset + kNumPlayers) % kNumPlayers;
+    }
 
     auto unplayedCards() const -> CardSet { return mUnplayedCards; }
 
@@ -194,7 +191,7 @@ public:
 
     auto getTrickPlay(unsigned i) const -> Card { return mTrick.getTrickPlay(i); }
 
-    auto highCardInTrick() const { return playInTrick()==0 ? kNoCard : mTrick.highCard(); }
+    auto highCardInTrick() const { return playInTrick() == 0 ? kNoCard : mTrick.highCard(); }
 
     auto currentMightShoot() const { return false; }
     auto otherMightShoot() const { return false; }
@@ -224,14 +221,20 @@ public:
     auto getPlayerOutcome(unsigned p) const -> PlayerOutcome
     {
         auto outcome = getVariantOutcomeRep();
-        return std::visit([p](auto&& arg)
-        {
-            return PlayerOutcome{arg.normalizedScore(p), arg.playerOutcomeResult(p)};
-        }, outcome);
+        return std::visit(
+            [p](auto&& arg) {
+                return PlayerOutcome{arg.normalizedScore(p), arg.playerOutcomeResult(p)};
+            },
+            outcome);
     }
 
     using Bid = uint8_t;
-    void setBid(PlayerNum p, Bid bid) { assert(bid>0); assert(bid<=13); mBids[p] = bid; }
+    void setBid(PlayerNum p, Bid bid)
+    {
+        assert(bid > 0);
+        assert(bid <= 13);
+        mBids[p] = bid;
+    }
 
     auto dealIndex() const -> DealIndex { return mDealIndex; }
 
@@ -248,7 +251,6 @@ private:
     auto finishTrick() -> void;
 
 private:
-
     // The members used to represent the game state here are chosen to strke a good balance
     // between minimal redundancy and efficiency.
     // We prefer efficient updates of state during game play over efficient calculation of the game outcome.
@@ -260,7 +262,7 @@ private:
 
     // The cards not yet played. Each card is removed as soon as it is placed on the table,
     // before the trick is completed.
-    CardSet   mUnplayedCards;
+    CardSet mUnplayedCards;
 
     // The cards currently still held for each player.
     // A card just placed on the table for the current trick is immediately removed from the hand.
@@ -300,7 +302,7 @@ private:
     Trick mPriorTrick;
 
     // True if all steps for the passing phase are complete.
-    bool     mPassingComplete;
+    bool mPassingComplete;
 
     // The bids for each player. This is only used for the "spades" variant.
     std::array<Bid, kNumPlayers> mBids;

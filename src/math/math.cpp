@@ -42,8 +42,9 @@ std::string asHexString(uint128_t N, unsigned zeroFillTo)
     return result;
 }
 
-uint128_t parseHex128(const char* line)
+uint128_t parseHex128(const std::string& str)
 {
+    const char* line = str.c_str();
     uint128_t N = 0;
     for (; isxdigit(*line); ++line)
     {
