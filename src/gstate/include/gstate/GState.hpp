@@ -44,13 +44,18 @@ constexpr auto kNonPointCards = CardSet{CardSetConstants::kNonPointCardsMask};
 
 using PlayerNum = uint32_t; // 0..3
 using PlayIndex = uint32_t; // 0..52 (52 -> game over)
+using DealIndex = uint128_t;
+using PassOffset = uint8_t;
+
+struct GStateInit
+{
+    std::string dealHexStr;
+    PassOffset passOffset;
+};
 
 class GState
 {
 public:
-    using DealIndex = uint128_t;
-    using PassOffset = uint8_t;
-
     struct Init
     {
         static constexpr DealIndex kRandomDealIndex = ~uint128_t{0} >> 2;
@@ -58,6 +63,11 @@ public:
 
         const DealIndex dealIndex;
         const PassOffset passOffset;
+
+        Init(const GStateInit& init)
+        : dealIndex{math::parseHex128(init.dealHexStr)}
+        , passOffset{init.passOffset}
+        { }
 
         constexpr Init(DealIndex dealIndex, PassOffset passOffset)
         : dealIndex{dealIndex}
@@ -87,28 +97,14 @@ public:
         constexpr auto operator!=(const Init& other) const -> bool { return !(*this == other); }
 
 #if __EMSCRIPTEN__
-        auto toVal() const -> emscripten::val
+        auto toVal() const -> GStateInit
         {
-            auto v = emscripten::val::object();
-            v.set("dealHexStr", math::asHexString(dealIndex));
-            v.set("passOffset", passOffset);
-            return v;
+            return GStateInit{.dealHexStr = math::asHexString(dealIndex), .passOffset = passOffset};
         }
 
-        static auto fromVal(const emscripten::val& v) -> Init
-        {
-            auto dealIndex = DealIndex(math::parseHex128(v["dealHexStr"].as<std::string>().c_str()));
-            return Init{dealIndex, v["passOffset"].as<uint8_t>()};
-        }
+        static auto kNoPassVal() -> GStateInit;
 
-        static auto kNoPassVal() -> emscripten::val { return kNoPass.toVal(); }
-
-        static auto kRandomVal() -> emscripten::val { return kRandom.toVal(); }
-
-        static auto fromIndexAndOffset(std::string hexIndex, uint8_t offset) -> emscripten::val
-        {
-            return Init{math::parseHex128(hexIndex.c_str()), offset}.toVal();
-        }
+        static auto kRandomVal() -> GStateInit;
 #endif
 
         static Init kRandom;
@@ -127,7 +123,7 @@ public:
     GState(const GState&) = default;
 
 #if __EMSCRIPTEN__
-    GState(const emscripten::val& init, GameVariant variant);
+    GState(const GStateInit& init, GameVariant variant);
 #endif
 
     auto gameStarted() const -> bool { return mPassingComplete; }

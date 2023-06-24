@@ -93,18 +93,19 @@ describe('api', (): void => {
     describe('gstate api', (): void => {
         it('withInitTest', async (): Promise<void> => {
             const init: GStateInit = instance.kRandomVal();
+            console.log("kRandomVal:", init)
             const gstate: GState = new instance.GState(init, instance.GameVariant.STANDARD);
-            const dealIndex: string = instance.getDealIndex(gstate);
+            const dealHexStr: string = instance.getDealIndex(gstate);
+            expect(dealHexStr).to.equal(init.dealHexStr);
             const passOffset: number = gstate.passOffset();
+            expect(passOffset).to.equal(init.passOffset);
             gstate.delete();
-            expect(dealIndex).not.to.be.undefined;
-            expect(passOffset).not.to.be.undefined;
 
-            const init2: GStateInit = instance.fromIndexAndOffset(dealIndex, passOffset);
+            const init2: GStateInit = { dealHexStr, passOffset };
             const gstate2: GState = new instance.GState(init2, instance.GameVariant.STANDARD);
             const dealIndex2: string = instance.getDealIndex(gstate2);
             const passOffset2: number = gstate2.passOffset();
-            expect(dealIndex2).to.deep.equal(dealIndex);
+            expect(dealIndex2).to.deep.equal(dealHexStr);
             expect(passOffset2).to.equal(passOffset);
             gstate2.delete();
         });
