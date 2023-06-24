@@ -4,7 +4,6 @@ add_library(math_lib OBJECT
     elo.cpp
     math.cpp
     random.cpp
-    Int126.cpp
 )
 
 target_include_directories(math_lib
