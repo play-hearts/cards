@@ -82,6 +82,7 @@ export interface GStateInit {
 export interface GState extends Deletable {
     delete: () => null;
     passOffset: () => number;
+    currentPlayer: () => number;
     playersHand: (p: number) => CardSet;
     currentPlayersHand: () => CardSet;
     legalPlays: () => CardSet;
