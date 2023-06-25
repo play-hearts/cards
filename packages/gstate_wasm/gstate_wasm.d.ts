@@ -57,6 +57,22 @@ export interface Deal extends Deletable {
     indexAsHexString: () => string;
 }
 
+export type TrickRep = [Card, Card, Card, Card];
+export type TrickOrdRep = [number, number, number, number];
+
+export interface Trick extends Deletable {
+    delete: () => null;
+    at: (i: number) => Card;
+    trickSuit: () => Suit;
+    lead: () => number;
+    leadCard: () => Card;
+    winner: () => number;
+    highCard: () => Card;
+    getTrickPlay: () => Card;
+    rep: () => TrickRep;
+    ordRep: () => TrickOrdRep;
+}
+
 // GStateInit is a emscripten::value_object;
 export interface GStateInit {
     dealHexStr: string,
@@ -74,6 +90,8 @@ export interface GState extends Deletable {
     playCard: (card: Card) => void;
     done: () => boolean;
     getPlayerOutcome: (p: number) => { zms: number, winPts: number };
+    currentTrick: () => Trick;
+    priorTrick: () => Trick;
 }
 
 export enum GameVariant {

@@ -5,26 +5,19 @@
 #include <emscripten/bind.h>
 #endif
 
-namespace pho::gstate
-{
+namespace pho::gstate {
 
 auto Trick::getTrickPlay(unsigned i) const -> Card
 {
-    auto seat = (mLead+i) % kNumPlayers;
+    auto seat = (mLead + i) % kNumPlayers;
     auto play = mRep.at(seat);
     assert(play != Card::kNone);
     return play;
 }
 
-auto Trick::leadCard() const -> Card
-{
-    return getTrickPlay(0);
-}
+auto Trick::leadCard() const -> Card { return getTrickPlay(0); }
 
-auto Trick::trickSuit() const -> Suit
-{
-    return suitOf(leadCard());
-}
+auto Trick::trickSuit() const -> Suit { return suitOf(leadCard()); }
 
 // Return the absolute seat that won the trick
 auto Trick::winner() const -> uint32_t
@@ -36,7 +29,7 @@ auto Trick::winner() const -> uint32_t
     for (auto p : prim::range(kNumPlayers))
     {
         auto card = mRep.at(p);
-        if (card!=Card::kNone && suit == suitOf(card) && rank<=rankOf(card))
+        if (card != Card::kNone && suit == suitOf(card) && rank <= rankOf(card))
         {
             rank = rankOf(card);
             winner = p;
@@ -52,7 +45,7 @@ auto Trick::highCard() const -> Card
     auto rank = Rank{};
     for (auto c : mRep)
     {
-        if (c!=Card::kNone && suit == suitOf(c) && rank<rankOf(c))
+        if (c != Card::kNone && suit == suitOf(c) && rank < rankOf(c))
         {
             rank = rankOf(c);
         }
@@ -63,7 +56,19 @@ auto Trick::highCard() const -> Card
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(Trick) {
+EMSCRIPTEN_BINDINGS(Trick)
+{
+    value_array<Trick::Rep>("TrickRep")
+        .element(emscripten::index<0>())
+        .element(emscripten::index<1>())
+        .element(emscripten::index<2>())
+        .element(emscripten::index<3>());
+
+    value_array<Trick::OrdRep>("TrickOrdRep")
+        .element(emscripten::index<0>())
+        .element(emscripten::index<1>())
+        .element(emscripten::index<2>())
+        .element(emscripten::index<3>());
 
     class_<Trick>("Trick")
         .constructor<>()
@@ -75,8 +80,7 @@ EMSCRIPTEN_BINDINGS(Trick) {
         .function("highCard", &Trick::highCard)
         .function("getTrickPlay", &Trick::getTrickPlay)
         .function("rep", &Trick::rep)
-        ;
-
+        .function("ordRep", &Trick::ordRep);
 }
 
 #endif
