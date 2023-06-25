@@ -2,7 +2,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import factory from "@playhearts/gstate_wasm";
+import factory, { Trick, TrickOrdRep } from "@playhearts/gstate_wasm";
 
 import type { RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
 
@@ -27,6 +27,22 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
         gstate.playCard(card);
         card.delete();
         legal.delete();
+        const trick: Trick = gstate.currentTrick();
+        expect(trick).to.not.be.undefined;
+        const trickArr: TrickOrdRep = trick.ordRep();
+        for (let i = 0; i < 4; ++i) {
+            const card: Card = trick.at(i);
+            expect(card.ord()).to.equal(trickArr[i])
+            // console.log(`Player ${i} played ${instance.nameOfCard(card)}`);
+            card.delete();
+        }
+        // console.log('typeof trickArr: ', typeof trickArr, Array.isArray(trickArr));
+        // console.log('trickArr: ', trickArr);
+        expect(trickArr.length).to.equal(4);
+        trick.delete();
+        const prior: Trick = gstate.priorTrick();
+        expect(prior).to.not.be.undefined;
+        prior.delete();
     }
 
     for (let p = 0; p < 4; ++p) {

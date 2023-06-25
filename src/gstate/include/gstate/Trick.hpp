@@ -1,10 +1,10 @@
 #pragma once
 
 #include "cards/Card.hpp"
+#include "prim/range.hpp"
 #include <cassert>
 
-namespace pho::gstate
-{
+namespace pho::gstate {
 using namespace pho::cards;
 
 using PlayerNum = uint32_t; // 0..3
@@ -16,7 +16,9 @@ public:
 
     Trick()
     : mLead{kNumPlayers}
-    { clear(); }
+    {
+        clear();
+    }
 
     Trick(const Trick&) = default;
     Trick(Trick&&) = default;
@@ -39,7 +41,12 @@ public:
     // The card that started this trick
     auto leadCard() const -> Card;
 
-    auto resetTrick(PlayerNum lead) { clear(); assert(lead<4); mLead=lead; }
+    auto resetTrick(PlayerNum lead)
+    {
+        clear();
+        assert(lead < 4);
+        mLead = lead;
+    }
 
     // Return the player/seat that won the trick
     auto winner() const -> PlayerNum;
@@ -50,15 +57,28 @@ public:
     auto getTrickPlay(unsigned i) const -> Card;
 
     using Rep = std::array<Card, kNumPlayers>;
-    Trick(const Rep& rep, PlayerNum lead=0) : mLead{lead}, mRep{rep} {}
+    Trick(const Rep& rep, PlayerNum lead = 0)
+    : mLead{lead}
+    , mRep{rep}
+    { }
 
     auto rep() const -> const Rep { return mRep; }
+
+    using OrdRep = std::array<uint8_t, kNumPlayers>;
+    auto ordRep() const -> OrdRep
+    {
+        std::array<uint8_t, kNumPlayers> ord;
+        for (auto i : prim::range(kNumPlayers))
+        {
+            ord[i] = mRep[i].ord();
+        }
+        return ord;
+    }
 
 private:
     auto clear() -> void { mRep.fill(Card::kNone); }
 
 private:
-
     uint32_t mLead;
     Rep mRep;
 };
