@@ -24,6 +24,8 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
     while (!gstate.done()) {
         const legal: CardSet = gstate.legalPlays();
         const card: Card = instance.aCardAtRandom(legal);
+        const p: number = gstate.currentPlayer();
+        expect(p).to.be.within(0, 3);
         gstate.playCard(card);
         card.delete();
         legal.delete();
