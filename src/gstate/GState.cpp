@@ -24,6 +24,15 @@ auto actualPassOffset(uint8_t passOffset) -> uint8_t
         passOffset = RandomGenerator::Range64(4u);
     return passOffset;
 }
+
+auto asActualVals(const GState::Init& init) -> GStateInit
+{
+    return GStateInit{
+        .dealHexStr = math::asHexString(actualDealIndex(init.dealIndex)),
+        .passOffset = actualPassOffset(init.passOffset),
+    };
+}
+
 } // namespace
 
 GameBehavior GState::kStandard = GameBehavior::make(GameVariant::standard);
@@ -58,9 +67,12 @@ GState::GState(Init init, GameBehavior behavior)
 { }
 
 #if __EMSCRIPTEN__
-GState::GState(const emscripten::val& init, GameVariant variant)
-: GState{Init::fromVal(init), GameBehavior::make(variant)}
+GState::GState(const GStateInit& init, GameVariant variant)
+: GState{Init{init}, GameBehavior::make(variant)}
 { }
+
+GStateInit GState::Init::kNoPassVal() { return asActualVals(kNoPass); }
+GStateInit GState::Init::kRandomVal() { return asActualVals(kRandom); }
 #endif
 
 auto GState::setPassFor(PlayerNum p, CardSet pass) -> void
@@ -559,7 +571,7 @@ EMSCRIPTEN_BINDINGS(GState)
         .field("winPts", &GState::PlayerOutcome::winPts);
 
     class_<GState>("GState")
-        .constructor<emscripten::val, GameVariant>()
+        .constructor<const GStateInit&, GameVariant>()
         .function("passOffset", &GState::passOffset)
         .function("playersHand", &GState::playersHand)
         .function("currentPlayersHand", &GState::currentPlayersHand)
@@ -572,12 +584,12 @@ EMSCRIPTEN_BINDINGS(GState)
 
     function("getDealIndex", &getDealIndex);
 
-    class_<GState::Init>("GStateInit").function("toVal", &GState::Init::toVal);
+    value_object<GStateInit>("GStateInit")
+        .field("dealHexStr", &GStateInit::dealHexStr)
+        .field("passOffset", &GStateInit::passOffset);
 
     function("kNoPassVal", &GState::Init::kNoPassVal);
     function("kRandomVal", &GState::Init::kRandomVal);
-    function("fromVal", &GState::Init::fromVal);
-    function("fromIndexAndOffset", &GState::Init::fromIndexAndOffset);
 }
 #endif
 

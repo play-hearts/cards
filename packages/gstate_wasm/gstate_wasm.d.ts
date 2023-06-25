@@ -57,8 +57,10 @@ export interface Deal extends Deletable {
     indexAsHexString: () => string;
 }
 
-export class GStateInit implements Deletable {
-    delete: () => null;
+// GStateInit is a emscripten::value_object;
+export interface GStateInit {
+    dealHexStr: string,
+    passOffset: number,
 }
 
 export interface GState extends Deletable {
@@ -95,12 +97,9 @@ export interface GStateModule extends EmscriptenModule {
     aCardAtRandom: (cardSet: CardSet) => Card;
     chooseThreeAtRandom: (cardSet: CardSet) => CardSet;
     GState: (this: GState, init: GStateInit, variant: GameVariant) => void;
-    GStateInit: (this: GStateInit) => void;
 
     getDealIndex: (gstate: GState) => string;
     kRandomVal: () => GStateInit;
-    fromIndexAndOffset: (hexIndex: string, offset: number) => GStateInit;
-    fromVal: ({ hexIndex: string, offset: number }) => GStateInit;
 
     GameVariant: typeof GameVariant;
 
