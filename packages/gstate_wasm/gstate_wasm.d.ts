@@ -83,11 +83,11 @@ export enum GameVariant {
 }
 
 export interface GStateModule extends EmscriptenModule {
-    RandomGenerator: (this: RandomGenerator) => void;
-    Deal: (this: Deal, dealIndex: string) => void;
-    CardSet: (this: CardSet) => void;
-    Card: (this: Card, ord: number) => void;
-    CardVector: (this: CardVector) => void;
+    RandomGenerator: new () => RandomGenerator;
+    Deal: new (dealIndex: string) => Deal;
+    CardSet: new () => CardSet;
+    Card: new (ord: number) => Card;
+    CardVector: new () => CardVector;
     suitOf: (card: Card) => Suit;
     rankOf: (card: Card) => Rank;
     cardFor: (suit: Suit, rank: Rank) => Card;
@@ -96,7 +96,7 @@ export interface GStateModule extends EmscriptenModule {
     to_string: (cardSet: CardSet) => string;
     aCardAtRandom: (cardSet: CardSet) => Card;
     chooseThreeAtRandom: (cardSet: CardSet) => CardSet;
-    GState: (this: GState, init: GStateInit, variant: GameVariant) => void;
+    GState: new (init: GStateInit, variant: GameVariant) => GState;
 
     getDealIndex: (gstate: GState) => string;
     kRandomVal: () => GStateInit;
