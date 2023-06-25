@@ -25,6 +25,7 @@ auto actualPassOffset(uint8_t passOffset) -> uint8_t
     return passOffset;
 }
 
+#if __EMSCRIPTEN__
 auto asActualVals(const GState::Init& init) -> GStateInit
 {
     return GStateInit{
@@ -32,6 +33,7 @@ auto asActualVals(const GState::Init& init) -> GStateInit
         .passOffset = actualPassOffset(init.passOffset),
     };
 }
+#endif
 
 } // namespace
 
