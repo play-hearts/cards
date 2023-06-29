@@ -574,18 +574,19 @@ EMSCRIPTEN_BINDINGS(GState)
 
     class_<GState>("GState")
         .constructor<const GStateInit&, GameVariant>()
-        .function("passOffset", &GState::passOffset)
-        .function("playersHand", &GState::playersHand)
         .function("currentPlayer", &GState::currentPlayer)
         .function("currentPlayersHand", &GState::currentPlayersHand)
-        .function("legalPlays", &GState::legalPlays)
         .function("currentTrick", &GState::currentTrick)
+        .function("done", &GState::done)
+        .function("getPlayerOutcome", &GState::getPlayerOutcome)
+        .function("legalPlays", &GState::legalPlays)
+        .function("passOffset", &GState::passOffset)
+        .function("playCard", &GState::playCard)
+        .function("playersHand", &GState::playersHand)
+        .function("playIndex", &GState::playIndex)
         .function("priorTrick", &GState::priorTrick)
         .function("setPassFor", &GState::setPassFor)
-        .function("startGame", &GState::startGame)
-        .function("playCard", &GState::playCard)
-        .function("done", &GState::done)
-        .function("getPlayerOutcome", &GState::getPlayerOutcome);
+        .function("startGame", &GState::startGame);
 
     function("getDealIndex", &getDealIndex);
 
