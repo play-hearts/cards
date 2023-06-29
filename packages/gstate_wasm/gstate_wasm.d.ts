@@ -81,18 +81,20 @@ export interface GStateInit {
 
 export interface GState extends Deletable {
     delete: () => null;
-    passOffset: () => number;
+
     currentPlayer: () => number;
-    playersHand: (p: number) => CardSet;
     currentPlayersHand: () => CardSet;
-    legalPlays: () => CardSet;
-    setPassFor: (p: number, cards: CardSet) => void;
-    startGame: () => void;
-    playCard: (card: Card) => void;
+    currentTrick: () => Trick;
     done: () => boolean;
     getPlayerOutcome: (p: number) => { zms: number, winPts: number };
-    currentTrick: () => Trick;
+    legalPlays: () => CardSet;
+    passOffset: () => number;
+    playCard: (card: Card) => void;
+    playersHand: (p: number) => CardSet;
+    playIndex: () => number;
     priorTrick: () => Trick;
+    setPassFor: (p: number, cards: CardSet) => void;
+    startGame: () => void;
 }
 
 export enum GameVariant {

@@ -189,9 +189,6 @@ public:
 
     auto highCardInTrick() const { return playInTrick() == 0 ? kNoCard : mTrick.highCard(); }
 
-    auto currentMightShoot() const { return false; }
-    auto otherMightShoot() const { return false; }
-
     auto voidsForOthers() const -> PlayerVoids;
 
     auto trickSuit() const -> Suit;
