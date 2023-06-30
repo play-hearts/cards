@@ -1,29 +1,28 @@
 #include "gtest/gtest.h"
 
-#include "gstate/GameBehavior.hpp"
-#include "gstate/GState.hpp"
 #include "cards/utils.hpp"
+#include "gstate/GState.hpp"
+#include "gstate/GameBehavior.hpp"
 #include "prim/range.hpp"
 #include "stats/RunningStats.hpp"
 
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
+#include <magic_enum.hpp>
 #include <map>
 #include <numeric>
-#include <magic_enum.hpp>
 
 namespace pho::gstate {
 
-template <typename T>
-auto uniform_loss(const std::array<T, 4>& values) -> double
+template <typename T> auto uniform_loss(const std::array<T, 4>& values) -> double
 {
     auto mean = std::accumulate(values.begin(), values.end(), 0) / 4.0;
     auto loss = double{};
     for (auto v : values)
     {
-        auto x = v/mean - 1.0;
-        loss += x*x;
+        auto x = v / mean - 1.0;
+        loss += x * x;
     }
     return loss;
 }
@@ -34,32 +33,22 @@ const auto atBack = [](CardSet legal) -> Card { return legal.back(); };
 
 using Chooser = std::function<Card(CardSet)>;
 
-auto choosers = std::map<std::string, Chooser>({
-    {"atRandom", atRandom},
-    {"atFront", atFront},
-    {"atBack", atBack}
-});
+auto choosers = std::map<std::string, Chooser>({{"atRandom", atRandom}, {"atFront", atFront}, {"atBack", atBack}});
 
 using GamePredicate = std::function<bool(const GState&)>;
 const auto anyGame = [](const GState&) -> bool { return true; };
-const auto moonShot = [](const GState& gameState) -> bool
-{
+const auto moonShot = [](const GState& gameState) -> bool {
     auto outcome = gameState.getVariantOutcomeRep();
-    return std::visit([](auto&& arg){ return arg.shotTheMoon(); }, outcome);
+    return std::visit([](auto&& arg) { return arg.shotTheMoon(); }, outcome);
 };
 const auto noMoon = [](const GState& gameState) -> bool { return !moonShot(gameState); };
 
-auto predicates = std::map<std::string,GamePredicate>({
-    {"anyGame", anyGame},
-    {"moonShot", moonShot},
-    {"noMoon", noMoon}
-});
+auto predicates
+    = std::map<std::string, GamePredicate>({{"anyGame", anyGame}, {"moonShot", moonShot}, {"noMoon", noMoon}});
 
-auto runOneGame(Chooser chooser
-            , GamePredicate predicate
-            , GameBehavior::Variant variant) -> GState
+auto runOneGame(Chooser chooser, GamePredicate predicate, GameBehavior::Variant variant) -> GState
 {
-    while(true)
+    while (true)
     {
         GState gameState{GState::kNoPass, GameBehavior::make(variant)};
 
@@ -112,11 +101,13 @@ TEST(unbiased_by_seat, player_outcome)
                     auto gameState = runOneGame(chooser.second, predicate.second, variant);
                     auto outcome = gameState.getVariantOutcomeRep();
                     auto rowSum = float{};
+                    auto scores = std::visit([](auto&& arg) { return arg.normalizedScores(); }, outcome);
                     for (auto p : prim::range(kNumPlayers))
                     {
-                        auto score = std::visit([p](auto&& arg){ return arg.normalizedScore(p); }, outcome);
+                        auto score = std::visit([p](auto&& arg) { return arg.normalizedScore(p); }, outcome);
+                        EXPECT_EQ(score, scores.at(p));
                         stats.accumulate(score);
-                        auto x = std::visit([p](auto&& arg){ return arg.playerOutcomeResult(p); }, outcome);
+                        auto x = std::visit([p](auto&& arg) { return arg.playerOutcomeResult(p); }, outcome);
                         EXPECT_GE(x, 0.0);
                         EXPECT_LE(x, 1.0);
                         playerOutcome.at(p) += x;
@@ -124,7 +115,8 @@ TEST(unbiased_by_seat, player_outcome)
                     }
                     EXPECT_FLOAT_EQ(rowSum, 1.0f);
                 }
-                fmt::print("{}:{}:{}  score:{}\n", magic_enum::enum_name(variant), predicate.first, chooser.first, toString(stats));
+                fmt::print("{}:{}:{}  score:{}\n", magic_enum::enum_name(variant), predicate.first, chooser.first,
+                    toString(stats));
                 auto avg = std::abs(stats.mean());
                 EXPECT_LT(avg, 1.0e-6);
             }

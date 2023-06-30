@@ -572,6 +572,12 @@ EMSCRIPTEN_BINDINGS(GState)
         .field("zms", &GState::PlayerOutcome::zms)
         .field("winPts", &GState::PlayerOutcome::winPts);
 
+    value_array<GState::PlayerScores>("PlayerScores")
+        .element(emscripten::index<0>())
+        .element(emscripten::index<1>())
+        .element(emscripten::index<2>())
+        .element(emscripten::index<3>());
+
     class_<GState>("GState")
         .constructor<const GStateInit&, GameVariant>()
         .function("currentPlayer", &GState::currentPlayer)
@@ -579,6 +585,7 @@ EMSCRIPTEN_BINDINGS(GState)
         .function("currentTrick", &GState::currentTrick)
         .function("done", &GState::done)
         .function("getPlayerOutcome", &GState::getPlayerOutcome)
+        .function("getPlayerScores", &GState::getPlayerScores)
         .function("legalPlays", &GState::legalPlays)
         .function("passOffset", &GState::passOffset)
         .function("playCard", &GState::playCard)

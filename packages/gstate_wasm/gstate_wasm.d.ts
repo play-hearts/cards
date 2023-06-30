@@ -9,14 +9,14 @@ export interface RandomGenerator extends Deletable {
     randNorm: () => number;
 }
 
-export enum Suit {
+declare enum Suit {
     kClubs = 0,
     kDiamonds = 1,
     kSpades = 2,
     kHearts = 3,
 }
 
-export enum Rank {
+declare enum Rank {
     kTwo = 0,
     kThree = 1,
     kFour = 2,
@@ -59,6 +59,7 @@ export interface Deal extends Deletable {
 
 export type TrickRep = [Card, Card, Card, Card];
 export type TrickOrdRep = [number, number, number, number];
+export type PlayerScores = [number, number, number, number];
 
 export interface Trick extends Deletable {
     delete: () => null;
@@ -87,6 +88,7 @@ export interface GState extends Deletable {
     currentTrick: () => Trick;
     done: () => boolean;
     getPlayerOutcome: (p: number) => { zms: number, winPts: number };
+    getPlayerScores: () => PlayerScores;
     legalPlays: () => CardSet;
     passOffset: () => number;
     playCard: (card: Card) => void;
@@ -97,7 +99,7 @@ export interface GState extends Deletable {
     startGame: () => void;
 }
 
-export enum GameVariant {
+declare enum GameVariant {
     STANDARD = 0,
     JACK = 1,
     SPADES = 2,

@@ -4,12 +4,12 @@ import chaiAsPromised from 'chai-as-promised';
 
 import factory, { Trick, TrickOrdRep } from "@playhearts/gstate_wasm";
 
-import type { RandomGenerator, Card, CardSet, Deal, GStateInit, GStateModule, GState } from '@playhearts/gstate_wasm';
+import type * as gstate_wasm from '@playhearts/gstate_wasm';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
 
-export async function playOutGame(instance: GStateModule, gstate: GState): Promise<void> {
+export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gstate_wasm.GState): Promise<void> {
 
     const passOffset = gstate.passOffset();
     if (passOffset > 0) {
@@ -22,8 +22,8 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
     gstate.startGame();
 
     while (!gstate.done()) {
-        const legal: CardSet = gstate.legalPlays();
-        const card: Card = instance.aCardAtRandom(legal);
+        const legal: gstate_wasm.CardSet = gstate.legalPlays();
+        const card: gstate_wasm.Card = instance.aCardAtRandom(legal);
         const p: number = gstate.currentPlayer();
         expect(p).to.be.within(0, 3);
         gstate.playCard(card);
@@ -33,7 +33,7 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
         expect(trick).to.not.be.undefined;
         const trickArr: TrickOrdRep = trick.ordRep();
         for (let i = 0; i < 4; ++i) {
-            const card: Card = trick.at(i);
+            const card: gstate_wasm.Card = trick.at(i);
             expect(card.ord()).to.equal(trickArr[i])
             // console.log(`Player ${i} played ${instance.nameOfCard(card)}`);
             card.delete();
@@ -47,21 +47,24 @@ export async function playOutGame(instance: GStateModule, gstate: GState): Promi
         prior.delete();
     }
 
+    const playerScores: gstate_wasm.PlayerScores = gstate.getPlayerScores();
+
     for (let p = 0; p < 4; ++p) {
         const outcome = gstate.getPlayerOutcome(p);
         console.log(`Player ${p} zms: ${outcome.zms}, winPts: ${outcome.winPts}`);
+        expect(outcome.zms).to.equal(playerScores[p]);
     }
 }
 
 describe('api', (): void => {
-    let instance: GStateModule;
+    let instance: gstate_wasm.GStateModule;
     beforeEach(async () => {
         instance = await factory();
     });
 
     describe('math api', (): void => {
         it('can create a RandomGenerator', async () => {
-            const rng: RandomGenerator = new instance.RandomGenerator();
+            const rng: gstate_wasm.RandomGenerator = new instance.RandomGenerator();
             expect(rng).not.to.be.undefined;
             rng.delete();
         });
@@ -69,15 +72,15 @@ describe('api', (): void => {
 
     describe('cards api', (): void => {
         it('can create a CardSet', async () => {
-            const cards: CardSet = new instance.CardSet();
+            const cards: gstate_wasm.CardSet = new instance.CardSet();
             expect(cards.size()).to.equal(0);
         });
 
         it('can create a random Deal and recreate it', async () => {
-            const deal1: Deal = new instance.Deal("");
+            const deal1: gstate_wasm.Deal = new instance.Deal("");
             const index: string = deal1.indexAsHexString();
             expect(index).to.have.lengthOf(25);
-            const deal2: Deal = new instance.Deal(index);
+            const deal2: gstate_wasm.Deal = new instance.Deal(index);
             for (let p = 0; p < 4; ++p) {
                 const hand1 = deal1.dealFor(p);
                 const hand2 = deal2.dealFor(p);
@@ -90,13 +93,13 @@ describe('api', (): void => {
         });
 
         it('a deal is consistent: four non-overlapping subsets', async () => {
-            const deal: Deal = new instance.Deal("");
-            let check: CardSet = new instance.CardSet();
+            const deal: gstate_wasm.Deal = new instance.Deal("");
+            let check: gstate_wasm.CardSet = new instance.CardSet();
             expect(check.size()).to.equal(0);
             for (let p = 0; p < 4; ++p) {
-                const hand: CardSet = deal.dealFor(p);
+                const hand: gstate_wasm.CardSet = deal.dealFor(p);
                 expect(hand.size()).to.equal(13);
-                const inCommon: CardSet = check.setIntersection(hand);
+                const inCommon: gstate_wasm.CardSet = check.setIntersection(hand);
                 expect(inCommon.size()).to.equal(0);
                 check = check.setUnion(hand);
                 hand.delete();
@@ -110,17 +113,17 @@ describe('api', (): void => {
 
     describe('gstate api', (): void => {
         it('withInitTest', async (): Promise<void> => {
-            const init: GStateInit = instance.kRandomVal();
+            const init: gstate_wasm.GStateInit = instance.kRandomVal();
             console.log("kRandomVal:", init)
-            const gstate: GState = new instance.GState(init, instance.GameVariant.STANDARD);
+            const gstate: gstate_wasm.GState = new instance.GState(init, instance.GameVariant.STANDARD);
             const dealHexStr: string = instance.getDealIndex(gstate);
             expect(dealHexStr).to.equal(init.dealHexStr);
             const passOffset: number = gstate.passOffset();
             expect(passOffset).to.equal(init.passOffset);
             gstate.delete();
 
-            const init2: GStateInit = { dealHexStr, passOffset };
-            const gstate2: GState = new instance.GState(init2, instance.GameVariant.STANDARD);
+            const init2: gstate_wasm.GStateInit = { dealHexStr, passOffset };
+            const gstate2: gstate_wasm.GState = new instance.GState(init2, instance.GameVariant.STANDARD);
             const dealIndex2: string = instance.getDealIndex(gstate2);
             const passOffset2: number = gstate2.passOffset();
             expect(dealIndex2).to.deep.equal(dealHexStr);
@@ -129,8 +132,8 @@ describe('api', (): void => {
         });
 
         it('playOutGameTest', async (): Promise<void> => {
-            const init: GStateInit = instance.kRandomVal();
-            const gstate: GState = new instance.GState(init, instance.GameVariant.STANDARD);
+            const init: gstate_wasm.GStateInit = instance.kRandomVal();
+            const gstate: gstate_wasm.GState = new instance.GState(init, instance.GameVariant.STANDARD);
             await playOutGame(instance, gstate);
             gstate.delete();
         });

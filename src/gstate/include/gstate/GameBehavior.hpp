@@ -12,11 +12,11 @@ class Trick;
 
 using CardSet = cards::CardSet;
 using Card = cards::Card;
+using Suit = cards::Suit;
 
 class GameBehavior
 {
 public:
-
     using Variant = GameVariant;
 
     static auto make(Variant variant) -> GameBehavior;
@@ -26,6 +26,8 @@ public:
 
     /// @brief return the (fixed) set of cards that have point value for this game variant
     auto pointCards() const -> CardSet { return mRep->pointCards(); };
+
+    auto trickSuit(const Trick& trick) const -> Suit { return mRep->trickSuit(trick); }
 
     auto trickWinner(const Trick& trick) const -> uint32_t { return mRep->trickWinner(trick); }
 
@@ -40,20 +42,23 @@ public:
     auto firstLead(const GState& state) const -> uint32_t { return mRep->firstLead(state); }
 
 private:
-
     struct Concept;
 
     using Rep = std::shared_ptr<Concept>;
 
     GameBehavior() = delete;
-    GameBehavior(Rep rep) : mRep(rep) {}
+    GameBehavior(Rep rep)
+    : mRep(rep)
+    { }
 
     struct Concept
     {
         virtual ~Concept();
 
         Concept() = delete;
-        Concept(Variant variant) : mVariant{variant} {}
+        Concept(Variant variant)
+        : mVariant{variant}
+        { }
 
         /// @brief return the (fixed) set of cards that have point value for this game variant
         // This is used to determine which cards are legal to lead with (and is currently not used for anything else).
@@ -68,6 +73,8 @@ private:
         /// @brief return the cards that are legal to follow with
         [[nodiscard]] auto legalFollowPlays(const GState& state) const -> CardSet;
 
+        [[nodiscard]] virtual auto trickSuit(const Trick& trick) const -> Suit;
+
         [[nodiscard]] virtual auto trickWinner(const Trick& trick) const -> uint32_t;
 
         [[nodiscard]] virtual auto firstLead(const GState& state) const -> uint32_t;
@@ -78,34 +85,43 @@ private:
     struct StandardHearts : public Concept
     {
         ~StandardHearts();
-        StandardHearts() : Concept{standard} {}
+        StandardHearts()
+        : Concept{standard}
+        { }
 
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
 
         using BitSetMask = uint64_t;
         static constexpr BitSetMask kAllHeartsMask = cards::CoreCardSetConstants::maskOfSuit(cards::kHearts);
-        static constexpr BitSetMask kPointCardsMask = BitSetMask{kAllHeartsMask | cards::CoreCardSetConstants::maskOf(cards::kSpades, cards::kQueen)};
+        static constexpr BitSetMask kPointCardsMask
+            = BitSetMask{kAllHeartsMask | cards::CoreCardSetConstants::maskOf(cards::kSpades, cards::kQueen)};
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
 
     struct JackDiamondsHearts : public Concept
     {
         ~JackDiamondsHearts();
-        JackDiamondsHearts() : Concept{jack} {}
+        JackDiamondsHearts()
+        : Concept{jack}
+        { }
 
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
 
         using BitSetMask = uint64_t;
-        static constexpr BitSetMask kPointCardsMask = StandardHearts::kPointCardsMask | BitSetMask{cards::CoreCardSetConstants::maskOf(cards::kDiamonds, cards::kJack)};
+        static constexpr BitSetMask kPointCardsMask = StandardHearts::kPointCardsMask
+            | BitSetMask{cards::CoreCardSetConstants::maskOf(cards::kDiamonds, cards::kJack)};
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
 
     struct Spades : public Concept
     {
         ~Spades();
-        Spades() : Concept{spades} {}
+        Spades()
+        : Concept{spades}
+        { }
 
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
+        [[nodiscard]] auto trickSuit(const Trick& trick) const -> Suit override;
         [[nodiscard]] auto trickWinner(const Trick& trick) const -> uint32_t override;
         [[nodiscard]] auto firstLead(const GState& state) const -> uint32_t override;
 

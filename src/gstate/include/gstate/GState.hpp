@@ -211,6 +211,13 @@ public:
         float winPts;
     };
 
+    using PlayerScores = std::array<float, kNumPlayers>;
+    auto getPlayerScores() const -> PlayerScores
+    {
+        auto outcome = getVariantOutcomeRep();
+        return std::visit([](auto&& arg) { return arg.normalizedScores(); }, outcome);
+    }
+
     auto getPlayerOutcome(unsigned p) const -> PlayerOutcome
     {
         auto outcome = getVariantOutcomeRep();

@@ -9,29 +9,29 @@ namespace pho::gstate {
 
 auto GameBehavior::make(Variant variant) -> GameBehavior
 {
-    switch(variant)
+    switch (variant)
     {
-        case standard: return GameBehavior{std::make_shared<StandardHearts>()};
-        case jack: return GameBehavior{std::make_shared<JackDiamondsHearts>()};
-        case spades: return GameBehavior{std::make_shared<Spades>()};
-        default: throw std::invalid_argument("Unrecognized game variant");
+    case standard:
+        return GameBehavior{std::make_shared<StandardHearts>()};
+    case jack:
+        return GameBehavior{std::make_shared<JackDiamondsHearts>()};
+    case spades:
+        return GameBehavior{std::make_shared<Spades>()};
+    default:
+        throw std::invalid_argument("Unrecognized game variant");
     }
 }
 
-GameBehavior::Concept::~Concept()
-{}
-GameBehavior::StandardHearts::~StandardHearts()
-{}
-GameBehavior::JackDiamondsHearts::~JackDiamondsHearts()
-{}
-GameBehavior::Spades::~Spades()
-{}
+GameBehavior::Concept::~Concept() { }
+GameBehavior::StandardHearts::~StandardHearts() { }
+GameBehavior::JackDiamondsHearts::~JackDiamondsHearts() { }
+GameBehavior::Spades::~Spades() { }
 
 auto GameBehavior::Concept::legalLeadPlays(const GState& state) const -> CardSet
 {
     auto hand = state.currentPlayersHand();
     auto pointsTaken = state.allTaken() & pointCards();
-    return pointsTaken.size()>0 ? hand : hand & ~pointCards();
+    return pointsTaken.size() > 0 ? hand : hand & ~pointCards();
 }
 
 auto GameBehavior::Concept::legalFollowPlays(const GState& state) const -> CardSet
@@ -44,19 +44,18 @@ auto GameBehavior::Concept::legal(const GState& state) const -> CardSet
 {
     assert(state.gameStarted());
 
-    if (state.playIndex() == 0 && mVariant!=spades ) return CardSet::make({Card::cardFor(kClubs, kTwo)});
+    if (state.playIndex() == 0 && mVariant != spades)
+        return CardSet::make({Card::cardFor(kClubs, kTwo)});
 
-    auto choices = state.playInTrick()==0 ? legalLeadPlays(state) : legalFollowPlays(state);
+    auto choices = state.playInTrick() == 0 ? legalLeadPlays(state) : legalFollowPlays(state);
     if (choices.empty())
         choices = state.currentPlayersHand();
 
     return choices;
 }
 
-auto GameBehavior::Concept::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t
-{
-    return trick.winner();
-}
+auto GameBehavior::Concept::trickSuit(const pho::gstate::Trick& trick) const -> Suit { return trick.trickSuit(); }
+auto GameBehavior::Concept::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t { return trick.winner(); }
 
 auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
 {
@@ -73,6 +72,24 @@ auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
     return 0;
 }
 
+auto GameBehavior::Spades::trickSuit(const pho::gstate::Trick& trick) const -> Suit
+{
+    auto lead = trick.leadCard();
+    auto suit = suitOf(lead);
+    if (suit != kSpades)
+    {
+        for (auto p : prim::range(kNumPlayers))
+        {
+            auto card = trick.at(p);
+            if (card != Card::kNone && suitOf(card) == kSpades)
+            {
+                suit = kSpades;
+                break;
+            }
+        }
+    }
+    return suit;
+}
 
 auto GameBehavior::Spades::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t
 {
@@ -90,7 +107,7 @@ auto GameBehavior::Spades::trickWinner(const pho::gstate::Trick& trick) const ->
             rank = rankOf(card);
             winner = p;
         }
-        else if (suit == suitOf(card) && rank<=rankOf(card))
+        else if (suit == suitOf(card) && rank <= rankOf(card))
         {
             rank = rankOf(card);
             winner = p;
