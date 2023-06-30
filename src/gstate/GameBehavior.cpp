@@ -22,6 +22,8 @@ auto GameBehavior::make(Variant variant) -> GameBehavior
     }
 }
 
+auto GameBehavior::trickSuit(const pho::gstate::Trick& trick) const -> Suit { return trick.trickSuit(); }
+
 GameBehavior::Concept::~Concept() { }
 GameBehavior::StandardHearts::~StandardHearts() { }
 GameBehavior::JackDiamondsHearts::~JackDiamondsHearts() { }
@@ -54,7 +56,7 @@ auto GameBehavior::Concept::legal(const GState& state) const -> CardSet
     return choices;
 }
 
-auto GameBehavior::Concept::trickSuit(const pho::gstate::Trick& trick) const -> Suit { return trick.trickSuit(); }
+auto GameBehavior::Concept::trumpSuit(const pho::gstate::Trick& trick) const -> Suit { return trick.trickSuit(); }
 auto GameBehavior::Concept::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t { return trick.winner(); }
 
 auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
@@ -72,16 +74,16 @@ auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
     return 0;
 }
 
-auto GameBehavior::Spades::trickSuit(const pho::gstate::Trick& trick) const -> Suit
+auto GameBehavior::Spades::trumpSuit(const pho::gstate::Trick& trick) const -> Suit
 {
-    auto lead = trick.leadCard();
-    auto suit = suitOf(lead);
+    auto suit = trick.trickSuit();
     if (suit != kSpades)
     {
         for (auto p : prim::range(kNumPlayers))
         {
             auto card = trick.at(p);
-            if (card != Card::kNone && suitOf(card) == kSpades)
+            assert(card != Card::kNone);
+            if (suitOf(card) == kSpades)
             {
                 suit = kSpades;
                 break;
@@ -93,21 +95,14 @@ auto GameBehavior::Spades::trickSuit(const pho::gstate::Trick& trick) const -> S
 
 auto GameBehavior::Spades::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t
 {
-    auto lead = trick.leadCard();
-    auto suit = suitOf(lead);
-    auto rank = rankOf(lead);
+    auto suit = trumpSuit(trick);
+    auto rank = kTwo;
     auto winner = 0xff;
     for (auto p : prim::range(kNumPlayers))
     {
         auto card = trick.at(p);
         assert(card != Card::kNone);
-        if (suit != kSpades && suitOf(card) == kSpades)
-        {
-            suit = kSpades;
-            rank = rankOf(card);
-            winner = p;
-        }
-        else if (suit == suitOf(card) && rank <= rankOf(card))
+        if (suitOf(card) == suit && rank <= rankOf(card)) // must use <= here to catch case where 2 of spades is winner
         {
             rank = rankOf(card);
             winner = p;
