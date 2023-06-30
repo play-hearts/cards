@@ -59,6 +59,7 @@ export interface Deal extends Deletable {
 
 export type TrickRep = [Card, Card, Card, Card];
 export type TrickOrdRep = [number, number, number, number];
+export type PlayerScores = [number, number, number, number];
 
 export interface Trick extends Deletable {
     delete: () => null;
@@ -87,6 +88,7 @@ export interface GState extends Deletable {
     currentTrick: () => Trick;
     done: () => boolean;
     getPlayerOutcome: (p: number) => { zms: number, winPts: number };
+    getPlayerScores: () => PlayerScores;
     legalPlays: () => CardSet;
     passOffset: () => number;
     playCard: (card: Card) => void;
