@@ -133,7 +133,7 @@ auto GState::startGame() -> void
 
 auto GState::finishTrick() -> void
 {
-    auto winner = mTrick.winner();
+    auto winner = mBehavior.trickWinner(mTrick);
     assert(mCardsPlayed.at(winner).hasCard(mTrick.at(winner)));
     for (auto i : prim::range(kCardsPerTrick))
     {
@@ -159,7 +159,10 @@ auto GState::playCard(Card card) -> void
     assert(mUnplayedCards.hasCard(card));
 
     if (playInTrick() != 0 && suitOf(card) != trickSuit())
+    {
+        assert(mHands.at(player).cardsWithSuit(trickSuit()).empty());
         mPlayerVoids.setIsVoid(player, trickSuit());
+    }
 
     mHands.at(player) -= card;
     mCardsPlayed.at(player) += card;

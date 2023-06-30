@@ -27,7 +27,15 @@ public:
     /// @brief return the (fixed) set of cards that have point value for this game variant
     auto pointCards() const -> CardSet { return mRep->pointCards(); };
 
-    auto trickSuit(const Trick& trick) const -> Suit { return mRep->trickSuit(trick); }
+    /// @brief return the suit of the current trick
+    /// In all variants the trick suit is the suit of the first card played in the trick.
+    /// E.g. followers must play a card of this suit if they hold a card of the suit.
+    [[nodiscard]] auto trickSuit(const Trick& trick) const -> Suit;
+
+    /// @brief return the suit of the the trick that won the trick.
+    /// In all current variants except spades this is the trickSuit.
+    /// In spades this is the suit kSpades if a spades was played, otherwise it is the trickSuit.
+    [[nodiscard]] auto trumpSuit(const Trick& trick) const -> Suit { return mRep->trumpSuit(trick); }
 
     auto trickWinner(const Trick& trick) const -> uint32_t { return mRep->trickWinner(trick); }
 
@@ -73,11 +81,11 @@ private:
         /// @brief return the cards that are legal to follow with
         [[nodiscard]] auto legalFollowPlays(const GState& state) const -> CardSet;
 
-        [[nodiscard]] virtual auto trickSuit(const Trick& trick) const -> Suit;
-
         [[nodiscard]] virtual auto trickWinner(const Trick& trick) const -> uint32_t;
 
         [[nodiscard]] virtual auto firstLead(const GState& state) const -> uint32_t;
+
+        [[nodiscard]] virtual auto trumpSuit(const Trick& trick) const -> Suit;
 
         Variant mVariant;
     };
@@ -121,7 +129,7 @@ private:
         { }
 
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
-        [[nodiscard]] auto trickSuit(const Trick& trick) const -> Suit override;
+        [[nodiscard]] auto trumpSuit(const Trick& trick) const -> Suit override;
         [[nodiscard]] auto trickWinner(const Trick& trick) const -> uint32_t override;
         [[nodiscard]] auto firstLead(const GState& state) const -> uint32_t override;
 

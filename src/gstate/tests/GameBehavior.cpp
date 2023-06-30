@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "gstate/GameBehavior.hpp"
 #include "gstate/GState.hpp"
+#include "gstate/GameBehavior.hpp"
 #include "gstate/Trick.hpp"
 
 namespace pho::gstate {
@@ -44,8 +44,7 @@ TEST(GameBehavior, trickWinner)
 
     EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 1);
     EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 2);
-
+    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4S}}), 3);
 }
 
-
-} // pho::gstate
+} // namespace pho::gstate
