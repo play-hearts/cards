@@ -1,12 +1,12 @@
 /// <reference types="emscripten" />
 
 export interface Deletable {
-    delete: () => void;
+    delete: () => void
 }
 
 export interface RandomGenerator extends Deletable {
-    delete: () => null;
-    randNorm: () => number;
+    delete: () => null
+    randNorm: () => number
 }
 
 declare enum Suit {
@@ -32,71 +32,71 @@ declare enum Rank {
     kAce = 12,
 }
 export interface Card extends Deletable {
-    ord: () => number;
-    suit: () => Suit;
-    rank: () => Rank;
+    ord: () => number
+    suit: () => Suit
+    rank: () => Rank
 }
 
 export interface CardVector extends Deletable {
-    size: () => number;
-    get: (i: number) => Card;
+    size: () => number
+    get: (i: number) => Card
 }
 
 export interface CardSet extends Deletable {
-    delete: () => null;
-    asCardVector: () => CardVector;
-    size: () => number;
-    setUnion: (other: CardSet) => CardSet;
-    setIntersection: (other: CardSet) => CardSet;
-    setSubtract: (other: CardSet) => CardSet;
-    equal: (other: CardSet) => boolean;
+    delete: () => null
+    asCardVector: () => CardVector
+    size: () => number
+    setUnion: (other: CardSet) => CardSet
+    setIntersection: (other: CardSet) => CardSet
+    setSubtract: (other: CardSet) => CardSet
+    equal: (other: CardSet) => boolean
 }
 
 export interface Deal extends Deletable {
-    dealFor: (p: number) => CardSet;
-    indexAsHexString: () => string;
+    dealFor: (p: number) => CardSet
+    indexAsHexString: () => string
 }
 
-export type TrickRep = [Card, Card, Card, Card];
-export type TrickOrdRep = [number, number, number, number];
-export type PlayerScores = [number, number, number, number];
+export type TrickRep = [Card, Card, Card, Card]
+export type TrickOrdRep = [number, number, number, number]
+export type PlayerScores = [number, number, number, number]
 
 export interface Trick extends Deletable {
-    delete: () => null;
-    at: (i: number) => Card;
-    trickSuit: () => Suit;
-    lead: () => number;
-    leadCard: () => Card;
-    winner: () => number;
-    highCard: () => Card;
-    getTrickPlay: () => Card;
-    rep: () => TrickRep;
-    ordRep: () => TrickOrdRep;
+    delete: () => null
+    at: (i: number) => Card
+    trickSuit: () => Suit
+    lead: () => number
+    leadCard: () => Card
+    winner: () => number
+    highCard: () => Card
+    getTrickPlay: () => Card
+    rep: () => TrickRep
+    ordRep: () => TrickOrdRep
 }
 
 // GStateInit is a emscripten::value_object;
 export interface GStateInit {
-    dealHexStr: string,
-    passOffset: number,
+    dealHexStr: string
+    passOffset: number
 }
 
 export interface GState extends Deletable {
-    delete: () => null;
+    delete: () => null
 
-    currentPlayer: () => number;
-    currentPlayersHand: () => CardSet;
-    currentTrick: () => Trick;
-    done: () => boolean;
-    getPlayerOutcome: (p: number) => { zms: number, winPts: number };
-    getPlayerScores: () => PlayerScores;
-    legalPlays: () => CardSet;
-    passOffset: () => number;
-    playCard: (card: Card) => void;
-    playersHand: (p: number) => CardSet;
-    playIndex: () => number;
-    priorTrick: () => Trick;
-    setPassFor: (p: number, cards: CardSet) => void;
-    startGame: () => void;
+    currentPlayer: () => number
+    currentPlayersHand: () => CardSet
+    currentTrick: () => Trick
+    done: () => boolean
+    getPlayerOutcome: (p: number) => {zms: number; winPts: number}
+    getPlayerScores: () => PlayerScores
+    legalPlays: () => CardSet
+    passOffset: () => number
+    playCard: (card: Card) => void
+    playersHand: (p: number) => CardSet
+    playIndex: () => number
+    priorTrick: () => Trick
+    setPassFor: (p: number, cards: CardSet) => void
+    startGame: () => void
 }
 
 declare enum GameVariant {
@@ -106,31 +106,32 @@ declare enum GameVariant {
 }
 
 export interface GStateModule extends EmscriptenModule {
-    RandomGenerator: new () => RandomGenerator;
-    Deal: new (dealIndex: string) => Deal;
-    CardSet: new () => CardSet;
-    Card: new (ord: number) => Card;
-    CardVector: new () => CardVector;
-    suitOf: (card: Card) => Suit;
-    rankOf: (card: Card) => Rank;
-    cardFor: (suit: Suit, rank: Rank) => Card;
-    nameOfCard: (card: Card) => string;
-    nameOfSuit: (suit: Suit) => string;
-    to_string: (cardSet: CardSet) => string;
-    aCardAtRandom: (cardSet: CardSet) => Card;
-    chooseThreeAtRandom: (cardSet: CardSet) => CardSet;
-    GState: new (init: GStateInit, variant: GameVariant) => GState;
+    RandomGenerator: new () => RandomGenerator
+    Deal: new (dealIndex: string) => Deal
+    CardSet: new () => CardSet
+    Card: new (ord: number) => Card
+    CardVector: new () => CardVector
+    suitOf: (card: Card) => Suit
+    rankOf: (card: Card) => Rank
+    cardFor: (suit: Suit, rank: Rank) => Card
+    nameOfCard: (card: Card) => string
+    nameOfSuit: (suit: Suit) => string
+    to_string: (cardSet: CardSet) => string
+    aCardAtRandom: (cardSet: CardSet) => Card
+    chooseThreeAtRandom: (cardSet: CardSet) => CardSet
+    GState: new (init: GStateInit, variant: GameVariant) => GState
 
-    getDealIndex: (gstate: GState) => string;
-    kRandomVal: () => GStateInit;
+    getDealIndex: (gstate: GState) => string
+    kRandomVal: () => GStateInit
 
-    GameVariant: typeof GameVariant;
+    GameVariant: typeof GameVariant
 
-    Suit: typeof Suit;
-    Rank: typeof Rank;
+    Suit: typeof Suit
+    Rank: typeof Rank
 }
 
-export interface GStateModuleFactory extends EmscriptenModuleFactory<GStateModule> { }
+export interface GStateModuleFactory
+    extends EmscriptenModuleFactory<GStateModule> {}
 
-declare const Module: GStateModuleFactory;
-export default Module;
+declare const Module: GStateModuleFactory
+export default Module
