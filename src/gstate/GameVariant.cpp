@@ -18,17 +18,13 @@ auto VariantOutcome::Base::playerOutcomeResult(unsigned p) const -> float
     }
 }
 
-
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(GameVariant) {
+EMSCRIPTEN_BINDINGS(GameVariant)
+{
 
-enum_<GameVariant>("GameVariant")
-    .value("STANDARD", standard)
-    .value("JACK", jack)
-    .value("SPADES", spades)
-    ;
+    enum_<GameVariant>("GameVariant").value("STANDARD", standard).value("JACK", jack).value("SPADES", spades);
 }
 
 #endif

@@ -41,17 +41,11 @@ public:
     double maximum() const { return mMax; }
 
     friend RunningStats operator+(const RunningStats& a, const RunningStats& b);
-    RunningStats& operator+=(const RunningStats &rhs);
+    RunningStats& operator+=(const RunningStats& rhs);
 
-    bool operator<(const RunningStats& other) const
-    {
-        return average() < other.average();
-    }
+    bool operator<(const RunningStats& other) const { return average() < other.average(); }
 
-    bool operator>(const RunningStats& other) const
-    {
-        return average() > other.average();
-    }
+    bool operator>(const RunningStats& other) const { return average() > other.average(); }
 
     Count N;
 

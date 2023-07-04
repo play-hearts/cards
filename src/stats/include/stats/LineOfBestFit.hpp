@@ -2,9 +2,9 @@
 
 #include "prim/range.hpp"
 
-#include <vector>
-#include <functional>
 #include <cmath>
+#include <functional>
+#include <vector>
 
 namespace pho::stats {
 
@@ -29,16 +29,20 @@ double loglog(double x) { return log(log(x)); }
 double exp(double x) { return std::exp2(x); }
 double expexp(double x) { return exp(exp(x)); }
 
-
 Transform forward(AxisType type)
 {
     switch (type)
     {
-        case eLinear: return identity;
-        case eLog: return log;
-        case eLogLog: return loglog;
-        case eExp: return exp;
-        case eExpExp: return expexp;
+        case eLinear:
+            return identity;
+        case eLog:
+            return log;
+        case eLogLog:
+            return loglog;
+        case eExp:
+            return exp;
+        case eExpExp:
+            return expexp;
         default:
             assert(UNEXPECTED);
             return identity;
@@ -49,11 +53,16 @@ Transform inverse(AxisType type)
 {
     switch (type)
     {
-        case eLinear: return identity;
-        case eLog: return exp;
-        case eLogLog: return expexp;
-        case eExp: return log;
-        case eExpExp: return loglog;
+        case eLinear:
+            return identity;
+        case eLog:
+            return exp;
+        case eLogLog:
+            return expexp;
+        case eExp:
+            return log;
+        case eExpExp:
+            return loglog;
         default:
             assert(UNEXPECTED);
             return identity;
@@ -65,25 +74,19 @@ Transform inverse(AxisType type)
 class Parameters
 {
 public:
-    Parameters(double alpha, double beta, AxisType xAxis=eLinear, AxisType yAxis=eLinear)
+    Parameters(double alpha, double beta, AxisType xAxis = eLinear, AxisType yAxis = eLinear)
     : mAlpha(alpha)
     , mBeta(beta)
     , xAxis(xAxis)
     , yAxis(yAxis)
-    {}
+    { }
 
     using X_t = double;
     using Y_t = double;
 
-    Y_t yFromX(X_t x) const
-    {
-        return detail::inverse(yAxis)(detail::forward(xAxis)(x)*mBeta + mAlpha);
-    }
+    Y_t yFromX(X_t x) const { return detail::inverse(yAxis)(detail::forward(xAxis)(x) * mBeta + mAlpha); }
 
-    X_t xFromY(Y_t y) const
-    {
-        return detail::inverse(xAxis)((detail::forward(yAxis)(y) - mAlpha) / mBeta);
-    }
+    X_t xFromY(Y_t y) const { return detail::inverse(xAxis)((detail::forward(yAxis)(y) - mAlpha) / mBeta); }
 
     double alpha() const { return mAlpha; }
     double beta() const { return mBeta; }
@@ -95,14 +98,13 @@ private:
     AxisType yAxis;
 };
 
-
 class LineOfBestFit
 {
 public:
     using XData = std::vector<double>;
     using YData = std::vector<double>;
 
-    LineOfBestFit(const XData&  x, const YData&  y)
+    LineOfBestFit(const XData& x, const YData& y)
     : mSize(x.size())
     , xData(x)
     , yData(y)
@@ -110,7 +112,7 @@ public:
         assert(mSize == y.size());
     }
 
-    Parameters parametersFor(AxisType xAxis=eLinear, AxisType yAxis=eLinear)
+    Parameters parametersFor(AxisType xAxis = eLinear, AxisType yAxis = eLinear)
     {
         double X1{};
         double Y1{};
@@ -132,13 +134,13 @@ public:
         for (auto i : prim::range(mSize))
         {
             const auto x = detail::forward(xAxis)(xData.at(i)) - X1;
-            num += x * (detail::forward(yAxis)(yData.at(i))-Y1);
+            num += x * (detail::forward(yAxis)(yData.at(i)) - Y1);
             den += x * x;
         }
 
         double beta = num / den;
         double alpha = Y1 - beta * X1;
-        Parameters params{ alpha, beta, xAxis, yAxis };
+        Parameters params{alpha, beta, xAxis, yAxis};
         return params;
     }
 
@@ -161,10 +163,10 @@ public:
             const auto yTrue = yData.at(i);
             const auto yPred = params.yFromX(x);
 
-            SStot += (yTrue - yMean)*(yTrue - yMean);
-            SSres += (yTrue - yPred)*(yTrue - yPred);
+            SStot += (yTrue - yMean) * (yTrue - yMean);
+            SSres += (yTrue - yPred) * (yTrue - yPred);
         }
-        return 1.0 - SSres/SStot;
+        return 1.0 - SSres / SStot;
     }
 
 private:

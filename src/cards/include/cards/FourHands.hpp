@@ -2,8 +2,7 @@
 
 #include "cards/CardSet.hpp"
 
-namespace pho::cards
-{
+namespace pho::cards {
 
 class FourHands
 {
@@ -12,7 +11,8 @@ public:
 
     ~FourHands() = default;
     FourHands() = default;
-    FourHands(Rep rep) : mRep{rep} {};
+    FourHands(Rep rep)
+    : mRep{rep} {};
     FourHands(const FourHands&) = default;
     FourHands(FourHands&&) = default;
 

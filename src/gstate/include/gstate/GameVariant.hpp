@@ -7,10 +7,14 @@
 #include <cassert>
 #include <variant>
 
-
 namespace pho::gstate {
 
-enum GameVariant { standard, jack, spades };
+enum GameVariant
+{
+    standard,
+    jack,
+    spades
+};
 
 using FloatScores = std::array<float, cards::kNumPlayers>;
 
@@ -19,14 +23,8 @@ struct VariantOutcome
     struct Base
     {
         FloatScores mScores;
-        auto normalizedScores() const -> FloatScores
-        {
-            return mScores;
-        }
-        auto normalizedScore(unsigned p) const -> float
-        {
-            return mScores[p];
-        }
+        auto normalizedScores() const -> FloatScores { return mScores; }
+        auto normalizedScore(unsigned p) const -> float { return mScores[p]; }
         auto playerOutcomeResult(unsigned p) const -> float;
     };
 

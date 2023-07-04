@@ -15,7 +15,8 @@
 
 namespace pho::gstate {
 
-template <typename T> auto uniform_loss(const std::array<T, 4>& values) -> double
+template <typename T>
+auto uniform_loss(const std::array<T, 4>& values) -> double
 {
     auto mean = std::accumulate(values.begin(), values.end(), 0) / 4.0;
     auto loss = double{};
@@ -72,7 +73,7 @@ TEST(unbiased_by_seat, trick_lead)
     auto trickLeadCount = std::array<unsigned, kNumPlayers>{};
     for (auto i : prim::range(1000))
     {
-        (void) i;
+        (void)i;
         GState gameState{GState::kNoPass};
         gameState.startGame();
         trickLeadCount.at(gameState.trickLead()) += 1;
@@ -97,7 +98,7 @@ TEST(unbiased_by_seat, player_outcome)
                 auto stats = stats::RunningStats{};
                 for (auto i : prim::range(100))
                 {
-                    (void) i;
+                    (void)i;
                     auto gameState = runOneGame(chooser.second, predicate.second, variant);
                     auto outcome = gameState.getVariantOutcomeRep();
                     auto rowSum = float{};

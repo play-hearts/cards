@@ -46,7 +46,7 @@ public:
 
     auto hands() const -> FourHands { return mHands.get(); }
 
-static DealIndex randomDealIndex(const RandomGenerator& rng);
+    static DealIndex randomDealIndex(const RandomGenerator& rng);
     static DealIndex randomDealIndex();
     // Generate a random number in the range [0, 52!/(13!^4))
 
@@ -54,7 +54,7 @@ static DealIndex randomDealIndex(const RandomGenerator& rng);
     Card PeekAt(int i) const { return PeekAt(i / 13, i % 13); }
     // For unit tests, peak at the card at a given card location
 
-    Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player=0);
+    Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player = 0);
     // Create a deal where the given player has the given hand.
 private:
     /// @brief Given a deal index, create the unique Deal for that index

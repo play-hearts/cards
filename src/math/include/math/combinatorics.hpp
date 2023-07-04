@@ -15,7 +15,8 @@ uint128_t combinations128(unsigned n, unsigned k);
 uint128_t possibleDistinguishableDeals();
 // Returns 52! / 13!^4
 
-template <unsigned N> constexpr uint64_t constFactorial()
+template <unsigned N>
+constexpr uint64_t constFactorial()
 {
     static_assert(N < 15u);
     if constexpr (N == 0)
@@ -24,7 +25,8 @@ template <unsigned N> constexpr uint64_t constFactorial()
         return N * constFactorial<N - 1>();
 }
 
-template <unsigned _K = 3, unsigned _N = 13> class ChooseFromGenerator
+template <unsigned _K = 3, unsigned _N = 13>
+class ChooseFromGenerator
 {
 public:
     static constexpr auto K = _K;
@@ -63,7 +65,8 @@ ChooseFromGenerator<K, N>::ChooseFromGenerator()
     assert(countBits(last()) == K);
 }
 
-template <unsigned K, unsigned N> uint64_t ChooseFromGenerator<K, N>::next()
+template <unsigned K, unsigned N>
+uint64_t ChooseFromGenerator<K, N>::next()
 {
     // Gosper's hack: https://en.wikipedia.org/wiki/Combinatorial_number_system#Applications
     if (mNext == 0)

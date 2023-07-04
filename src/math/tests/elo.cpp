@@ -35,6 +35,7 @@ TEST(inverseEloDelta, nominal)
     EXPECT_GT(0.05, inverseEloDelta(-800));
 
     EXPECT_GT(0.95, inverseEloDelta(400));
-    EXPECT_LT(0.95, inverseEloDelta(800));}
+    EXPECT_LT(0.95, inverseEloDelta(800));
+}
 
 } // namespace pho::math::tests

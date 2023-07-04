@@ -189,22 +189,22 @@ auto GState::getVariantOutcomeRep() const -> VariantOutcomeRep
     auto outcome = VariantOutcomeRep{};
     switch (mBehavior.variant())
     {
-    case GameVariant::standard: {
-        outcome = getStandardOutcome();
-        break;
-    }
-    case GameVariant::jack: {
-        outcome = getJackOutcome();
-        break;
-    }
-    case GameVariant::spades: {
-        outcome = getSpadesOutcome();
-        break;
-    }
-    default: {
-        assert(false);
-        throw std::runtime_error("Bad behavior variant");
-    }
+        case GameVariant::standard: {
+            outcome = getStandardOutcome();
+            break;
+        }
+        case GameVariant::jack: {
+            outcome = getJackOutcome();
+            break;
+        }
+        case GameVariant::spades: {
+            outcome = getSpadesOutcome();
+            break;
+        }
+        default: {
+            assert(false);
+            throw std::runtime_error("Bad behavior variant");
+        }
     }
     return outcome;
 }
@@ -354,7 +354,7 @@ auto GState::adjustPassedState() -> void
     {
         const auto passedTo = (p + mPassOffset) % 4;
         const auto receivedFrom = (p + 4 - mPassOffset) % 4;
-        (void) passedTo;
+        (void)passedTo;
 
         auto handAtStart = mHands.at(p) + mCardsPlayed.at(p);
         // fmt::print(stderr, "mHands.at(p) = {}\n", to_string(mHands.at(p)));
@@ -371,7 +371,7 @@ auto GState::adjustPassedState() -> void
         auto received = CardSet{};
         if (receivedFrom == kCarl)
         {
-            (void) kAlan;
+            (void)kAlan;
             assert(p == kAlan);
             received = mPassed.at(receivedFrom);
             assert((handAtStart & received) == received);

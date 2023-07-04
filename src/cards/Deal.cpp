@@ -150,12 +150,12 @@ Deal::Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player)
     mHands.setUnion(player, playersHand);
     assert(mHands.totalCapacity() == kCardsPerDeck - kCardsPerHand);
 
-    auto o1 = (player+1) % kNumPlayers;
-    auto o2 = (player+2) % kNumPlayers;
-    auto o3 = (player+3) % kNumPlayers;
+    auto o1 = (player + 1) % kNumPlayers;
+    auto o2 = (player + 2) % kNumPlayers;
+    auto o3 = (player + 3) % kNumPlayers;
     for (auto i : prim::range(kCardsPerHand))
     {
-        (void) i;
+        (void)i;
         mHands.addCard(o1, removeACardAtRandom_(others, rng));
         mHands.addCard(o2, removeACardAtRandom_(others, rng));
     }
@@ -169,12 +169,12 @@ Deal::Deal(CardSet playersHand, const RandomGenerator& rng, PlayerNum player)
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(Deal) {
-  class_<Deal>("Deal")
-    .constructor<const std::string&>()
-    .function("dealFor", &Deal::dealFor)
-    .function("indexAsHexString", &Deal::indexAsHexString)
-    ;
+EMSCRIPTEN_BINDINGS(Deal)
+{
+    class_<Deal>("Deal")
+        .constructor<const std::string&>()
+        .function("dealFor", &Deal::dealFor)
+        .function("indexAsHexString", &Deal::indexAsHexString);
 }
 #endif
 

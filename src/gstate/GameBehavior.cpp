@@ -11,14 +11,14 @@ auto GameBehavior::make(Variant variant) -> GameBehavior
 {
     switch (variant)
     {
-    case standard:
-        return GameBehavior{std::make_shared<StandardHearts>()};
-    case jack:
-        return GameBehavior{std::make_shared<JackDiamondsHearts>()};
-    case spades:
-        return GameBehavior{std::make_shared<Spades>()};
-    default:
-        throw std::invalid_argument("Unrecognized game variant");
+        case standard:
+            return GameBehavior{std::make_shared<StandardHearts>()};
+        case jack:
+            return GameBehavior{std::make_shared<JackDiamondsHearts>()};
+        case spades:
+            return GameBehavior{std::make_shared<Spades>()};
+        default:
+            throw std::invalid_argument("Unrecognized game variant");
     }
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "cards/Card.hpp"
-#include "cards/CardSet.hpp"
 #include "cards/CardHands.hpp"
+#include "cards/CardSet.hpp"
 #include "cards/FourHands.hpp"
 #include <vector>
 
@@ -15,15 +15,15 @@ using FourHands = FourHands;
 struct SuitVoids
 {
     SuitVoids(Suit s, uint8_t n)
-        : suit(s)
-        , numVoids(n)
+    : suit(s)
+    , numVoids(n)
     {
         assert(n <= 3);
     }
     SuitVoids()
-        : suit(kUnknown)
-        , numVoids(0)
-    {}
+    : suit(kUnknown)
+    , numVoids(0)
+    { }
     Suit suit;
     uint8_t numVoids;
 
@@ -66,9 +66,7 @@ public:
 
     std::string toString() const;
 
-    friend std::ostream& operator<<(std::ostream& os, const PlayerVoids& bits) {
-        return os << bits.toString();
-    }
+    friend std::ostream& operator<<(std::ostream& os, const PlayerVoids& bits) { return os << bits.toString(); }
 
     Rep OthersKnownVoid(int currentPlayer) const
     {
@@ -85,15 +83,9 @@ private:
         return 1u << (4 * suit + player);
     }
 
-    static Rep playerMask(int p)
-    {
-        return 0x1111 << p;
-    }
+    static Rep playerMask(int p) { return 0x1111 << p; }
 
-    static Rep suitMask(Suit suit)
-    {
-        return 0x000F << (suit*4);
-    }
+    static Rep suitMask(Suit suit) { return 0x000F << (suit * 4); }
 
 private:
     Rep mBits;
