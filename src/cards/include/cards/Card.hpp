@@ -77,8 +77,12 @@ class Card
 public:
     static constexpr auto kNone = Ord{63};
 
-    constexpr Card() : card{kNone} {}
-    constexpr Card(Ord c) : card{c} {}
+    constexpr Card()
+    : card{kNone}
+    { }
+    constexpr Card(Ord c)
+    : card{c}
+    { }
 
     Card(const Card&) = default;
     Card(Card&&) = default;

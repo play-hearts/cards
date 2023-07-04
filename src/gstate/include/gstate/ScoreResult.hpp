@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <cassert>
+#include <cstdint>
 #include <tuple>
 
 namespace pho::gstate {
@@ -16,7 +16,12 @@ class GState;
 class ScoreResult
 {
 public:
-    enum ScoreType { eUnknown, eSolo, eTeam };
+    enum ScoreType
+    {
+        eUnknown,
+        eSolo,
+        eTeam
+    };
 
     ~ScoreResult() = default;
 
@@ -25,7 +30,7 @@ public:
     , mZms{}
     , N{}
     , kScoreType{eUnknown}
-    {}
+    { }
 
     ScoreResult(const ScoreResult&) = default;
     ScoreResult(ScoreResult&&) = default;
@@ -43,7 +48,7 @@ public:
 
     auto winFraction() const -> double;
 
-    auto scoreDelta() const -> double { return N==0 ? 0.0 : mZms/N; }
+    auto scoreDelta() const -> double { return N == 0 ? 0.0 : mZms / N; }
 
     auto eloDelta() const -> double;
 
@@ -60,7 +65,6 @@ public:
     auto scoreType() const -> ScoreType { return kScoreType; }
 
 private:
-
     double mWinPts;
     double mZms;
     uint64_t N;

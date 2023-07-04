@@ -2,7 +2,8 @@
 
 namespace pho::prim {
 
-template <typename Int> class range
+template <typename Int>
+class range
 {
 public:
     static_assert(std::is_integral_v<Int>);

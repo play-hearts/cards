@@ -17,7 +17,8 @@ public:
     , mColorize(isatty(fileno(outFile)))
     { }
 
-    template <typename... T> void operator()(fmt::format_string<T...> fmt, T&&... args) const
+    template <typename... T>
+    void operator()(fmt::format_string<T...> fmt, T&&... args) const
     {
         if (mOn)
         {

@@ -116,7 +116,8 @@ private:
         [[nodiscard]] auto pointCards() const -> CardSet override { return kAllPointCards; }
 
         using BitSetMask = uint64_t;
-        static constexpr BitSetMask kPointCardsMask = StandardHearts::kPointCardsMask
+        static constexpr BitSetMask kPointCardsMask
+            = StandardHearts::kPointCardsMask
             | BitSetMask{cards::CoreCardSetConstants::maskOf(cards::kDiamonds, cards::kJack)};
         static constexpr auto kAllPointCards = CardSet{kPointCardsMask};
     };
