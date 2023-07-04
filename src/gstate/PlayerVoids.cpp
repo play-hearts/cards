@@ -6,15 +6,15 @@
 
 namespace pho::gstate {
 
-PlayerVoids::~PlayerVoids() {}
+PlayerVoids::~PlayerVoids() { }
 
 PlayerVoids::PlayerVoids(uint16_t bits)
-    : mBits(bits)
-{}
+: mBits(bits)
+{ }
 
 PlayerVoids::PlayerVoids(const PlayerVoids& other)
-    : mBits(other.mBits)
-{}
+: mBits(other.mBits)
+{ }
 
 PriorityList PlayerVoids::MakePriorityList() const
 {
@@ -49,7 +49,8 @@ void PlayerVoids::setAllOthersVoid(Suit suit, unsigned p)
     if (numVoids != 3)
     {
         fmt::print(stderr, "Player:{}, Suit:{} Voids:{}, NumVoids: {}\n", p, nameOfSuit(suit), toString(), numVoids);
-        fmt::print(stderr, "suitMask: {:016b}, playerMask:{:016b}, mBits:{:016b}\n", suitMask(suit), playerMask(p), mBits);
+        fmt::print(
+            stderr, "suitMask: {:016b}, playerMask:{:016b}, mBits:{:016b}\n", suitMask(suit), playerMask(p), mBits);
         assert(numVoids == 3);
     }
 }
@@ -75,10 +76,7 @@ std::string PlayerVoids::toString() const
 {
     std::string result;
 
-    const auto V = [this](unsigned p, Suit s)
-    {
-        return isVoid(p, s) ? nameOfSuit(s) : ".";
-    };
+    const auto V = [this](unsigned p, Suit s) { return isVoid(p, s) ? nameOfSuit(s) : "."; };
 
     for (auto p : prim::range(kNumPlayers))
         result += fmt::format("{}{}{}{} ", V(p, kClubs), V(p, kDiamonds), V(p, kSpades), V(p, kHearts));

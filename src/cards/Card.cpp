@@ -51,13 +51,13 @@ static_assert(std::is_same_v<Rank, uint8_t>);
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(Card) {
+EMSCRIPTEN_BINDINGS(Card)
+{
     class_<Card>("Card")
         .constructor<Ord>()
         .function("ord", &Card::ord)
-        .function("suit", &Card::suit )
-        .function("rank", &Card::rank )
-        ;
+        .function("suit", &Card::suit)
+        .function("rank", &Card::rank);
 
     function("cardFrom", cardFrom);
     function("nameOfCard", nameOfCard);
@@ -87,8 +87,7 @@ EMSCRIPTEN_BINDINGS(Card) {
         .value("kClubs", kClubs)
         .value("kDiamonds", kDiamonds)
         .value("kSpades", kSpades)
-        .value("kHearts", kHearts)
-        ;
+        .value("kHearts", kHearts);
 
     enum_<Rank>("Rank")
         .value("kTwo", kTwo)
@@ -103,8 +102,7 @@ EMSCRIPTEN_BINDINGS(Card) {
         .value("kJack", kJack)
         .value("kQueen", kQueen)
         .value("kKing", kKing)
-        .value("kAce", kAce)
-        ;
+        .value("kAce", kAce);
 
 #endif
 }

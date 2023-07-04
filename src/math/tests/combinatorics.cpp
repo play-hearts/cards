@@ -7,12 +7,12 @@ namespace pho::math::tests {
 
 TEST(combinations128, small)
 {
-    EXPECT_EQ(1u, (unsigned) combinations128(0, 0));
-    EXPECT_EQ(1u, (unsigned) combinations128(1, 1));
-    EXPECT_EQ(3u, (unsigned) combinations128(3, 1));
-    EXPECT_EQ(3u, (unsigned) combinations128(3, 2));
-    EXPECT_EQ(4u, (unsigned) combinations128(4, 1));
-    EXPECT_EQ(6u, (unsigned) combinations128(4, 2));
+    EXPECT_EQ(1u, (unsigned)combinations128(0, 0));
+    EXPECT_EQ(1u, (unsigned)combinations128(1, 1));
+    EXPECT_EQ(3u, (unsigned)combinations128(3, 1));
+    EXPECT_EQ(3u, (unsigned)combinations128(3, 2));
+    EXPECT_EQ(4u, (unsigned)combinations128(4, 1));
+    EXPECT_EQ(6u, (unsigned)combinations128(4, 2));
 }
 
 // As an independent confirmation, several of the values below are published here:

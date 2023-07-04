@@ -15,20 +15,11 @@ CardHands::CardHands()
     mCapacities.fill(13);
 }
 
-auto CardHands::at(int i) const -> CardSet
-{
-    return mHands.at(i);
-}
+auto CardHands::at(int i) const -> CardSet { return mHands.at(i); }
 
-auto CardHands::operator[](int i) const -> CardSet
-{
-    return mHands.at(i);
-}
+auto CardHands::operator[](int i) const -> CardSet { return mHands.at(i); }
 
-auto CardHands::availableCapacity(int i) const -> Size_t
-{
-    return mCapacities[i] - mHands.at(i).size();
-}
+auto CardHands::availableCapacity(int i) const -> Size_t { return mCapacities[i] - mHands.at(i).size(); }
 
 auto CardHands::totalCapacity() const -> Size_t
 {
@@ -50,7 +41,7 @@ auto CardHands::playersWithAvailableCapacity(Size_t expectedCapacity) const -> u
             ++numPlayers;
     }
     assert(capacity == expectedCapacity);
-    (void) capacity; // silence warning in release build
+    (void)capacity; // silence warning in release build
     assert(numPlayers >= 1);
     return numPlayers;
 }
@@ -104,12 +95,9 @@ auto CardHands::restoreCapacityTo(unsigned p, Size_t capacity) -> void
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(CardHands) {
-    class_<CardHands>("CardHands")
-        .constructor<>()
-        .function("get", &CardHands::get)
-        .function("at", &CardHands::at)
-        ;
+EMSCRIPTEN_BINDINGS(CardHands)
+{
+    class_<CardHands>("CardHands").constructor<>().function("get", &CardHands::get).function("at", &CardHands::at);
 }
 #endif
 

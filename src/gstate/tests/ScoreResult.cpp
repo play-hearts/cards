@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
+#include "cards/utils.hpp"
 #include "gstate/GState.hpp"
 #include "gstate/ScoreResult.hpp"
-#include "cards/utils.hpp"
 #include "prim/range.hpp"
 #include "stats/RunningStats.hpp"
 
@@ -14,7 +14,7 @@ using namespace pho::cards;
 
 auto runOneGame() -> GState
 {
-    while(true)
+    while (true)
     {
         GState gameState{GState::kNoPass};
 
@@ -32,7 +32,6 @@ auto runOneGame() -> GState
         if (!gameState.getStandardOutcome().shotTheMoon())
             continue;
         return gameState;
-
     }
 }
 
@@ -43,7 +42,7 @@ TEST(ScoreResult, solo_zero_sum_win_fraction)
     // We also should see the opponent at 25%, since the opponent win rate is the average opponent win rate.
     for (auto i : prim::range(100))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
 
         auto scoreResult = ScoreResult{};
@@ -67,7 +66,7 @@ TEST(ScoreResult, team_zero_sum_win_fraction)
     // then  the win fraction should be exactly 50%.
     for (auto i : prim::range(100))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
 
         ScoreResult scoreResult{};
@@ -84,7 +83,7 @@ TEST(ScoreResult, solo_range)
     std::array<ScoreResult, kNumPlayers> scoreResults;
     for (auto i : prim::range(100))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
 
         for (auto p : prim::range(kNumPlayers))
@@ -110,7 +109,7 @@ TEST(ScoreResult, solo_expected_win_fraction)
     auto stats = std::array<stats::RunningStats, kNumPlayers>{};
     for (auto i : prim::range(1000))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
 
         auto zeroSumResult = ScoreResult{};
@@ -126,7 +125,6 @@ TEST(ScoreResult, solo_expected_win_fraction)
     }
     for (auto p : prim::range(kNumPlayers))
         fmt::print("{}\n", toString(stats.at(p)));
-
 }
 
 TEST(ScoreResult, team_range)
@@ -134,7 +132,7 @@ TEST(ScoreResult, team_range)
     stats::RunningStats stats;
     for (auto i : prim::range(100))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
 
         ScoreResult scoreResultA{};
@@ -157,11 +155,11 @@ TEST(ScoreResult, solo_elo_average)
     ScoreResult allRuns{};
     for (auto run : prim::range(10))
     {
-        (void) run;
+        (void)run;
         ScoreResult scoreResult{};
         for (auto i : prim::range(100))
         {
-            (void) i;
+            (void)i;
             auto gameState = runOneGame();
             scoreResult.soloUpdate(gameState, 0);
         }
@@ -187,7 +185,7 @@ TEST(ScoreResult, team_elo_average)
     ScoreResult scoreResult{};
     for (auto i : prim::range(1000))
     {
-        (void) i;
+        (void)i;
         auto gameState = runOneGame();
         scoreResult.teamUpdate(gameState, 0, 2);
     }
@@ -199,4 +197,4 @@ TEST(ScoreResult, team_elo_average)
     EXPECT_LT(elo, 50);
 }
 
-} // namespace pho::torchnn
+} // namespace pho::gstate

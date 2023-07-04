@@ -4,10 +4,7 @@
 
 namespace pho::cards {
 
-Card aCardAtRandom(CardSet set)
-{
-    return set.nthCard(pho::math::RandomGenerator::Range64(set.size()));
-}
+Card aCardAtRandom(CardSet set) { return set.nthCard(pho::math::RandomGenerator::Range64(set.size())); }
 
 CardSet chooseThreeAtRandom(CardSet dealt)
 {
@@ -16,7 +13,7 @@ CardSet chooseThreeAtRandom(CardSet dealt)
     auto result = CardSet();
     for (auto i : pho::prim::range(3))
     {
-        (void) i;
+        (void)i;
         auto card = aCardAtRandom(tmp);
         result += card;
         tmp -= card;

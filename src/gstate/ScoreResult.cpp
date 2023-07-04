@@ -1,8 +1,8 @@
 #include "gstate/ScoreResult.hpp"
 #include "gstate/GState.hpp"
 #include "math/elo.hpp"
-#include "stats/RunningStats.hpp"
 #include "prim/dlog.hpp"
+#include "stats/RunningStats.hpp"
 
 #include <fmt/format.h>
 
@@ -32,7 +32,8 @@ ScoreResult& ScoreResult::soloUpdate(const GState& game, unsigned p)
 {
     static thread_local auto stats = stats::RunningStats{};
 
-    if (N == 0) kScoreType = eSolo;
+    if (N == 0)
+        kScoreType = eSolo;
     assert(kScoreType == eSolo);
     assert(p < 4u);
     auto result = game.getPlayerOutcome(p);
@@ -63,7 +64,7 @@ ScoreResult& ScoreResult::teamUpdate(const GState& game, unsigned p1, unsigned p
     auto teamWin = result1.winPts + result2.winPts;
     dlog("teamZms: {}\n", teamZms);
     dlog("teamWin: {}\n", teamWin);
-    assert(teamWin>=0.0 && teamWin<=1.0);
+    assert(teamWin >= 0.0 && teamWin <= 1.0);
 
     mZms += teamZms;
     mWinPts += teamWin;
@@ -75,7 +76,7 @@ ScoreResult& ScoreResult::teamUpdate(const GState& game, unsigned p1, unsigned p
 auto ScoreResult::winFraction() const -> double
 {
     if (N > 0)
-        return double(mWinPts)  / N;
+        return double(mWinPts) / N;
     else if (kScoreType == eSolo)
         return 0.25;
     else
@@ -100,15 +101,9 @@ auto ScoreResult::opponentWinFraction() const -> double
     return win;
 }
 
-auto ScoreResult::opponentElo() const -> double
-{
-    return -eloDelta();
-}
+auto ScoreResult::opponentElo() const -> double { return -eloDelta(); }
 
-auto ScoreResult::opponentScoreDelta() const -> double
-{
-    return -scoreDelta();
-}
+auto ScoreResult::opponentScoreDelta() const -> double { return -scoreDelta(); }
 
 auto ScoreResult::opponentStrength() const -> std::tuple<double, double>
 {

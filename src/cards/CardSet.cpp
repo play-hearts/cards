@@ -28,11 +28,11 @@ std::vector<Card> CardSet::asCardVector() const
     return result;
 }
 
-
 #if __EMSCRIPTEN__
 using namespace emscripten;
 
-EMSCRIPTEN_BINDINGS(CardSet) {
+EMSCRIPTEN_BINDINGS(CardSet)
+{
     class_<CardSet>("CardSet")
         .constructor<>()
         .function("asCardVector", &CardSet::asCardVector)
@@ -40,8 +40,7 @@ EMSCRIPTEN_BINDINGS(CardSet) {
         .function("setUnion", &CardSet::setUnion)
         .function("setSubtract", &CardSet::setSubtract)
         .function("setIntersection", &CardSet::setIntersection)
-        .function("equal", &CardSet::operator==)
-        ;
+        .function("equal", &CardSet::operator==);
 
     function("to_string", &pho::cards::to_string);
     function("chooseThreeAtRandom", &pho::cards::chooseThreeAtRandom);

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "gstate/GState.hpp"
 #include "cards/utils.hpp"
+#include "gstate/GState.hpp"
 #include "prim/range.hpp"
 
 #include <fmt/ranges.h>
@@ -40,7 +40,7 @@ TEST(GState, random_deals_no_passing)
 {
     for (auto i : prim::range(100))
     {
-        (void) i;
+        (void)i;
         GState gameState{Deal::randomDealIndex(), 0};
 
         gameState.startGame();
@@ -64,16 +64,15 @@ TEST(GState, random_deals_no_passing)
             EXPECT_EQ(shooter, 4u);
         }
     }
-
 }
 
 TEST(GState, random_deals_with_passing)
 {
-    for (uint8_t offset : prim::range(1u,4u))
+    for (uint8_t offset : prim::range(1u, 4u))
     {
         for (auto i : prim::range(20))
         {
-            (void) i;
+            (void)i;
             GState gameState{Deal::randomDealIndex(), offset};
 
             passingSetup(gameState);
@@ -87,16 +86,15 @@ TEST(GState, random_deals_with_passing)
             }
         }
     }
-
 }
 
 TEST(GState, random_deals_with_passing_as_probs)
 {
-    for (uint8_t offset : prim::range(1u,4u))
+    for (uint8_t offset : prim::range(1u, 4u))
     {
         for (auto i : prim::range(20))
         {
-            (void) i;
+            (void)i;
             GState gameState{Deal::randomDealIndex(), offset};
 
             passingSetup(gameState);
@@ -114,8 +112,6 @@ TEST(GState, random_deals_with_passing_as_probs)
             }
         }
     }
-
 }
-
 
 } // namespace pho::gstate

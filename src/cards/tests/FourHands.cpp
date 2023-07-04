@@ -24,7 +24,4 @@ TEST(FourHands, ctorWithRep)
         EXPECT_EQ(hands.at(i), rep.at(i));
 }
 
-
-
-
 } // namespace pho::cards::tests

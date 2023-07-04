@@ -126,11 +126,9 @@ thread_local RandomGenerator RandomGenerator::gRandomGenerator;
 
 #if __EMSCRIPTEN__
 using namespace emscripten;
-EMSCRIPTEN_BINDINGS(cards) {
-    class_<RandomGenerator>("RandomGenerator")
-        .constructor<>()
-        .function("randNorm", &RandomGenerator::randNorm)
-        ;
+EMSCRIPTEN_BINDINGS(cards)
+{
+    class_<RandomGenerator>("RandomGenerator").constructor<>().function("randNorm", &RandomGenerator::randNorm);
 }
 #endif
 
