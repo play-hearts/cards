@@ -6,7 +6,7 @@ EMCC=builds/emcc/
 GENERATOR="Ninja Multi-Config"
 CMAKE ?= $(shell which cmake) # /home/jim/.local/bin/cmake
 NODE ?= $(shell which node) # /usr/local/bin/node
-CONFIG ?= Debug
+CONFIG ?= Release
 
 .PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emcc build wasm_tests tsbuild dist dist_test clean api_test test
 
@@ -19,7 +19,7 @@ ${EMCC}:
 	mkdir -p ${EMCC}
 
 ${X86}/CMakeCache.txt: ${X86}
-	${CMAKE} -S . -B ${X86} -G ${GENERATOR}
+	${CMAKE} -S . -B ${X86} -G ${GENERATOR} --toolchain=cmake/posix.toolchain.cmake
 
 configure_x86: ${X86}/CMakeCache.txt
 
@@ -43,7 +43,7 @@ build_emcc: configure_emcc
 	${CMAKE} --build ${EMCC}  --config ${CONFIG}
 	cp ${EMCC}bin/${CONFIG}/gstate_wasm.* packages/gstate_wasm/
 
-build_js:
+build_js: build_emcc
 	pnpm -r build
 
 test_x86: build_x86
