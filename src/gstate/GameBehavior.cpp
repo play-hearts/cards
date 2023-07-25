@@ -59,6 +59,23 @@ auto GameBehavior::Concept::legal(const GState& state) const -> CardSet
 auto GameBehavior::Concept::trumpSuit(const pho::gstate::Trick& trick) const -> Suit { return trick.trickSuit(); }
 auto GameBehavior::Concept::trickWinner(const pho::gstate::Trick& trick) const -> uint32_t { return trick.winner(); }
 
+// This method works for all variants but only because `trumpSuit()` is overridden in the Spades variant.
+auto GameBehavior::Concept::highCard(const Trick& trick) const -> Card
+{
+    auto suit = trumpSuit(trick);
+    auto rank = kTwo;
+    for (auto p : prim::range(kNumPlayers))
+    {
+        auto card = trick.at(p);
+        if (card == Card::kNone) continue;
+        if (suitOf(card) == suit && rank <= rankOf(card)) // must use <= here to catch case where 2 of spades is winner
+        {
+            rank = rankOf(card);
+        }
+    }
+    return Card::cardFor(suit, rank);
+}
+
 auto GameBehavior::Concept::firstLead(const GState& state) const -> uint32_t
 {
     static constexpr auto kTwoClubs = Card::cardFor(kClubs, kTwo);
@@ -112,7 +129,7 @@ auto GameBehavior::Spades::trickWinner(const pho::gstate::Trick& trick) const ->
     return winner;
 }
 
-auto GameBehavior::Spades::firstLead(const GState& state) const -> uint32_t
+auto GameBehavior::Spades::firstLead(const GState&) const -> uint32_t
 {
     return math::RandomGenerator::Range64(4u);
 }

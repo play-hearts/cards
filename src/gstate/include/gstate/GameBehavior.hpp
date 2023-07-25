@@ -39,6 +39,8 @@ public:
 
     auto trickWinner(const Trick& trick) const -> uint32_t { return mRep->trickWinner(trick); }
 
+    auto highCard(const Trick& trick) const -> Card { return mRep->highCard(trick); }
+
     GameBehavior(const GameBehavior&) = default;
     GameBehavior(GameBehavior&&) = default;
 
@@ -82,6 +84,8 @@ private:
         [[nodiscard]] auto legalFollowPlays(const GState& state) const -> CardSet;
 
         [[nodiscard]] virtual auto trickWinner(const Trick& trick) const -> uint32_t;
+
+        [[nodiscard]] auto highCard(const Trick& trick) const -> Card;
 
         [[nodiscard]] virtual auto firstLead(const GState& state) const -> uint32_t;
 
