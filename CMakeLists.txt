@@ -1,14 +1,14 @@
-cmake_minimum_required (VERSION 3.24.0)
+cmake_minimum_required(VERSION 3.24.0)
 
-project (Cards)
+project(Cards)
 
-set(CMAKE_CXX_STANDARD 17)
-add_compile_options(-Wall -Wextra -Wno-unused-parameter)
+set(CMAKE_CXX_STANDARD 20)
+add_compile_options(-Wall -Werror -Wextra)
 
 add_compile_options(-pthread)
 add_link_options(-pthread)
 
-if (EMSCRIPTEN)
+if(EMSCRIPTEN)
     add_compile_options("SHELL:-sNO_DISABLE_EXCEPTION_CATCHING")
     add_link_options("SHELL:-s WASM_BIGINT")
     add_link_options("SHELL:-lembind")
@@ -16,6 +16,7 @@ if (EMSCRIPTEN)
     add_link_options("SHELL:-s EXPORT_ES6=1")
     add_link_options("SHELL:-s MODULARIZE=1")
     add_link_options("SHELL:-s SINGLE_FILE=1")
+    add_link_options("SHELL:-s EXPORTED_FUNCTIONS=_malloc,_free")
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

@@ -446,19 +446,8 @@ PlayerVoids GState::voidsForOthers() const
 
 #define INFO(exp) fmt::print(stderr, "{}: {}\n", #exp, exp)
 
-auto GState::asProbabilities() const -> ProbArray
+auto GState::fillProbabilities(float* data) const -> void
 {
-    // There is a bug here somewhere related to the case where the last unknown card
-    // of a suit has just been played. That player should be marked void in the suit.
-    // And if either of the other two players had not yet been forced to declare they were
-    // void, then they should also be declared void.
-    //
-    // Note that Carl can make these inferences since they have all of the
-    // remaining cards of the suit. But the other players may not be able to make
-    // the same inference.
-
-    auto prob = ProbArray{};
-
     const unsigned carl = currentPlayer();
 
     const CardSet hand = currentPlayersHand();
@@ -526,7 +515,7 @@ auto GState::asProbabilities() const -> ProbArray
         {
             for (Card card : currentPlayersHand())
             {
-                prob[card.ord()][p] = 1.0;
+                data[4 * card.ord() + p] = 1.0;
             }
         }
         else
@@ -538,11 +527,11 @@ auto GState::asProbabilities() const -> ProbArray
                     Suit suit = suitOf(card);
                     if (voids.isVoid(p, suit))
                     {
-                        assert(prob[card.ord()][p] == 0.0);
+                        assert(data[4 * card.ord() + p] == 0.0);
                     }
                     else
                     {
-                        prob[card.ord()][p] = suitProb[suit];
+                        data[4 * card.ord() + p] = suitProb[suit];
                     }
                 }
             }
@@ -550,14 +539,111 @@ auto GState::asProbabilities() const -> ProbArray
             {
                 for (Card card : passed)
                 {
-                    assert(prob[card.ord()][p] == 0.0);
-                    prob[card.ord()][p] = 1.0;
+                    assert(data[4 * card.ord() + p] == 0.0);
+                    data[4 * card.ord() + p] = 1.0;
                 }
             }
         }
     }
+}
+
+auto GState::asProbabilities() const -> ProbArray
+{
+    auto prob = ProbArray{};
+
+    fillProbabilities(prob[0].data());
 
     return prob;
+}
+
+namespace min2022 {
+enum InputSchema
+{
+    eLegalPlay,
+    eP0ProbHasCard,
+    eP1ProbHasCard,
+    eP2ProbHasCard,
+    eP3ProbHasCard,
+    eP0TakenCard,
+    eP1TakenCard,
+    eP2TakenCard,
+    eP3TakenCard,
+    eCardOnTable,
+    eCardLeadingTrick,
+    eHighCardInTrick,
+
+    kNumInFeatures
+};
+} // namespace min2022
+
+auto GState::asMin2022InputTensor(float* data) const -> void
+{
+    const GState& self = *this;
+    // ---- Legal Plays ----
+    // Note: A tensor encoding is always created from the perspective as if the current player (Carl) is sitting at
+    // the South seat, but the actual state is unconstrained: the player may be at any seat. (It's possible that we
+    // should have constrained KnowableState the same way, but let's set that aside.) So, we remap the seating here.
+
+    // In the code below, we use the convention that `pMain` is a player numbering with Carl at South (seat 0),
+    // and `pState` is the actual player numbering in the knowable state.
+
+    // We also have yet another player numbering: the "playInTrick" numbering, which is 0 for the player leading
+    // the current trick.
+
+    const auto mainToState = [&](unsigned pMain) -> unsigned {
+        assert(pMain < kNumPlayers);
+        return (self.currentPlayer() + pMain) % kNumPlayers;
+    };
+
+    // Note to future self: using an accessor is critical for good performance here
+    float(*rowAccessor)[min2022::kNumInFeatures] = reinterpret_cast<float(*)[min2022::kNumInFeatures]>(data);
+
+    for (auto card : self.legalPlays())
+    {
+        auto cardAccessor = rowAccessor[card.ord()];
+        cardAccessor[min2022::eLegalPlay] = 1.0;
+    }
+
+    // ---- Probability Has Card (for unknown cards) ----
+    GState::ProbArray prob = self.asProbabilities();
+    for (auto pMain : prim::range(kNumPlayers))
+    {
+        // AsProbabilities fills the probabilities in pMain (absolute player) order.
+        auto pState = mainToState(pMain);
+        for (Card card : CardSet::fullDeck())
+        {
+            rowAccessor[card.ord()][min2022::eP0ProbHasCard + pMain] = prob[card.ord()][pState];
+        }
+    }
+
+    // ---- Probability Took Card (for cards in completed tricks) ----
+    unsigned totalTaken = 0;
+    for (auto pMain : prim::range(kNumPlayers))
+    {
+        auto pState = mainToState(pMain);
+        for (Card card : self.takenBy(pState))
+        {
+            rowAccessor[card.ord()][min2022::eP0TakenCard + pMain] = 1.0;
+            ++totalTaken;
+        }
+    }
+    (void)totalTaken;
+    assert(totalTaken == (self.playIndex() / kCardsPerTrick) * kCardsPerTrick);
+
+    // ---- Current trick features ----
+    if (self.playInTrick() > 0)
+    {
+        // ---- Lead and High Card in current trick ----
+        rowAccessor[self.getTrickPlay(0).ord()][min2022::eCardLeadingTrick] = 1.0;
+        rowAccessor[self.highCardInTrick().ord()][min2022::eHighCardInTrick] = 1.0;
+
+        // Fill columns eP1CardOnTable .. eP3CardOnTable
+        for (auto pTrick : prim::range(self.playInTrick()))
+        {
+            Card card = self.getTrickPlay(pTrick);
+            rowAccessor[card.ord()][min2022::eCardOnTable] = 1.0;
+        }
+    }
 }
 
 #if __EMSCRIPTEN__
@@ -581,6 +667,8 @@ EMSCRIPTEN_BINDINGS(GState)
         .element(emscripten::index<2>())
         .element(emscripten::index<3>());
 
+    register_vector<float>("FloatVector");
+
     class_<GState>("GState")
         .constructor<const GStateInit&, GameVariant>()
         .function("currentPlayer", &GState::currentPlayer)
@@ -596,14 +684,26 @@ EMSCRIPTEN_BINDINGS(GState)
         .function("playIndex", &GState::playIndex)
         .function("priorTrick", &GState::priorTrick)
         .function("setPassFor", &GState::setPassFor)
-        .function("startGame", &GState::startGame);
-
-    function("getDealIndex", &getDealIndex);
+        .function("startGame", &GState::startGame)
+        .function("fillProbabilities", optional_override([](GState& state, uintptr_t array) {
+            float* data = reinterpret_cast<float*>(array);
+            state.fillProbabilities(data);
+        }))
+        .function("takenBy", &GState::takenBy)
+        .function("getTrickPlay", &GState::getTrickPlay)
+        .function("highCardInTrick", &GState::highCardInTrick)
+        .function("trickLead", &GState::trickLead)
+        .function("playInTrick", &GState::playInTrick)
+        .function("asMin2022InputTensor", optional_override([](GState& state, uintptr_t array) {
+            float* data = reinterpret_cast<float*>(array);
+            return state.asMin2022InputTensor(data);
+        }));
 
     value_object<GStateInit>("GStateInit")
         .field("dealHexStr", &GStateInit::dealHexStr)
         .field("passOffset", &GStateInit::passOffset);
 
+    function("getDealIndex", &getDealIndex);
     function("kNoPassVal", &GState::Init::kNoPassVal);
     function("kRandomVal", &GState::Init::kRandomVal);
 }

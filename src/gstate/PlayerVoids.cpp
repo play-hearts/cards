@@ -57,6 +57,7 @@ void PlayerVoids::setAllOthersVoid(Suit suit, unsigned p)
 
 void PlayerVoids::VerifyVoids(const FourHands& hands) const
 {
+    (void)hands;
 #ifndef NDEBUG
     for (auto p : prim::range(kNumPlayers))
     {

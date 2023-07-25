@@ -1,20 +1,12 @@
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import {all_ranks, rankOrd, rankName} from './cards.js'
-import {all_suits, suitOrd, suitName} from './cards.js'
-import {all_seat_names, seatPosition, seatName} from './cards.js'
-import {
-    kNoCard,
-    isSuitName,
-    isRankName,
-    isCard,
-    isNoCard,
-    isTrickCard,
-    isTrick,
-} from './cards.js'
+import { all_ranks, rankOrd, rankName } from './cards.js'
+import { all_suits, suitOrd, suitName } from './cards.js'
+import { all_seat_names, seatPosition, seatName } from './cards.js'
+import { kNoCard, isSuitName, isRankName, isCard, isNoCard, isTrickCard, isTrick } from './cards.js'
 
 chai.use(chaiAsPromised)
-const {expect} = chai
+const { expect } = chai
 
 describe('cards_ts', (): void => {
     it('all_ranks and all_suits are correct', async () => {
@@ -143,132 +135,132 @@ describe('cards_ts', (): void => {
     })
 
     it('isCard is correct', async () => {
-        expect(isCard({rank: '2', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '3', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '4', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '5', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '6', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '7', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '8', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '9', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: '10', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: 'jack', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: 'queen', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: 'king', suit: 'clubs'})).to.be.true
-        expect(isCard({rank: 'ace', suit: 'clubs'})).to.be.true
+        expect(isCard({ rank: '2', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '3', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '4', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '5', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '6', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '7', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '8', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '9', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: '10', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: 'jack', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: 'queen', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: 'king', suit: 'clubs' })).to.be.true
+        expect(isCard({ rank: 'ace', suit: 'clubs' })).to.be.true
 
-        expect(isCard({rank: '2', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '3', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '4', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '5', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '6', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '7', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '8', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '9', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: '10', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: 'jack', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: 'queen', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: 'king', suit: 'diamonds'})).to.be.true
-        expect(isCard({rank: 'ace', suit: 'diamonds'})).to.be.true
+        expect(isCard({ rank: '2', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '3', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '4', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '5', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '6', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '7', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '8', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '9', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: '10', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: 'jack', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: 'queen', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: 'king', suit: 'diamonds' })).to.be.true
+        expect(isCard({ rank: 'ace', suit: 'diamonds' })).to.be.true
 
-        expect(isCard({rank: '2', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '3', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '4', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '5', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '6', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '7', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '8', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '9', suit: 'spades'})).to.be.true
-        expect(isCard({rank: '10', suit: 'spades'})).to.be.true
-        expect(isCard({rank: 'jack', suit: 'spades'})).to.be.true
-        expect(isCard({rank: 'queen', suit: 'spades'})).to.be.true
-        expect(isCard({rank: 'king', suit: 'spades'})).to.be.true
-        expect(isCard({rank: 'ace', suit: 'spades'})).to.be.true
+        expect(isCard({ rank: '2', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '3', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '4', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '5', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '6', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '7', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '8', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '9', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: '10', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: 'jack', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: 'queen', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: 'king', suit: 'spades' })).to.be.true
+        expect(isCard({ rank: 'ace', suit: 'spades' })).to.be.true
 
-        expect(isCard({rank: '2', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '3', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '4', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '5', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '6', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '7', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '8', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '9', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: '10', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: 'jack', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: 'queen', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: 'king', suit: 'hearts'})).to.be.true
-        expect(isCard({rank: 'ace', suit: 'hearts'})).to.be.true
+        expect(isCard({ rank: '2', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '3', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '4', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '5', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '6', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '7', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '8', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '9', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: '10', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: 'jack', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: 'queen', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: 'king', suit: 'hearts' })).to.be.true
+        expect(isCard({ rank: 'ace', suit: 'hearts' })).to.be.true
 
-        expect(isCard({rank: '1', suit: 'clubs'})).to.be.false
-        expect(isCard({rank: '11', suit: 'diamonds'})).to.be.false
-        expect(isCard({rank: '', suit: 'spades'})).to.be.false
-        expect(isCard({rank: 1, suit: 'hearts'})).to.be.false
-        expect(isCard({rank: null, suit: 'clubs'})).to.be.false
-        expect(isCard({suit: 'diamonds'})).to.be.false
+        expect(isCard({ rank: '1', suit: 'clubs' })).to.be.false
+        expect(isCard({ rank: '11', suit: 'diamonds' })).to.be.false
+        expect(isCard({ rank: '', suit: 'spades' })).to.be.false
+        expect(isCard({ rank: 1, suit: 'hearts' })).to.be.false
+        expect(isCard({ rank: null, suit: 'clubs' })).to.be.false
+        expect(isCard({ suit: 'diamonds' })).to.be.false
 
-        expect(isCard({rank: '2', suit: 'foo'})).to.be.false
-        expect(isCard({rank: '3', suit: 3})).to.be.false
-        expect(isCard({rank: '4', suit: null})).to.be.false
-        expect(isCard({rank: '5'})).to.be.false
+        expect(isCard({ rank: '2', suit: 'foo' })).to.be.false
+        expect(isCard({ rank: '3', suit: 3 })).to.be.false
+        expect(isCard({ rank: '4', suit: null })).to.be.false
+        expect(isCard({ rank: '5' })).to.be.false
     })
 
     it('isNoCard is correct', function () {
-        expect(isNoCard({rank: '2', suit: 'clubs'})).to.be.false
-        expect(isNoCard({rank: '3', suit: 'clubs'})).to.be.false
-        expect(isNoCard({rank: '', suit: ''})).to.be.true
+        expect(isNoCard({ rank: '2', suit: 'clubs' })).to.be.false
+        expect(isNoCard({ rank: '3', suit: 'clubs' })).to.be.false
+        expect(isNoCard({ rank: '', suit: '' })).to.be.true
     })
 
     it('isTrickCard is correct', function () {
-        expect(isTrickCard({rank: '', suit: ''})).to.be.true
-        expect(isTrickCard({rank: '2', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '3', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '4', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '5', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '6', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '7', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '8', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '9', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: '10', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: 'jack', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: 'queen', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: 'king', suit: 'spades'})).to.be.true
-        expect(isTrickCard({rank: 'ace', suit: 'spades'})).to.be.true
+        expect(isTrickCard({ rank: '', suit: '' })).to.be.true
+        expect(isTrickCard({ rank: '2', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '3', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '4', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '5', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '6', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '7', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '8', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '9', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: '10', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: 'jack', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: 'queen', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: 'king', suit: 'spades' })).to.be.true
+        expect(isTrickCard({ rank: 'ace', suit: 'spades' })).to.be.true
 
-        expect(isTrickCard({rank: '2', suit: ''})).to.be.false
-        expect(isTrickCard({rank: '', suit: 'spades'})).to.be.false
+        expect(isTrickCard({ rank: '2', suit: '' })).to.be.false
+        expect(isTrickCard({ rank: '', suit: 'spades' })).to.be.false
     })
 
     it('itTrick is correct', function () {
         expect(isTrick([kNoCard, kNoCard, kNoCard, kNoCard])).to.be.true
         expect(
-            isTrick([kNoCard, kNoCard, kNoCard, {rank: '2', suit: 'spades'}])
+            isTrick([kNoCard, kNoCard, kNoCard, { rank: '2', suit: 'spades' }])
         ).to.be.true
         expect(
             isTrick([
                 kNoCard,
                 kNoCard,
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
             ])
         ).to.be.true
         expect(
             isTrick([
                 kNoCard,
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
             ])
         ).to.be.true
         expect(
             isTrick([
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
-                {rank: '2', suit: 'spades'},
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
+                { rank: '2', suit: 'spades' },
             ])
         ).to.be.true
         expect(
-            isTrick([kNoCard, {rank: '2', suit: 'spades'}, kNoCard, kNoCard])
+            isTrick([kNoCard, { rank: '2', suit: 'spades' }, kNoCard, kNoCard])
         ).to.be.true
 
         expect(isTrick([])).to.be.false

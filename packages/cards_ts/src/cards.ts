@@ -10,6 +10,13 @@ export const all_suits = ['clubs', 'diamonds', 'spades', 'hearts'] as const
 export type SuitName = (typeof all_suits)[number]
 export type SuitOrd = typeof all_suits.indexOf
 
+export const kNumPlayers = 4
+export const kNumCardsInSuit = 13
+export const kNumSuits = 4
+export const kNumCardsInDeck = kNumCardsInSuit * kNumSuits
+export const kNumFeaturesPerCard = 12   // works for the min2022 model that works for all 3 variants
+export const kNumFeaturesPerDeck = kNumFeaturesPerCard * kNumCardsInDeck
+
 export const all_ranks = [
     '2',
     '3',
@@ -33,7 +40,7 @@ export type CardType = {
     rank: RankName
 }
 
-export const kNoCard = {suit: '', rank: ''} as const
+export const kNoCard = { suit: '', rank: '' } as const
 export type NoCard = typeof kNoCard
 
 export type TrickCard = {
@@ -122,4 +129,22 @@ export function isTrick(trick: unknown): trick is TrickType {
     return (
         Array.isArray(trick) && trick.length === 4 && trick.every(isTrickCard)
     )
+}
+
+export enum InputSchema
+{
+    eLegalPlay,
+    eP0ProbHasCard,
+    eP1ProbHasCard,
+    eP2ProbHasCard,
+    eP3ProbHasCard,
+    eP0TakenCard,
+    eP1TakenCard,
+    eP2TakenCard,
+    eP3TakenCard,
+    eCardOnTable,
+    eCardLeadingTrick,
+    eHighCardInTrick,
+
+    kNumInFeatures
 }

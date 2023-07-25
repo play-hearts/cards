@@ -54,7 +54,7 @@ TEST(ScoreResult, solo_zero_sum_win_fraction)
             EXPECT_EQ(scoreResult.scoreType(), ScoreResult::eSolo);
         }
 
-        EXPECT_EQ(scoreResult.count(), 4);
+        EXPECT_EQ(scoreResult.count(), 4u);
         EXPECT_EQ(scoreResult.winFraction(), 0.25);
         EXPECT_EQ(scoreResult.opponentWinFraction(), 0.25);
     }

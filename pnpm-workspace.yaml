@@ -2,3 +2,6 @@ packages:
   - 'packages/gstate_wasm'
   - 'packages/gstate_wasm_test'
   - 'packages/cards_ts'
+  - 'packages/onnx_test'
+link-workspace-packages: true
+prefer-workspace-packages: true

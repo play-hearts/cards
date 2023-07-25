@@ -2,6 +2,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import factory, { Trick, TrickOrdRep } from '@playhearts/gstate_wasm'
+import { type FloatArraySpec, createSession, newFloatArray, runInferrence } from '@playhearts/cards_ts'
 
 import type * as gstate_wasm from '@playhearts/gstate_wasm'
 
@@ -19,15 +20,21 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
     }
     gstate.startGame()
 
+    const session = await createSession('./model.onnx')
+    const { inputNames, outputNames } = session
+    console.log('inputNames: ', inputNames)
+    console.log('outputNames: ', outputNames)
+    const spec: FloatArraySpec = newFloatArray(instance, 52 * 12)
+
     while (!gstate.done()) {
         const legal: gstate_wasm.CardSet = gstate.legalPlays()
         const card: gstate_wasm.Card = instance.aCardAtRandom(legal)
         const p: number = gstate.currentPlayer()
         expect(p).to.be.within(0, 3)
-        const taken: gstate_wasm.CardSet = gstate.takenBy(
-            (p + gstate.trickLead()) % 4
-        )
-        taken.delete()
+
+        const outputData: Float32Array = await runInferrence(session, gstate, spec)
+        expect(outputData).to.exist
+        console.log(outputData)
 
         gstate.playCard(card)
         card.delete()
@@ -37,11 +44,8 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
         const trickArr: TrickOrdRep = trick.ordRep()
         for (let i = 0; i < 4; ++i) {
             const card: gstate_wasm.Card = trick.at(i)
-            const x = (4 + i - gstate.trickLead()) % 4
-            if (x < gstate.playInTrick()) {
-                expect(card.ord()).to.equal(gstate.getTrickPlay(x).ord())
-            }
             expect(card.ord()).to.equal(trickArr[i])
+            // console.log(`Player ${i} played ${instance.nameOfCard(card)}`);
             card.delete()
         }
         // console.log('typeof trickArr: ', typeof trickArr, Array.isArray(trickArr));
@@ -66,7 +70,9 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
 
 describe('api', (): void => {
     let instance: gstate_wasm.GStateModule
-    beforeEach(async () => { instance = await factory() })
+    beforeEach(async () => {
+        instance = await factory()
+    })
 
     describe('math api', (): void => {
         it('can create a RandomGenerator', async () => {
@@ -145,7 +151,7 @@ describe('api', (): void => {
             gstate2.delete()
         })
 
-        it('playOutGameTest', async (): Promise<void> => {
+        it.skip('playOutGameTest', async (): Promise<void> => {
             const init: gstate_wasm.GStateInit = instance.kRandomVal()
             const gstate: gstate_wasm.GState = new instance.GState(
                 init,

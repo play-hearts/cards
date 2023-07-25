@@ -38,13 +38,13 @@ TEST(GameBehavior, trickWinner)
     auto standard = GameBehavior::make(GameVariant::standard);
     auto spades = GameBehavior::make(GameVariant::spades);
 
-    EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 3);
-    EXPECT_EQ(standard.trickWinner(Trick{{k2S, k3S, k4S, k4C}}), 2);
-    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 2);
+    EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 3u);
+    EXPECT_EQ(standard.trickWinner(Trick{{k2S, k3S, k4S, k4C}}), 2u);
+    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4C}}), 2u);
 
-    EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 1);
-    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 2);
-    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4S}}), 3);
+    EXPECT_EQ(standard.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 1u);
+    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k2D}}), 2u);
+    EXPECT_EQ(spades.trickWinner(Trick{{k2C, k3C, k2S, k4S}}), 3u);
 }
 
 } // namespace pho::gstate

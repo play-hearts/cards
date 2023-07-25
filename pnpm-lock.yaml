@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -11,8 +11,11 @@ importers:
   packages/cards_ts:
     dependencies:
       '@playhearts/gstate_wasm':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../gstate_wasm
+      onnxruntime-node:
+        specifier: 1.16.0-dev.20230704-d540c7da0f
+        version: 1.16.0-dev.20230704-d540c7da0f
     devDependencies:
       '@types/chai':
         specifier: ^4.3.5
@@ -53,6 +56,40 @@ importers:
 
   packages/gstate_wasm_test:
     dependencies:
+      '@playhearts/gstate_wasm':
+        specifier: workspace:*
+        version: link:../gstate_wasm
+    devDependencies:
+      '@types/chai':
+        specifier: ^4.3.5
+        version: 4.3.5
+      '@types/chai-as-promised':
+        specifier: ^7.1.5
+        version: 7.1.5
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+      chai:
+        specifier: ^4.3.7
+        version: 4.3.7
+      chai-as-promised:
+        specifier: ^7.1.1
+        version: 7.1.1(chai@4.3.7)
+      mocha:
+        specifier: ^10.2.0
+        version: 10.2.0
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.2.5)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  packages/onnx_test:
+    dependencies:
+      '@playhearts/cards_ts':
+        specifier: workspace:*
+        version: link:../cards_ts
       '@playhearts/gstate_wasm':
         specifier: workspace:*
         version: link:../gstate_wasm
@@ -572,6 +609,17 @@ packages:
     dependencies:
       wrappy: 1.0.2
     dev: true
+
+  /onnxruntime-common@1.16.0-dev.20230704-d540c7da0f:
+    resolution: {integrity: sha512-vVCykcZkDeVKbbc76hj0Qqfu31pANAdt6DC6FHLvlzUeBI9MfSOV0/ed/N31Tpp5wnKEnyQyqHLVUPjbnCbuxg==}
+    dev: false
+
+  /onnxruntime-node@1.16.0-dev.20230704-d540c7da0f:
+    resolution: {integrity: sha512-3drb7MMqQWXSqeIWi2oYosHF9qA8PwpZ7e7pITAv9NsPROh2xo7PSWyEXQ8RYHAqfnHsO1vGaakWaKprgJ+nuA==}
+    os: [win32, darwin, linux]
+    dependencies:
+      onnxruntime-common: 1.16.0-dev.20230704-d540c7da0f
+    dev: false
 
   /p-limit@3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}

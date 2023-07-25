@@ -185,9 +185,13 @@ public:
     using ProbArray = std::array<ProbRow, kCardsPerDeck>;
     auto asProbabilities() const -> ProbArray;
 
+    // A less safe API alternative to asProbabilities() that merely assumes that data points to a large enough
+    // memory block for 52*4 floats. But this is the more convient API for the JS side.
+    auto fillProbabilities(float* data) const -> void;
+
     auto getTrickPlay(unsigned i) const -> Card { return mTrick.getTrickPlay(i); }
 
-    auto highCardInTrick() const { return playInTrick() == 0 ? kNoCard : mTrick.highCard(); }
+    auto highCardInTrick() const { return playInTrick() == 0 ? kNoCard : mBehavior.highCard(mTrick); }
 
     auto voidsForOthers() const -> PlayerVoids;
 
@@ -198,6 +202,11 @@ public:
     auto behavior() const -> GameBehavior { return mBehavior; }
 
     auto taken() const -> FourHands { return mTaken; }
+
+    // a hack that allows a way to test game play with WASM.
+    // TODO: port parts of the torchnn implementation to WASM so that we can
+    // use the same code for both.
+    auto asMin2022InputTensor(float*) const -> void;
 
     auto getVariantOutcomeRep() const -> VariantOutcomeRep;
     void getStandardOutcome(VariantOutcome::Standard& outcome) const;

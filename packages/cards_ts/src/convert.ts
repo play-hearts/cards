@@ -1,17 +1,12 @@
-import type {CardType, SuitName, RankName} from './cards.js'
-import type {
-    Card,
-    CardSet,
-    CardVector,
-    GStateModule,
-} from '@playhearts/gstate_wasm'
-import {suitName, rankName} from './cards.js'
+import type { CardType, SuitName, RankName } from './cards.js'
+import type { Card, CardSet, CardVector, GStateModule } from '@playhearts/gstate_wasm'
+import { suitName, rankName } from './cards.js'
 
 export function convertCard(card: Card): CardType {
     const suit: SuitName = suitName(card.suit() as number)
     const rank: RankName = rankName(card.rank() as number)
     card.delete()
-    return {suit, rank}
+    return { suit, rank }
 }
 
 export function convertCardSet(cardSet: CardSet): CardType[] {

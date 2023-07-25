@@ -87,7 +87,7 @@ export interface GState extends Deletable {
     currentPlayersHand: () => CardSet
     currentTrick: () => Trick
     done: () => boolean
-    getPlayerOutcome: (p: number) => {zms: number; winPts: number}
+    getPlayerOutcome: (p: number) => { zms: number; winPts: number }
     getPlayerScores: () => PlayerScores
     legalPlays: () => CardSet
     passOffset: () => number
@@ -97,6 +97,15 @@ export interface GState extends Deletable {
     priorTrick: () => Trick
     setPassFor: (p: number, cards: CardSet) => void
     startGame: () => void
+
+    takenBy: (p: number) => CardSet
+    getTrickPlay: (p: number) => Card
+    highCardInTrick: (p: number) => Card
+    trickLead: () => number
+    playInTrick: () => number
+
+    fillProbabilities: (ptr: number) => void    // ptr must be allocated via _malloc
+    asMin2022InputTensor: (ptr: number) => void // ptr must be allocated via _malloc
 }
 
 declare enum GameVariant {
@@ -131,7 +140,7 @@ export interface GStateModule extends EmscriptenModule {
 }
 
 export interface GStateModuleFactory
-    extends EmscriptenModuleFactory<GStateModule> {}
+    extends EmscriptenModuleFactory<GStateModule> { }
 
 declare const Module: GStateModuleFactory
 export default Module

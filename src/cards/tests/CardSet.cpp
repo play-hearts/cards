@@ -12,7 +12,7 @@ static const auto kFiveCards = CardsInitializerList{0, 3, 6, 10, 51};
 TEST(CardSet, default_ctor)
 {
     CardSet hand;
-    EXPECT_EQ(hand.size(), 0);
+    EXPECT_EQ(hand.size(), 0u);
 }
 
 TEST(CardSet, make)
@@ -24,7 +24,7 @@ TEST(CardSet, make)
 TEST(CardSet, fullDeck)
 {
     auto deck = CardSet::fullDeck();
-    EXPECT_EQ(52, deck.size());
+    EXPECT_EQ(52u, deck.size());
     EXPECT_EQ(deck.front(), Card(0));
     EXPECT_EQ(deck.back(), Card(51));
 }
@@ -42,14 +42,14 @@ TEST(CardSet, assignment)
 TEST(CardSet, operator_add_card)
 {
     CardSet hand;
-    EXPECT_EQ(0, hand.size());
+    EXPECT_EQ(0u, hand.size());
 
     hand += Card{3};
-    EXPECT_EQ(1, hand.size());
+    EXPECT_EQ(1u, hand.size());
     EXPECT_EQ(Card{3}, hand.front());
 
     hand += Card{7};
-    EXPECT_EQ(2, hand.size());
+    EXPECT_EQ(2u, hand.size());
     EXPECT_EQ(Card{7}, hand.back());
 }
 
@@ -61,7 +61,7 @@ TEST(CardSet, insert_ordered)
     for (int i = 0; i < 3; i++)
         hand += cards[i];
 
-    EXPECT_EQ(3, hand.size());
+    EXPECT_EQ(3u, hand.size());
     for (int i = 0; i < 3; i++)
         EXPECT_TRUE(hand.hasCard(cards[i]));
 
