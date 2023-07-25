@@ -8,7 +8,7 @@ const uint64_t kOne = 1;
 
 TEST(leastSetBitIndex, OneBit)
 {
-    for (unsigned i = 0; i < 64; ++i)
+    for (int i = 0; i < 64; ++i)
     {
         EXPECT_EQ(i, leastSetBitIndex(kOne << i));
     }
@@ -16,7 +16,7 @@ TEST(leastSetBitIndex, OneBit)
 
 TEST(greatestSetBitIndex, OneBit)
 {
-    for (unsigned i = 0; i < 64; ++i)
+    for (int i = 0; i < 64; ++i)
     {
         EXPECT_EQ(i, greatestSetBitIndex(kOne << i));
     }
@@ -43,7 +43,7 @@ TEST(isolateGreatestBit, OneBit)
 TEST(leastSetBitIndex, TwoBits)
 {
     const uint64_t bits = 3;
-    for (unsigned i = 0; i < 63; ++i)
+    for (int i = 0; i < 63; ++i)
     {
         EXPECT_EQ(i, leastSetBitIndex(bits << i));
     }
@@ -52,7 +52,7 @@ TEST(leastSetBitIndex, TwoBits)
 TEST(greatestSetBitIndex, TwoBits)
 {
     const uint64_t bits = 3;
-    for (unsigned i = 0; i < 63; ++i)
+    for (int i = 0; i < 63; ++i)
     {
         EXPECT_EQ(i + 1, greatestSetBitIndex(bits << i));
     }
@@ -70,12 +70,12 @@ TEST(greatestSetBitIndex, uint128)
 
 TEST(countBits, nominal)
 {
-    EXPECT_EQ(0, countBits(kZero));
-    EXPECT_EQ(1, countBits(8));
-    EXPECT_EQ(2, countBits(12));
-    EXPECT_EQ(3, countBits(82));
-    EXPECT_EQ(52, countBits((kOne << 52) - 1));
-    EXPECT_EQ(64, countBits(~kZero));
+    EXPECT_EQ(0u, countBits(kZero));
+    EXPECT_EQ(1u, countBits(8));
+    EXPECT_EQ(2u, countBits(12));
+    EXPECT_EQ(3u, countBits(82));
+    EXPECT_EQ(52u, countBits((kOne << 52) - 1));
+    EXPECT_EQ(64u, countBits(~kZero));
 }
 
 TEST(roundUpToPowerOfTwo, Exact)

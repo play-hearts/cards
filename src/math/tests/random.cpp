@@ -8,15 +8,15 @@ namespace pho::math::tests {
 
 TEST(random, max128)
 {
+    constexpr uint128_t kZero = 0;
     constexpr uint128_t max = RandomGenerator::kMax128;
 
     // Adding one to max causes rollover to zero
     uint128_t maxPlus1 = max + 1;
-    EXPECT_EQ(0, maxPlus1);
+    EXPECT_EQ(kZero, maxPlus1);
 
     // Subtracting one from zero causes rollover to max
-    const uint128_t zero = 0;
-    uint128_t zeroMinus1 = zero - 1;
+    constexpr uint128_t zeroMinus1 = kZero - 1;
     EXPECT_EQ(max, zeroMinus1);
 
     // asHexString reports max is 32 fs.

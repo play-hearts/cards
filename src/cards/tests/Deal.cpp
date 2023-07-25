@@ -72,14 +72,14 @@ TEST(Deal, deckForIndex2)
 
 TEST(Deal, dealFromHexString)
 {
-    EXPECT_EQ(Deal("0").dealIndex(), 0);
-    EXPECT_EQ(Deal("1").dealIndex(), 1);
-    EXPECT_EQ(Deal("0fff").dealIndex(), 0xfff);
+    EXPECT_EQ(Deal("0").dealIndex(), 0u);
+    EXPECT_EQ(Deal("1").dealIndex(), 1u);
+    EXPECT_EQ(Deal("0fff").dealIndex(), 0xfffu);
 
     Deal deal("");
     dealIsValid(deal);
     const auto index = math::asHexString(deal.dealIndex());
-    EXPECT_GT(index.size(), 10); // just a very cheap & dirty test for randomness
+    EXPECT_GT(index.size(), 10u); // just a very cheap & dirty test for randomness
 
     for (int i = 0; i < 10; ++i)
     {

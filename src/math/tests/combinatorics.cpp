@@ -88,8 +88,8 @@ TEST(ChooseFromGenerator, nominal)
         EXPECT_LT(mask, 1u << 13);
 
         // Tighter bounds
-        EXPECT_LE(0b0111, mask);
-        EXPECT_LE(mask, 0b0111 << 10);
+        EXPECT_LE(0b0111u, mask);
+        EXPECT_LE(mask, 0b0111u << 10);
 
         EXPECT_EQ(seen.size(), i);
         EXPECT_EQ(seen.find(mask), seen.end());

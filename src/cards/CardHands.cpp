@@ -42,6 +42,7 @@ auto CardHands::playersWithAvailableCapacity(Size_t expectedCapacity) const -> u
     }
     assert(capacity == expectedCapacity);
     (void)capacity; // silence warning in release build
+    (void)expectedCapacity; // silence warning in release build
     assert(numPlayers >= 1);
     return numPlayers;
 }
