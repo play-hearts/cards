@@ -2,10 +2,10 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import factory from '@playhearts/gstate_wasm'
-import type {GStateModule, Card} from '@playhearts/gstate_wasm'
+import type { GStateModule, Card } from '@playhearts/gstate_wasm'
 
 chai.use(chaiAsPromised)
-const {expect} = chai
+const { expect } = chai
 
 const getMethods = (obj) => {
     let properties = new Set()
