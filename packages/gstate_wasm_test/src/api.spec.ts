@@ -1,17 +1,14 @@
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-import factory, {Trick, TrickOrdRep} from '@playhearts/gstate_wasm'
+import factory, { Trick, TrickOrdRep } from '@playhearts/gstate_wasm'
 
 import type * as gstate_wasm from '@playhearts/gstate_wasm'
 
 chai.use(chaiAsPromised)
-const {expect} = chai
+const { expect } = chai
 
-export async function playOutGame(
-    instance: gstate_wasm.GStateModule,
-    gstate: gstate_wasm.GState
-): Promise<void> {
+export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gstate_wasm.GState): Promise<void> {
     const passOffset = gstate.passOffset()
     if (passOffset > 0) {
         for (let i = 0; i < 4; i++) {
@@ -27,6 +24,11 @@ export async function playOutGame(
         const card: gstate_wasm.Card = instance.aCardAtRandom(legal)
         const p: number = gstate.currentPlayer()
         expect(p).to.be.within(0, 3)
+        const taken: gstate_wasm.CardSet = gstate.takenBy(
+            (p + gstate.trickLead()) % 4
+        )
+        taken.delete()
+
         gstate.playCard(card)
         card.delete()
         legal.delete()
@@ -35,8 +37,11 @@ export async function playOutGame(
         const trickArr: TrickOrdRep = trick.ordRep()
         for (let i = 0; i < 4; ++i) {
             const card: gstate_wasm.Card = trick.at(i)
+            const x = (4 + i - gstate.trickLead()) % 4
+            if (x < gstate.playInTrick()) {
+                expect(card.ord()).to.equal(gstate.getTrickPlay(x).ord())
+            }
             expect(card.ord()).to.equal(trickArr[i])
-            // console.log(`Player ${i} played ${instance.nameOfCard(card)}`);
             card.delete()
         }
         // console.log('typeof trickArr: ', typeof trickArr, Array.isArray(trickArr));
@@ -61,9 +66,7 @@ export async function playOutGame(
 
 describe('api', (): void => {
     let instance: gstate_wasm.GStateModule
-    beforeEach(async () => {
-        instance = await factory()
-    })
+    beforeEach(async () => { instance = await factory() })
 
     describe('math api', (): void => {
         it('can create a RandomGenerator', async () => {
@@ -130,7 +133,7 @@ describe('api', (): void => {
             expect(passOffset).to.equal(init.passOffset)
             gstate.delete()
 
-            const init2: gstate_wasm.GStateInit = {dealHexStr, passOffset}
+            const init2: gstate_wasm.GStateInit = { dealHexStr, passOffset }
             const gstate2: gstate_wasm.GState = new instance.GState(
                 init2,
                 instance.GameVariant.STANDARD
