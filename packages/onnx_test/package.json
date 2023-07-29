@@ -1,5 +1,5 @@
 {
-  "name": "gstate_wasm_test",
+  "name": "onnx_test",
   "version": "1.0.0",
   "description": "",
   "main": "dist/src/api.spec.js",
