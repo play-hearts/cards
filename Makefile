@@ -6,7 +6,7 @@ EMCC=builds/emcc/
 GENERATOR="Ninja Multi-Config"
 CMAKE ?= $(shell which cmake) # /home/jim/.local/bin/cmake
 NODE ?= $(shell which node) # /usr/local/bin/node
-CONFIG ?= Release
+CONFIG ?= Debug
 
 .PHONY: all configure_x86 configure_emcc build_x86 build_emcc test_x86 test_emcc build wasm_tests tsbuild dist dist_test clean api_test test
 
