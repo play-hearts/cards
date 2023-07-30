@@ -6,19 +6,20 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@playhearts/gstate_wasm": "workspace:*",
-    "@playhearts/cards_ts": "workspace:*"
+    "@playhearts/cards_ts": "workspace:*",
+    "@playhearts/gstate_wasm": "workspace:*"
   },
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^10.0.1",
+    "@types/node": "^20.2.5",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "mocha": "^10.2.0",
