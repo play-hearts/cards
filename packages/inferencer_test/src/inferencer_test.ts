@@ -56,13 +56,18 @@ export async function runInferrence(session: Socket, gstate: GState, spec: Float
 }
 
 
-async function createSession(): Promise<Socket> {
+async function createSession(modelPath: string): Promise<Socket> {
     return new Promise((resolve, reject) => {
-        const session: Socket = createConnection(51515, "ryley.lan", () => {
-            const modelPath = "/opt/pho/models/standard/play/e165.pt"
-            session.write(modelPath, () => {
-                resolve(session)
+        const session: Socket = createConnection(51515, "ryley.lan", async () => {
+            session.on('data', (chunk: Buffer) => {
+                const response = chunk.toString()
+                if (response.length == 2 && response[0] == 'O' && response[1] == 'K') {
+                    resolve(session)
+                }
             })
+            const modelSpec = `{ "model": "${modelPath}" }`
+            console.log("Sending model spec:", modelSpec)
+            session.write(modelSpec)
         })
     })
 }
@@ -78,7 +83,8 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
     }
     gstate.startGame()
 
-    const session = await createSession()
+    const modelPath = "/opt/pho/models/standard/play/e165.pt"
+    const session: Socket = await createSession(modelPath)
     const spec: FloatArraySpec = newFloatArray(instance, 52 * 12)
 
     while (!gstate.done()) {
@@ -155,7 +161,6 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
 async function main(): Promise<void> {
     const instance = await factory()
 
-
     const init: gstate_wasm.GStateInit = instance.kRandomVal()
     console.log('kRandomVal:', init)
     const gstate: gstate_wasm.GState = new instance.GState(
@@ -166,8 +171,6 @@ async function main(): Promise<void> {
     await playOutGame(instance, gstate)
 
     gstate.delete()
-
-
 }
 
 await main()
