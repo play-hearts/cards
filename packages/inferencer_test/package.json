@@ -13,11 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "@playhearts/cards_ts": "workspace:*",
-    "@playhearts/gstate_wasm": "workspace:*"
+    "@playhearts/gstate_wasm": "workspace:*",
+    "debug": "^4.3.4"
   },
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
+    "@types/debug": "^4.1.8",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.2.5",
     "chai": "^4.3.7",
