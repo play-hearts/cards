@@ -25,6 +25,21 @@ export default class Socket {
         })
     }
 
+    public async connectUnix(path: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this._socket.on('connect', () => {
+                dlog(`Connected to ${path}`)
+                resolve()
+            })
+            this._socket.on('error', (err) => {
+                dlog(`Error connecting to ${path}: ${err.message}`)
+                reject(err)
+            })
+            dlog(`Connecting to ${path}`)
+            this._socket.connect(path)
+        })
+    }
+
     public async read(size: number, timeoutMs: number = 5000): Promise<Buffer> {
         return new Promise<Buffer>((resolve, reject) => {
             const t = setTimeout(() => {
