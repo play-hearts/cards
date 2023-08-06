@@ -9,12 +9,28 @@ export function convertCard(card: Card): CardType {
     return { suit, rank }
 }
 
+export function cardToOrd(card: Card): number {
+    const ord: number = card.ord()
+    card.delete()
+    return ord
+}
+
 export function convertCardSet(cardSet: CardSet): CardType[] {
     const cardVector: CardVector = cardSet.asCardVector()
     cardSet.delete()
     let converted: CardType[] = []
     for (let i = 0; i < cardVector.size(); i++) {
         converted.push(convertCard(cardVector.get(i)))
+    }
+    return converted
+}
+
+export function cardSetAsOrds(cardSet: CardSet): number[] {
+    const cardVector: CardVector = cardSet.asCardVector()
+    cardSet.delete()
+    let converted: number[] = []
+    for (let i = 0; i < cardVector.size(); i++) {
+        converted.push(cardToOrd(cardVector.get(i)))
     }
     return converted
 }
