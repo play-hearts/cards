@@ -72,20 +72,27 @@ export async function playOutGame(instance: gstate_wasm.GStateModule, gstate: gs
 }
 
 
-async function main(): Promise<void> {
+async function main(concurrent: number): Promise<void> {
     EventEmitter.setMaxListeners(0)
     const instance = await factory()
 
-    const init: gstate_wasm.GStateInit = instance.kRandomVal()
-    console.log('kRandomVal:', init)
-    const gstate: gstate_wasm.GState = new instance.GState(
-        init,
-        instance.GameVariant.STANDARD
-    )
+    const promises: Promise<void>[] = []
+    for (let i = 0; i < concurrent; ++i) {
+        const init: gstate_wasm.GStateInit = instance.kRandomVal()
+        dlog('kRandomVal:', init)
+        const gstate: gstate_wasm.GState = new instance.GState(
+            init,
+            instance.GameVariant.STANDARD
+        )
 
-    await playOutGame(instance, gstate)
-    gstate.delete()
+        const promise = playOutGame(instance, gstate).then(() => gstate.delete())
+        promises.push(promise)
+    }
+
+    await Promise.all(promises)
 }
 
-await main()
+const concurrent = process.argv.length <= 2 ? 10 : parseInt(process.argv[2])
+console.log(`Running ${concurrent} concurrent games`)
+await main(concurrent)
 process.exit(0)
