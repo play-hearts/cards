@@ -40,7 +40,10 @@ EMSCRIPTEN_BINDINGS(CardSet)
         .function("setUnion", &CardSet::setUnion)
         .function("setSubtract", &CardSet::setSubtract)
         .function("setIntersection", &CardSet::setIntersection)
-        .function("equal", &CardSet::operator==);
+        .function("equal", &CardSet::operator==)
+        // hasOrd and addOrd do not exist in the C++ API, but are useful for the JS API
+        .function("hasOrd", optional_override([](CardSet& cardSet, Ord ord) { return cardSet.hasCard(Card(ord)); }))
+        .function("addOrd", optional_override([](CardSet& cardSet, Ord ord) { cardSet += Card(ord); }));
 
     function("to_string", &pho::cards::to_string);
     function("chooseThreeAtRandom", &pho::cards::chooseThreeAtRandom);

@@ -1,24 +1,27 @@
 {
-  "name": "onnx_test",
+  "name": "@playhearts/inferencer",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/api.spec.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --require ts-node/register src/onnx.spec.ts"
+    "test": "echo \"Error: no test specified\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@playhearts/cards_ts": "workspace:*",
     "@playhearts/gstate_wasm": "workspace:*",
-    "@playhearts/cards_ts": "workspace:*"
+    "debug": "^4.3.4"
   },
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
+    "@types/debug": "^4.1.8",
     "@types/mocha": "^10.0.1",
+    "@types/node": "^20.2.5",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "mocha": "^10.2.0",

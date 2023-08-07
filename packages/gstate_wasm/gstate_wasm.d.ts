@@ -50,6 +50,8 @@ export interface CardSet extends Deletable {
     setIntersection: (other: CardSet) => CardSet
     setSubtract: (other: CardSet) => CardSet
     equal: (other: CardSet) => boolean
+    hasOrd: (ord: number) => boolean
+    addOrd: (ord: number) => void
 }
 
 export interface Deal extends Deletable {

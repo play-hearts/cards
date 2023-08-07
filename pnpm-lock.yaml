@@ -85,6 +85,95 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
+  packages/inferencer:
+    dependencies:
+      '@playhearts/cards_ts':
+        specifier: workspace:*
+        version: link:../cards_ts
+      '@playhearts/gstate_wasm':
+        specifier: workspace:*
+        version: link:../gstate_wasm
+      debug:
+        specifier: ^4.3.4
+        version: 4.3.4(supports-color@8.1.1)
+    devDependencies:
+      '@types/chai':
+        specifier: ^4.3.5
+        version: 4.3.5
+      '@types/chai-as-promised':
+        specifier: ^7.1.5
+        version: 7.1.5
+      '@types/debug':
+        specifier: ^4.1.8
+        version: 4.1.8
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+      '@types/node':
+        specifier: ^20.2.5
+        version: 20.2.5
+      chai:
+        specifier: ^4.3.7
+        version: 4.3.7
+      chai-as-promised:
+        specifier: ^7.1.1
+        version: 7.1.1(chai@4.3.7)
+      mocha:
+        specifier: ^10.2.0
+        version: 10.2.0
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.2.5)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  packages/inferencer_test:
+    dependencies:
+      '@playhearts/cards_ts':
+        specifier: workspace:*
+        version: link:../cards_ts
+      '@playhearts/gstate_wasm':
+        specifier: workspace:*
+        version: link:../gstate_wasm
+      '@playhearts/inferencer':
+        specifier: workspace:*
+        version: link:../inferencer
+      debug:
+        specifier: ^4.3.4
+        version: 4.3.4(supports-color@8.1.1)
+    devDependencies:
+      '@types/chai':
+        specifier: ^4.3.5
+        version: 4.3.5
+      '@types/chai-as-promised':
+        specifier: ^7.1.5
+        version: 7.1.5
+      '@types/debug':
+        specifier: ^4.1.8
+        version: 4.1.8
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+      '@types/node':
+        specifier: ^20.2.5
+        version: 20.2.5
+      chai:
+        specifier: ^4.3.7
+        version: 4.3.7
+      chai-as-promised:
+        specifier: ^7.1.1
+        version: 7.1.1(chai@4.3.7)
+      mocha:
+        specifier: ^10.2.0
+        version: 10.2.0
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.2.5)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
   packages/onnx_test:
     dependencies:
       '@playhearts/cards_ts':
@@ -170,12 +259,22 @@ packages:
     resolution: {integrity: sha512-mEo1sAde+UCE6b2hxn332f1g1E8WfYRu6p5SvTKr2ZKC1f7gFJXk4h5PyGP9Dt6gCaG8y8XhwnXWC6Iy2cmBng==}
     dev: true
 
+  /@types/debug@4.1.8:
+    resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
+    dependencies:
+      '@types/ms': 0.7.31
+    dev: true
+
   /@types/emscripten@1.39.6:
     resolution: {integrity: sha512-H90aoynNhhkQP6DRweEjJp5vfUVdIj7tdPLsu7pq89vODD/lcugKfZOsfgwpvM6XUewEp2N5dCg1Uf3Qe55Dcg==}
     dev: true
 
   /@types/mocha@10.0.1:
     resolution: {integrity: sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==}
+    dev: true
+
+  /@types/ms@0.7.31:
+    resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
   /@types/node@20.2.5:
@@ -355,7 +454,6 @@ packages:
     dependencies:
       ms: 2.1.2
       supports-color: 8.1.1
-    dev: true
 
   /decamelize@4.0.0:
     resolution: {integrity: sha512-9iE1PgSik9HeIIw2JO94IidnE3eBoQrFJ3w7sFuzSX4DpmZ3v5sZpUiV5Swcf6mQEF+Y0ru8Neo+p+nyh2J+hQ==}
@@ -455,7 +553,6 @@ packages:
   /has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
-    dev: true
 
   /he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
@@ -587,7 +684,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -715,7 +811,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       has-flag: 4.0.0
-    dev: true
 
   /to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

@@ -65,6 +65,9 @@ async function CardSet_test(instance) {
     const pass = instance.chooseThreeAtRandom(hand);
     assert.strictEqual(pass.size(), 3);
 
+    cards.addOrd(37);
+    assert.ok(cards.hasOrd(37));
+
     pass.delete()
     hand.delete()
     deal.delete()
