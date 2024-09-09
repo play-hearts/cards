@@ -5,15 +5,15 @@
 
 namespace pho::math {
 
-typedef __uint128_t uint128_t;
+using uint128_t = __uint128_t;
 
-std::string asDecimalString(uint128_t N);
+auto asDecimalString(uint128_t N) -> std::string;
 // This is inefficient, but it's meant for unit tests and other performance non-critical code
 
-std::string asHexString(uint128_t N, unsigned zeroFillTo = 0);
+auto asHexString(uint128_t N, unsigned zeroFillTo = 0) -> std::string;
 // If the output would have less than zeroFileTo hex digits, pad on the left with zeros.
 // This is inefficient, but it's meant for unit tests and other performance non-critical code
 
-uint128_t parseHex128(const std::string& hexString);
+auto parseHex128(const std::string& hexString) -> uint128_t;
 
 } // namespace pho::math

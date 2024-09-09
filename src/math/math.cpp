@@ -4,7 +4,7 @@
 
 namespace pho::math {
 
-std::string asDecimalString(uint128_t N)
+auto asDecimalString(uint128_t N) -> std::string
 {
     if (N == 0)
         return "0";
@@ -20,7 +20,7 @@ std::string asDecimalString(uint128_t N)
     return result;
 }
 
-std::string asHexString(uint128_t N, unsigned zeroFillTo)
+auto asHexString(uint128_t N, unsigned zeroFillTo) -> std::string
 {
     if (N == 0)
         return "0";
@@ -42,7 +42,7 @@ std::string asHexString(uint128_t N, unsigned zeroFillTo)
     return result;
 }
 
-uint128_t parseHex128(const std::string& str)
+auto parseHex128(const std::string& str) -> uint128_t
 {
     const char* line = str.c_str();
     uint128_t N = 0;
