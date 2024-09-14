@@ -1,4 +1,4 @@
-add_library(stats_lib STATIC
+add_library(stats_lib
     RunningStats.cpp
 )
 
