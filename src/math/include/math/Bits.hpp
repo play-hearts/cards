@@ -1,7 +1,6 @@
 #pragma once
 
 #include "math/math.hpp"
-#include <stdint.h>
 
 namespace pho::math {
 
