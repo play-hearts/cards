@@ -31,9 +31,16 @@ GameBehavior::Spades::~Spades() { }
 
 auto GameBehavior::Concept::legalLeadPlays(const GState& state) const -> CardSet
 {
+    // This implements the legal lead plays for Hearts and JackOfDiamond variants,
+    // using the rule that hearts can only lead a trick of a heart has already been taken in prior trick.
+    // Another variant sometimes counts "points broken" when QS has been played, allowing leading with
+    // a heart when no hearts have been played. It might be nice to allow the variant to be a preference setting.
+    static constexpr auto kAllHeartsMask = cards::CoreCardSetConstants::maskOfSuit(cards::kHearts);
+    static constexpr auto kAllHearts = CardSet{kAllHeartsMask};
+
     auto hand = state.currentPlayersHand();
-    auto pointsTaken = state.allTaken() & pointCards();
-    return pointsTaken.size() > 0 ? hand : hand & ~pointCards();
+    auto heartsTaken = state.allTaken() & kAllHearts;
+    return heartsTaken.size() > 0 ? hand : hand & ~heartsTaken;
 }
 
 auto GameBehavior::Concept::legalFollowPlays(const GState& state) const -> CardSet
