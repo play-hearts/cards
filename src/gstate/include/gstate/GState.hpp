@@ -160,18 +160,21 @@ public:
     // Return true when all cards have been played.
     auto done() const -> bool { return mPlayIndex == kCardsPerDeck; }
 
+    // Given the passOffset, return the player number of the player that the passer passed to (or will pass to)
+    auto passedTo(int passer) const -> PlayerNum { return (passer + mPassOffset) % kNumPlayers; }
+
     // Return the player number of the player that the current player passed to (or will pass to)
     // at the beginning of the game. Will return the current player's own player number when cards were held
     // as dealt.
-    auto currentPassedTo() const -> PlayerNum { return (currentPlayer() + mPassOffset) % kNumPlayers; }
+    auto currentPassedTo() const -> PlayerNum { return passedTo(currentPlayer()); }
+
+    // Given the passOffset, return the player number of the player that the receiver received from (or will receive from)
+    auto receivedFrom(int receiver) const -> PlayerNum { return (receiver - mPassOffset + kNumPlayers) % kNumPlayers; }
 
     // Return the player number of the player that the current player receieved from (or will receive from)
     // at the beginning of the game. Will return the current player's own player number when cards were held
     // as dealt.
-    auto currentReceivedFrom() const -> PlayerNum
-    {
-        return (currentPlayer() - mPassOffset + kNumPlayers) % kNumPlayers;
-    }
+    auto currentReceivedFrom() const -> PlayerNum { return receivedFrom(currentPlayer()); }
 
     auto unplayedCards() const -> CardSet { return mUnplayedCards; }
 

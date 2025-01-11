@@ -112,6 +112,7 @@ auto GState::startGame() -> void
         for (auto p : prim::range(kNumPlayers))
         {
             assert(mHands.at(p).size() == 13);
+            assert(mHands.at(p).setIntersection(mPassed.at(p)) == mPassed.at(p));
             mHands.at(p) -= mPassed.at(p);
             assert(mHands.at(p).size() == 10);
         }
