@@ -47,6 +47,12 @@ GState::Init GState::Init::kNoPass = GState::Init{GState::Init::kRandomDealIndex
 GState::Init GState::kRandom = GState::Init::kRandom;
 GState::Init GState::kNoPass = GState::Init::kNoPass;
 
+// This is the default constructor, defaulting to a random deal, no pass, standard variant.
+// It uses the constructor below to create the random deal
+GState::GState(Init init, GameBehavior behavior)
+: GState{Deal{actualDealIndex(init.dealIndex)}, actualPassOffset(init.passOffset), behavior}
+{ }
+
 GState::GState(const cards::Deal& deal, uint8_t passOffset, GameBehavior behavior)
 : mDealIndex{deal.dealIndex()}
 , mBehavior(behavior)
@@ -62,10 +68,6 @@ GState::GState(const cards::Deal& deal, uint8_t passOffset, GameBehavior behavio
 , mTrick{}
 , mPriorTrick{}
 , mPassingComplete{}
-{ }
-
-GState::GState(Init init, GameBehavior behavior)
-: GState{Deal{actualDealIndex(init.dealIndex)}, actualPassOffset(init.passOffset), behavior}
 { }
 
 #if __EMSCRIPTEN__
@@ -435,6 +437,53 @@ auto GState::alternate(const FourHands& hands) const -> GState
 
     return alt;
 }
+
+auto GState::fromConstrainedHandsPasses(unsigned carl, const CardSet& carlHand, const FourHands& passes, PassOffset passOffset) -> GState
+{
+    // The pure default constructor creates a standard game variant with a random deal and no pass.
+    // We'll overwrite the state.
+    auto gState = GState{};
+
+    assert(carlHand.size() == 13);
+    gState.mDealIndex = ~uint128_t{0};
+    gState.mPassOffset = passOffset;
+    auto knownCards = carlHand;
+    for (auto p : prim::range(kNumPlayers))
+    {
+        auto pass = passes.at(p);
+        assert(pass.size() == 3);
+        gState.mHands.at(p) = pass;
+        gState.mPassed.at(p) = pass;
+        knownCards += pass;
+    }
+    gState.mHands.at(carl) = carlHand;
+    assert(knownCards.size() == 22);
+    auto unknownCards = CardSet::fullDeck() - knownCards;
+    assert(unknownCards.size() == 30);
+
+    auto numUnknownCards = unknownCards.size();
+    (void) numUnknownCards;
+    auto check = CardSet{};
+    for (auto p : prim::range(kNumPlayers))
+    {
+        // fmt::print(stderr, "p = {}, carl = {}, handSize = {}\n", p, carl, gState.mHands.at(p).size());
+        if (p != carl)
+        {
+            assert(gState.mHands.at(p).size() == 3);
+            gState.mHands.at(p) += removeSomeAtRandom(unknownCards, 10);
+            assert(gState.mHands.at(p).size() == 13);
+            numUnknownCards -= 10;
+            assert(unknownCards.size() == numUnknownCards);
+        }
+        assert(gState.mHands.at(p).size() == 13);
+        check += gState.mHands.at(p);
+    }
+    assert(unknownCards.size() == 0);
+    assert(check.size() == 52);
+    (void) check;
+    return gState;
+}
+
 
 PlayerVoids GState::voidsForOthers() const
 {

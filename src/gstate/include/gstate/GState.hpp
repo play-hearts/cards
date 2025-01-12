@@ -118,9 +118,24 @@ public:
     static GameBehavior kJackDiamonds;
     static GameBehavior kSpades;
 
+    // This is a default constructor.
+    // It creates a game with a valid state, but in some cases we override the state.
     GState(Init init = kNoPass, GameBehavior behavior = kStandard);
+
+
+
     GState(const cards::Deal& deal, PassOffset passOffset = Init::kRandomPassOffset, GameBehavior behavior = kStandard);
     GState(const GState&) = default;
+
+    /// @brief Create a game state from fixed hands and passes.
+    /// @details This factory function is used from the PassingGenerator to create a hypothetical games state
+    ///         from fixed hands and passes. The hands and passes are constrainted as follows:
+    ///         carlHand is a full hand of 13 cards that were dealt to Carl.
+    ///         passes is a FourHands object, but containing only the cards that each player will pass.
+    ///         This means that 22 (= 13 + 9) cards are fixed, and the remaining 30 cards are unknown.
+    ///         The algorithm randomly deals the 30 unknown cards to the other players.
+    ///         It creates the game state with all hands populated, the passes determined, and the game ready to be started.
+    static auto fromConstrainedHandsPasses(unsigned carl, const CardSet& carlHand, const FourHands& passes, PassOffset passOffset) -> GState;
 
 #if __EMSCRIPTEN__
     GState(const GStateInit& init, GameVariant variant);
