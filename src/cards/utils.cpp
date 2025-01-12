@@ -6,20 +6,30 @@ namespace pho::cards {
 
 Card aCardAtRandom(CardSet set) { return set.nthCard(pho::math::RandomGenerator::Range64(set.size())); }
 
-CardSet chooseThreeAtRandom(CardSet dealt)
+CardSet chooseSomeAtRandom(CardSet set, unsigned N)
 {
-    auto tmp = dealt;
-    assert(tmp.size() == 13);
+    auto tmp = set;
     auto result = CardSet();
-    for (auto i : pho::prim::range(3))
+    for (auto i : pho::prim::range(N))
     {
         (void)i;
         auto card = aCardAtRandom(tmp);
         result += card;
         tmp -= card;
     }
-    assert(tmp.size() == 10);
     return result;
 }
+
+CardSet removeSomeAtRandom(CardSet& set, unsigned N)
+{
+    auto before = set.size();
+    (void) before;
+    auto chosen = chooseSomeAtRandom(set, N);
+    assert(chosen.size() == N);
+    set -= chosen;
+    assert(set.size() == before - N);
+    return chosen;
+}
+
 
 } // namespace pho::cards
