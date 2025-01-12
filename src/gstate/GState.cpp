@@ -92,9 +92,9 @@ auto GState::startGameNoPass() -> void
     startGame();
 }
 
-auto totalCards(const FourHands& hands) -> uint32_t
+auto allPassed(const FourHands& hands) -> CardSet
 {
-    return hands.at(0).size() + hands.at(1).size() + hands.at(2).size() + hands.at(3).size();
+    return hands.at(0) + hands.at(1) + hands.at(2) + hands.at(3);
 }
 
 auto GState::startGame() -> void
@@ -104,23 +104,46 @@ auto GState::startGame() -> void
     assert(mPassOffset < 4u);
     if (mPassOffset == 0)
     {
-        assert(totalCards(mPassed) == 0);
+        assert(allPassed(mPassed).size() == 0);
     }
     else
     {
-        assert(totalCards(mPassed) == 12);
+        // TODO: We are using defensive programming here instead of unit tests. We should add unit tests.
+        assert(allPassed(mPassed).size() == 12);
+        // At this point, mPassed.at(p) is the set of cards that player p will pass to another player.
+        // The cards must be present in that player's hand, but will be removed from the hand
+        // immediately below, and then inserted into the hand of the player that will receive them.
         for (auto p : prim::range(kNumPlayers))
         {
+            (void) p;
+            // Verify that the passed cards are present in the hand
             assert(mHands.at(p).size() == 13);
             assert(mHands.at(p).setIntersection(mPassed.at(p)) == mPassed.at(p));
+        }
+        for (auto p : prim::range(kNumPlayers))
+        {
+            // Remove the passed cards from the hand
             mHands.at(p) -= mPassed.at(p);
             assert(mHands.at(p).size() == 10);
         }
         for (auto p : prim::range(kNumPlayers))
         {
-            auto passTo = (p + mPassOffset) % 4;
+            // Insert the passed cards into the hand of the player that will receive them
+            auto passTo = passedTo(p);
             mHands.at(passTo) += mPassed.at(p);
             assert(mHands.at(passTo).size() == 13);
+        }
+        for (auto p : prim::range(kNumPlayers))
+        {
+            (void) p;
+            // Verify that the passed cards are no longer in the hand
+            assert(mHands.at(p).setIntersection(mPassed.at(p)).size() == 0);
+        }
+        for (auto p : prim::range(kNumPlayers))
+        {
+            (void) p;
+            // Verify that the passed cards are now in the hand of the player that received them
+            assert(mHands.at(passedTo(p)).setIntersection(mPassed.at(p)) == mPassed.at(p));
         }
     }
     mPassingComplete = true;
